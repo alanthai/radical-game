@@ -1,0 +1,23 @@
+DOING
+-----
+  Drag system
+  Order matters
+
+TODO
+----
+  Animations
+    Correct answer
+    Incorrect answer
+    Enemy death
+    Enemy idle
+  Level system
+  Point system
+  Spaced Repitition system
+  Create first 5 levels
+  Monster health and levels
+
+  Set up build system for phone
+  Create first 5 enemies
+
+  Vocab view
+  Bonus points and buy scrolls?

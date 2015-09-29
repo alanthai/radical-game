@@ -39,7 +39,7 @@ gulp.task('jscs', function() {
 
 gulp.task('watch', function() {
   livereload.listen();
-  gulp.watch(paths.js, ['lint:js', 'build:js']);
+  gulp.watch(paths.js, ['build:js']);
   // gulp.watch(paths.js, ['lint:js', 'jscs', 'build:js']);
   gulp.watch(paths.jade, ['build:html']);
 });

@@ -5,11 +5,6 @@ var Wordpart = (() => {
 
   var imgs = config.wordpart;
 
-  function center(sprite) {
-    sprite.anchor.x = 0.5;
-    sprite.anchor.y = 0.5;
-  }
-
   return class Wordpart {
     constructor(part, point) {
       this.container = new PIXI.Container();
@@ -31,7 +26,11 @@ var Wordpart = (() => {
       var sprite = this.baseSprite = new PIXI.Sprite(this.inactiveTexture);
 
       sprite.interactive = true;
-      sprite.click = this.toggleSelect.bind(this);
+      sprite.forceHitTest = true;
+      // sprite.click = this.toggleSelect.bind(this);
+      // sprite.click = () => {
+        
+      // }
 
       center(sprite);
 
@@ -39,22 +38,18 @@ var Wordpart = (() => {
     }
 
     initText() {
-      // var radical = this.part.english;
-      var radical = 'eight';
-      var img = imgs.text(radical);
-      var sprite = this.textSprite = new PIXI.Sprite.fromImage(img);
-      center(sprite);
+      var text = new PIXI.Text(this.part.chinese, {font: '30px MySimHei'});
+      center(text);
 
-      this.container.addChild(sprite);
+      this.container.addChild(text);
     }
 
     move(point) {
-      this.container.x = point.x;
-      this.container.y = point.y;
+      Vector.move(this.container, point);
     }
 
     toggleSelect() {
-      this.baseSprite.texture === this.activeTexture
+      this.selected
         ? this.deselect()
         : this.select();
     }
@@ -62,11 +57,13 @@ var Wordpart = (() => {
     select() {
       this.selected = true;
       this.baseSprite.texture = this.activeTexture;
+      this.container.parent.emit('wordpart:selected', this, this.selected);
     }
 
     deselect() {
       this.selected = false;
       this.baseSprite.texture = this.inactiveTexture;
+      this.container.parent.emit('wordpart:selected', this, this.selected);
     }
   };
 })();

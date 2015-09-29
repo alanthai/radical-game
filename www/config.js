@@ -17,5 +17,10 @@ var config = (function () {
       text: function (radical) {
         return "" + IMG_PATH + "/radicals/" + radical + ".png";
       }
-    } };
+    },
+
+    enemy: {
+      center: [500, 0],
+      textOffset: [30, 180] }
+  };
 })();

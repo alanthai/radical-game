@@ -1,11 +1,21 @@
 html
-	header
+	head
+		meta(charset="UTF-8")
+		meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+		link(rel="stylesheet" type="text/css" href="./main.css")
 	body
 		script(src="lib/pixi.js")
+
+		//- helpers and others
 		script(src="Vector.js")
+		script(src="helpers.js")
 		script(src="config.js")
-		script(src="data/wordparts.js")
+		script(src="data/enemies.js")
+		script(src="data/wordparts.js" charset="UTF-8")
+		script(src="GConsole.js")
+		script(src="entities/enemy.js")
 		script(src="entities/wordpart.js")
 		script(src="Word.js")
 		script(src="WordpartSet.js")
+		script(src="WordQueue.js")
 		script(src="main.js")

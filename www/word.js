@@ -4,7 +4,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var Word = function () {
+var Word = (function () {
   /**
    * `partsCount` is a dictionary that holds the parts and its count.
    * It's used when verifying whether all parts
@@ -17,8 +17,8 @@ var Word = function () {
    * getPartsCount(word.partials); // {'日': 1, '免': 1}
    */
   function getPartsCount(parts) {
-    parts.reduce(function (map, part) {
-      map[part] = (map[part] || 0) + 1;
+    return parts.reduce(function (map, part) {
+      map[part.chinese] = (map[part.chinese] || 0) + 1;
       return map;
     }, {});
   }
@@ -34,6 +34,9 @@ var Word = function () {
     _createClass(Word, {
       buildsFrom: {
         value: function buildsFrom(parts) {
+          parts = parts.map(function (p) {
+            return p.part;
+          });
           var partsCount = getPartsCount(parts);
           var wPartsCount = this.partsCount;
 
@@ -48,4 +51,4 @@ var Word = function () {
 
     return Word;
   })();
-};
+})();

@@ -1,4 +1,4 @@
-export default [
+Game.data.words = [
   {
     english: 'night',
     simplified: '夜',
@@ -19,34 +19,34 @@ export default [
     simplified: '早',
     partials: ['日', '十']
   },
-  {
-    english: '',
-    simplified: '',
-    partials: []
-  },
-  {
-    english: 'tea',
-    simplified: '茶',
-    partials: ['艹', '']
-  },
-  {
-    english: 'month',
-    simplified: '',
-    partials: []
-  },
-  {
-    english: 'clear',
-    simplified: '',
-    partials: []
-  },
-  {
-    english: 'white',
-    simplified: '',
-    partials: []
-  },
-  {
-    english: 'black',
-    simplified: '',
-    partials: []
-  },
+  // {
+  //   english: '',
+  //   simplified: '',
+  //   partials: []
+  // },
+  // {
+  //   english: 'tea',
+  //   simplified: '茶',
+  //   partials: ['艹', '']
+  // },
+  // {
+  //   english: 'month',
+  //   simplified: '',
+  //   partials: []
+  // },
+  // {
+  //   english: 'clear',
+  //   simplified: '',
+  //   partials: []
+  // },
+  // {
+  //   english: 'white',
+  //   simplified: '',
+  //   partials: []
+  // },
+  // {
+  //   english: 'black',
+  //   simplified: '',
+  //   partials: []
+  // },
 ];

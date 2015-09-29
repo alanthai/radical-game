@@ -11,8 +11,8 @@ var Word = (() => {
    * getPartsCount(word.partials); // {'日': 1, '免': 1}
    */
   function getPartsCount(parts) {
-    parts.reduce((map, part) => {
-      map[part] = (map[part] || 0) + 1;
+    return parts.reduce((map, part) => {
+      map[part.chinese] = (map[part.chinese] || 0) + 1;
       return map;
     }, {});
   }
@@ -24,8 +24,9 @@ var Word = (() => {
     }
 
     buildsFrom(parts) {
+      parts = parts.map(p => p.part);
       var partsCount = getPartsCount(parts);
-      var wPartsCount = this.partsCount
+      var wPartsCount = this.partsCount;
 
       if (parts.length !== this.parts.length) return false;
 
@@ -33,7 +34,7 @@ var Word = (() => {
         return partsCount[part] === wPartsCount[part];
       });
     }
-  }
-});
+  };
+})();
 
 export default Word;

@@ -6,72 +6,81 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-function getXY(v) {
-  if (Array.isArray(v)) {
-    return v;
-  }
-
-  return [v.x, v.y];
-}
-
 var Vector = (function () {
-  function Vector(x, y) {
-    _classCallCheck(this, Vector);
-
-    if (Array.isArray(x)) {
-      y = x[1];
-      x = x[0];
+  function getXY(v) {
+    if (Array.isArray(v)) {
+      return v;
     }
 
-    this.x = x;
-    this.y = y;
+    return [v.x, v.y];
   }
 
-  _createClass(Vector, {
-    _add: {
-      value: function _add(v) {
-        var _getXY = getXY(v);
+  var Vector = (function () {
+    function Vector(x, y) {
+      _classCallCheck(this, Vector);
 
-        var _getXY2 = _slicedToArray(_getXY, 2);
-
-        var x = _getXY2[0];
-        var y = _getXY2[1];
-
-        this.x += x;
-        this.y += y;
-        return this;
+      if (Array.isArray(x)) {
+        y = x[1];
+        x = x[0];
       }
-    },
-    add: {
-      value: function add(v) {
-        return this.clone()._add(v);
-      }
-    },
-    _mult: {
-      value: function _mult(v) {
-        var _getXY = getXY(v);
 
-        var _getXY2 = _slicedToArray(_getXY, 2);
-
-        var x = _getXY2[0];
-        var y = _getXY2[1];
-
-        this.x *= x;
-        this.y *= y;
-        return this;
-      }
-    },
-    mult: {
-      value: function mult(v) {
-        return this.clone()._mult(v);
-      }
-    },
-    clone: {
-      value: function clone() {
-        return new Vector(this.x, this.y);
-      }
+      this.x = x;
+      this.y = y;
     }
-  });
+
+    _createClass(Vector, {
+      _add: {
+        value: function _add(v) {
+          var _getXY = getXY(v);
+
+          var _getXY2 = _slicedToArray(_getXY, 2);
+
+          var x = _getXY2[0];
+          var y = _getXY2[1];
+
+          this.x += x;
+          this.y += y;
+          return this;
+        }
+      },
+      add: {
+        value: function add(v) {
+          return this.clone()._add(v);
+        }
+      },
+      _mult: {
+        value: function _mult(v) {
+          var _getXY = getXY(v);
+
+          var _getXY2 = _slicedToArray(_getXY, 2);
+
+          var x = _getXY2[0];
+          var y = _getXY2[1];
+
+          this.x *= x;
+          this.y *= y;
+          return this;
+        }
+      },
+      mult: {
+        value: function mult(v) {
+          return this.clone()._mult(v);
+        }
+      },
+      clone: {
+        value: function clone() {
+          return new Vector(this.x, this.y);
+        }
+      }
+    });
+
+    return Vector;
+  })();
+
+  Vector.move = function (dp, point) {
+    dp.x = point.x;
+    dp.y = point.y;
+  };
 
   return Vector;
 })();

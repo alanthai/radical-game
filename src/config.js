@@ -14,6 +14,11 @@ var config = (() => {
       inactive: `${IMG_PATH}/circle-inactive.png`,
       text: radical => `${IMG_PATH}/radicals/${radical}.png`
     },
+
+    enemy: {
+      center: [500, 0],
+      textOffset: [30, 180],
+    }
   };
 })();
 

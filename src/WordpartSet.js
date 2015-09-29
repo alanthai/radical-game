@@ -1,20 +1,10 @@
 import Wordpart from './entities/wordpart.js';
 import Word from './Word.js';
 import config from './config.js';
-import wordpartList from './data/wordparts.js';
 import Vector from './Vector.js';
 
 var WordpartSet = (() => {
-  'use strict';
-  var wordpartList = wordparts;
-
-  function shuffle(array) {
-    for (let i = 0, len = array.length; i < len; i++) {
-      let rnd = Math.floor(Math.random() * (len - 1));
-      [array[rnd], array[i]] = [array[i], array[rnd]];
-    }
-    return array;
-  }
+  var dataWordparts = Game.data.wordparts;
 
   function getPoints(numPoints) {
     var angle = 2 * Math.PI / numPoints;
@@ -29,9 +19,7 @@ var WordpartSet = (() => {
    * @param type Either 'radical' or 'word'; Default radical
    */
   function getRandomPart(type='radical') {
-    var list = wordpartList[type];
-    var rnd = Math.floor(Math.random() * (list.length - 1));
-    return list[rnd].simplified;
+    return getRandom(dataWordparts[type]);
   }
 
   /**
@@ -39,7 +27,8 @@ var WordpartSet = (() => {
    * until it reaches `numPoints` elements
    * @param existingParts 
    */
-  function generateMissingParts(parts, numPoints) {
+  function generateMissingParts(wparts, numPoints) {
+    var parts = wparts.slice(0);
     for (let i = 0, len = numPoints - parts.length; i < len; i++) {
       parts.push(getRandomPart());
     }
@@ -55,15 +44,25 @@ var WordpartSet = (() => {
   return class WordpartSet {
     constructor(wordObj, numPoints=6) {
       var container = this.container = new PIXI.Container();
-      container.x = center.x;
-      container.y = center.y;
+      Vector.move(container, center);
+
+      container.interactive = true;
+      container.interactiveChildren = true;
+
+      container.click = () => {debugger};
 
       this.word = new Word(wordObj);
+      container.word = this.word;
       this.numPoints = numPoints;
       this.set = this.buildWordparts();
 
       this.wordparts.forEach(wordpart => {
         container.addChild(wordpart.container);
+      });
+
+      container.on('wordpart:selected', () => {
+        var wordIsSelected = this.word.buildsFrom(this.getSelected());
+        wordIsSelected && container.emit('word:completed');
       });
     }
 
@@ -79,11 +78,11 @@ var WordpartSet = (() => {
     }
 
     select(wordpart) {
-      wordpart.selected = true;
+      wordpart.select();
     }
 
     clear() {
-      this.wordparts.forEach(wordpart => wordpart.selected = false);
+      this.wordparts.forEach(wordpart => wordpart.deselected());
     }
   };
 })();

@@ -1,27 +1,11 @@
 "use strict";
 
-var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var WordpartSet = (function () {
-  "use strict";
-  var wordpartList = wordparts;
-
-  function shuffle(array) {
-    for (var i = 0, len = array.length; i < len; i++) {
-      var rnd = Math.floor(Math.random() * (len - 1));
-      var _ref = [array[i], array[rnd]];
-
-      var _ref2 = _slicedToArray(_ref, 2);
-
-      array[rnd] = _ref2[0];
-      array[i] = _ref2[1];
-    }
-    return array;
-  }
+  var dataWordparts = Game.data.wordparts;
 
   function getPoints(numPoints) {
     var angle = 2 * Math.PI / numPoints;
@@ -38,9 +22,7 @@ var WordpartSet = (function () {
   function getRandomPart() {
     var type = arguments[0] === undefined ? "radical" : arguments[0];
 
-    var list = wordpartList[type];
-    var rnd = Math.floor(Math.random() * (list.length - 1));
-    return list[rnd].simplified;
+    return getRandom(dataWordparts[type]);
   }
 
   /**
@@ -48,7 +30,8 @@ var WordpartSet = (function () {
    * until it reaches `numPoints` elements
    * @param existingParts 
    */
-  function generateMissingParts(parts, numPoints) {
+  function generateMissingParts(wparts, numPoints) {
+    var parts = wparts.slice(0);
     for (var i = 0, len = numPoints - parts.length; i < len; i++) {
       parts.push(getRandomPart());
     }
@@ -63,20 +46,34 @@ var WordpartSet = (function () {
 
   return (function () {
     function WordpartSet(wordObj) {
+      var _this = this;
+
       var numPoints = arguments[1] === undefined ? 6 : arguments[1];
 
       _classCallCheck(this, WordpartSet);
 
       var container = this.container = new PIXI.Container();
-      container.x = center.x;
-      container.y = center.y;
+      Vector.move(container, center);
+
+      container.interactive = true;
+      container.interactiveChildren = true;
+
+      container.click = function () {
+        debugger;
+      };
 
       this.word = new Word(wordObj);
+      container.word = this.word;
       this.numPoints = numPoints;
       this.set = this.buildWordparts();
 
       this.wordparts.forEach(function (wordpart) {
         container.addChild(wordpart.container);
+      });
+
+      container.on("wordpart:selected", function () {
+        var wordIsSelected = _this.word.buildsFrom(_this.getSelected());
+        wordIsSelected && container.emit("word:completed");
       });
     }
 
@@ -102,13 +99,13 @@ var WordpartSet = (function () {
       },
       select: {
         value: function select(wordpart) {
-          wordpart.selected = true;
+          wordpart.select();
         }
       },
       clear: {
         value: function clear() {
           this.wordparts.forEach(function (wordpart) {
-            return wordpart.selected = false;
+            return wordpart.deselected();
           });
         }
       }

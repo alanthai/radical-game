@@ -1,4 +1,6 @@
-var wordparts = {
+﻿// If Chinese characters start to look funny, make sure this file is saved in UTF-8
+// In sublime text: File > Save with Encoding > UTF-8 with BOM
+Game.data.wordparts = {
   radical: [
     {chinese: '一', pinyin: 'yī', strokes: 1, english: 'one'},
     {chinese: '丨', pinyin: 'shù', strokes: 1, english: 'line'},
@@ -217,5 +219,3 @@ var wordparts = {
   ],
   word: [],
 };
-
-export default wordparts;
