@@ -1,16 +1,12 @@
 var Enemy = (() => {
   var dataEnemies = Game.data.enemies;
-  var levelEnemies = Game.data.enemies.reduce((hash, enemy) => {
-    (hash[enemy.level] = hash[enemy.level]  || []).push(enemy);
-    return hash;
-  }, {});
 
   return class Enemy {
-    constructor(word, level) {
+    constructor(word, data) {
       this.word = word;
 
       this.container = new PIXI.Container();
-      this.data = getRandom(levelEnemies[level]);
+      this.data = data;
 
       this.initSprite();
       this.initText();

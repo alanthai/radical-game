@@ -6,21 +6,22 @@ var config = (function () {
   var IMG_PATH = "img";
 
   return {
+    screen: [640, 1024],
+    backgroundColor: 8947848,
+
     wordpartSet: {
-      center: [200, 200],
-      radius: 150 // pixel
+      center: [300, 500],
+      radius: 150, // pixel
+      laserImg: "" + IMG_PATH + "/laser.png",
+      boundaryColor: 16776960
     },
 
     wordpart: {
       active: "" + IMG_PATH + "/circle-active.png",
-      inactive: "" + IMG_PATH + "/circle-inactive.png",
-      text: function (radical) {
-        return "" + IMG_PATH + "/radicals/" + radical + ".png";
-      }
-    },
+      inactive: "" + IMG_PATH + "/circle-inactive.png" },
 
     enemy: {
-      center: [500, 0],
+      center: [200, 0],
       textOffset: [30, 180] }
   };
 })();

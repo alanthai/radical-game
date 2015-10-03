@@ -80,6 +80,7 @@ var Vector = (function () {
   Vector.move = function (dp, point) {
     dp.x = point.x;
     dp.y = point.y;
+    return dp;
   };
 
   return Vector;

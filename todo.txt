@@ -1,6 +1,5 @@
 DOING
 -----
-  Drag system
   Order matters
 
 TODO
@@ -10,12 +9,15 @@ TODO
     Incorrect answer
     Enemy death
     Enemy idle
+    Enemy enter
+  Progression
+    Points system
+    Monster health and levels
   Level system
-  Point system
-  Spaced Repitition system
-  Create first 5 levels
-  Monster health and levels
+    Learning progression
+    Create first 5 levels
 
+  Spaced Repitition system
   Set up build system for phone
   Create first 5 enemies
 

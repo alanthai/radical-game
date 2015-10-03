@@ -27,10 +27,16 @@ var Wordpart = (() => {
 
       sprite.interactive = true;
       sprite.forceHitTest = true;
-      // sprite.click = this.toggleSelect.bind(this);
-      // sprite.click = () => {
-        
-      // }
+
+      var emitEvent = eventName => {
+        return (event => {
+          this.container.parent.emit(eventName, event, this);
+        });
+      }
+
+      sprite.mousedown = emitEvent('wordpart:mousedown');
+      sprite.mouseover = emitEvent('wordpart:mouseover');
+      sprite.mouseout = emitEvent('wordpart:mouseout');
 
       center(sprite);
 
@@ -57,13 +63,11 @@ var Wordpart = (() => {
     select() {
       this.selected = true;
       this.baseSprite.texture = this.activeTexture;
-      this.container.parent.emit('wordpart:selected', this, this.selected);
     }
 
     deselect() {
       this.selected = false;
       this.baseSprite.texture = this.inactiveTexture;
-      this.container.parent.emit('wordpart:selected', this, this.selected);
     }
   };
 })();

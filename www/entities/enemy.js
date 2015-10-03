@@ -6,19 +6,15 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var Enemy = (function () {
   var dataEnemies = Game.data.enemies;
-  var levelEnemies = Game.data.enemies.reduce(function (hash, enemy) {
-    (hash[enemy.level] = hash[enemy.level] || []).push(enemy);
-    return hash;
-  }, {});
 
   return (function () {
-    function Enemy(word, level) {
+    function Enemy(word, data) {
       _classCallCheck(this, Enemy);
 
       this.word = word;
 
       this.container = new PIXI.Container();
-      this.data = getRandom(levelEnemies[level]);
+      this.data = data;
 
       this.initSprite();
       this.initText();

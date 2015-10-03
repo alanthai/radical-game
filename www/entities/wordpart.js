@@ -28,6 +28,8 @@ var Wordpart = (function () {
     _createClass(Wordpart, {
       initBase: {
         value: function initBase() {
+          var _this = this;
+
           this.inactiveTexture = PIXI.Texture.fromImage(imgs.inactive);
           this.activeTexture = PIXI.Texture.fromImage(imgs.active);
 
@@ -35,10 +37,16 @@ var Wordpart = (function () {
 
           sprite.interactive = true;
           sprite.forceHitTest = true;
-          // sprite.click = this.toggleSelect.bind(this);
-          // sprite.click = () => {
 
-          // }
+          var emitEvent = function (eventName) {
+            return function (event) {
+              _this.container.parent.emit(eventName, event, _this);
+            };
+          };
+
+          sprite.mousedown = emitEvent("wordpart:mousedown");
+          sprite.mouseover = emitEvent("wordpart:mouseover");
+          sprite.mouseout = emitEvent("wordpart:mouseout");
 
           center(sprite);
 
@@ -67,14 +75,12 @@ var Wordpart = (function () {
         value: function select() {
           this.selected = true;
           this.baseSprite.texture = this.activeTexture;
-          this.container.parent.emit("wordpart:selected", this, this.selected);
         }
       },
       deselect: {
         value: function deselect() {
           this.selected = false;
           this.baseSprite.texture = this.inactiveTexture;
-          this.container.parent.emit("wordpart:selected", this, this.selected);
         }
       }
     });

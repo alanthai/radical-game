@@ -1,9 +1,8 @@
-Game.data.enemies = [
-  {
-    name: 'enemy1',
+Game.data.enemies = {
+  enemy1: {
+    name: 'Enemy 1',
     points: 100,
-    level: 1,
-    health: 1,
+    health: 100,
     img: 'img/enemy1.png'
   }
-];
+};

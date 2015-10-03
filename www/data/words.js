@@ -1,50 +1,66 @@
 "use strict";
 
-Game.data.words = [{
-  english: "night",
-  simplified: "夜",
-  partials: ["亠", "亻", "夕", "丶"]
-}, {
-  english: "late",
-  simplified: "晚",
-  partials: ["日", "免"]
-}, {
-  english: "day",
-  simplified: "日",
-  partials: ["日"]
-}, {
-  english: "early",
-  simplified: "早",
-  partials: ["日", "十"]
-}];
+Game.data.words = Game.data.words || {};
+
+extend(Game.data.words, {
+  八八: {
+    english: "eighty-eight",
+    chinese: "八八",
+    parts: ["八", "八"]
+  },
+  二二: {
+    english: "twenty-two",
+    chinese: "二二",
+    parts: ["二", "二"]
+  },
+  夜: {
+    english: "night",
+    chinese: "夜",
+    parts: ["亠", "亻", "夕", "丶"]
+  },
+  晚: {
+    english: "late",
+    chinese: "晚",
+    parts: ["日", "免"]
+  },
+  日: {
+    english: "day",
+    chinese: "日",
+    parts: ["日"]
+  },
+  早: {
+    english: "early",
+    chinese: "早",
+    parts: ["日", "十"]
+  } });
 
 // {
 //   english: '',
-//   simplified: '',
-//   partials: []
+//   chinese: '',
+//   parts: []
 // },
 // {
 //   english: 'tea',
-//   simplified: '茶',
-//   partials: ['艹', '']
+//   chinese: '茶',
+//   parts: ['艹', '']
 // },
 // {
 //   english: 'month',
-//   simplified: '',
-//   partials: []
+//   chinese: '',
+//   parts: []
 // },
 // {
 //   english: 'clear',
-//   simplified: '',
-//   partials: []
+//   chinese: '',
+//   parts: []
 // },
 // {
 //   english: 'white',
-//   simplified: '',
-//   partials: []
+//   chinese: '',
+//   parts: []
 // },
 // {
 //   english: 'black',
-//   simplified: '',
-//   partials: []
+//   chinese: '',
+//   parts: []
 // },

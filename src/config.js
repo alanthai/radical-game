@@ -4,19 +4,23 @@ var config = (() => {
   var IMG_PATH = 'img';
 
   return {
+    screen: [640, 1024],
+    backgroundColor: 0x888888,
+
     wordpartSet: {
-      center: [200, 200],
-      radius: 150 // pixel
+      center: [300, 500],
+      radius: 150, // pixel
+      laserImg: `${IMG_PATH}/laser.png`,
+      boundaryColor: 0xFFFF00
     },
   
     wordpart: {
       active: `${IMG_PATH}/circle-active.png`,
       inactive: `${IMG_PATH}/circle-inactive.png`,
-      text: radical => `${IMG_PATH}/radicals/${radical}.png`
     },
 
     enemy: {
-      center: [500, 0],
+      center: [200, 0],
       textOffset: [30, 180],
     }
   };
