@@ -1,5 +1,7 @@
-define(function (require, exports, module) {
+define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _config2, _Vector, _dataIndex, _util) {
   "use strict";
+
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
@@ -7,16 +9,17 @@ define(function (require, exports, module) {
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var Wordpart = require("./entities/wordpart.js");
-  var Word = require("./Word.js");
-  var config = require("./config.js");
-  var Vector = require("./Vector.js");
+  var Wordpart = _interopRequire(_entitiesWordpart);
 
-  var data = require("./data/index");
+  var Word = _interopRequire(_Word);
 
-  var _require = require("./util");
+  var config = _interopRequire(_config2);
 
-  var getValues = _require.getValues;
+  var Vector = _interopRequire(_Vector);
+
+  var data = _interopRequire(_dataIndex);
+
+  var getValues = _util.getValues;
 
   var dataWordparts = getValues(data.radicals);
 
@@ -85,7 +88,6 @@ define(function (require, exports, module) {
           container.on("wordpart:mouseover", function (event, wordpart) {
             isContactingWordpart = true;
             if (!wordpart.selected && dragging) {
-              container.emit("wordpart:select", event, wordpart);
               wordpart.select();
             }
           });
@@ -112,7 +114,7 @@ define(function (require, exports, module) {
 
           container.on("wordpartSet:mouseup", function () {
             if (isContactingWordpart) {
-              _this.word.buildsFrom(_this.getSelected()) ? container.emit("word:completed") : container.emit("word:incomplete");
+              _this.word.buildsFrom(_this.getSelected()) ? container.emit("word:completed") : container.emit("word:incorrect");
             }
             clear();
           });
@@ -172,6 +174,14 @@ define(function (require, exports, module) {
         _this.getHint() === wordpart.part && _this.highlightNextHint();
       });
 
+      this.container.on("wordpart:select", function (event, wordpart) {
+        wordpart.unhighlight();
+      });
+
+      this.container.on("word:incorrect", function () {
+        return _this.resetHints();
+      });
+
       this.container.on("wordpart:mouseup", function () {
         return _this.resetHints();
       });
@@ -196,6 +206,9 @@ define(function (require, exports, module) {
     },
 
     resetHints: function resetHints() {
+      this.wordparts.forEach(function (wp) {
+        return wp.unhighlight();
+      });
       this.hints = [null].concat(_toConsumableArray(this.word.getPieces()));
       this.highlightNextHint();
     }

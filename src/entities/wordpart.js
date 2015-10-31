@@ -1,10 +1,11 @@
-var config = require('../config');
-var Vector = require('../Vector');
-var {ticker} = require('../globals.js');
+// import {wordpart as imgs} from '../config';
+import config from '../config';
+import Vector from '../Vector';
+import {ticker} from '../globals';
 
 var imgs = config.wordpart;
 
-module.exports = class Wordpart {
+export default class Wordpart {
   constructor(part, point) {
     this.container = new PIXI.Container();
 
@@ -52,26 +53,28 @@ module.exports = class Wordpart {
   highlight() {
     var container = this.container;
 
-    var radius = 0;
+    var radius = 64*2;
     var hiSprite = this.hiSprite = new PIXI.Graphics();
     hiSprite.lineStyle(2, 0x000000, 1);
-    hiSprite.drawCircle(container.x, container.y, radius);
+    hiSprite.drawCircle(0, 0, radius);
     container.addChild(hiSprite);
 
     var theta = 0;
-    var tf = 1500; // total time (in ms) to complete one turn
+    var tf = 1200; // total time (in ms) to complete one turn
     var TAU = 2 * Math.PI; // full circle 
+    var dr = 25;
 
     this.ticker = ticker.onTick((tick, diff) => {
-      console.log('hello?');
-      // var baseRadius = this.baseSprite.height;
-      // theta += TAU * diff / 1500;
-      // radius = baseRadius + 30 * Math.sin(theta);
+      var baseRadius = this.baseSprite.height + dr;
+      theta += TAU * diff / tf;
+      radius = baseRadius + dr * Math.sin(theta);
+      hiSprite.height = hiSprite.width = radius;
     });
     // animate wordpart for hint
   }
 
   unhighlight() {
+    if (!this.hiSprite) return;
     this.container.removeChild(this.hiSprite);
     ticker.removeListener(this.ticker);
     this.hiSprite.destroy();
@@ -92,6 +95,7 @@ module.exports = class Wordpart {
   select() {
     this.selected = true;
     this.baseSprite.texture = this.activeTexture;
+    this.container.parent.emit('wordpart:select', event, this);
   }
 
   deselect() {

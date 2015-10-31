@@ -1,7 +1,7 @@
-var WordpartSet = require('./WordpartSet.js');
-var gconsole = require('./GConsole.js');
-var LevelManager = require('./LevelManager.js');
-var config = require('./config.js');
+import WordpartSet from './WordpartSet';
+import gconsole from './GConsole';
+import LevelManager from './LevelManager';
+import config from './config';
 
 // New instance of a pixi stage
 var stage = new PIXI.Container();

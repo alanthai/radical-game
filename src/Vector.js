@@ -1,5 +1,3 @@
-'use strict';
-
 function getXY(v) {
   if (Array.isArray(v)) {
     return v;
@@ -8,7 +6,7 @@ function getXY(v) {
   return [v.x, v.y];
 }
 
-module.exports = class Vector {
+export default class Vector {
   constructor(x, y) {
     if (Array.isArray(x)) {
       y = x[1];
@@ -56,4 +54,4 @@ module.exports = class Vector {
     sprite.anchor.x = 0.5;
     sprite.anchor.y = 0.5;
   }
-}
+};

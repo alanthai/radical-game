@@ -1,7 +1,8 @@
 DOING
 -----
   Order matters
-  Tutorial mode on first learn
+  Hint mode on first learn
+    - set tutorial mode on/off
 
 TODO
 ----
@@ -22,9 +23,10 @@ TODO
   Set up build system for phone
   Create first 5 enemies
 
+  Audio for pinyin
+
   Vocab view
   Bonus points and buy scrolls?
 
   Rename wordpartSet->buildSet, wordpart->buildpart
     Or wordpartSet-> choices, wordpart->choice
-  Rename LaserChain to Chain?

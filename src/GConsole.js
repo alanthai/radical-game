@@ -1,4 +1,4 @@
-var Vector = require('./Vector.js');
+import Vector from './Vector';
 
 class GConsole {
   constructor() {
@@ -15,4 +15,4 @@ class GConsole {
   }
 };
 
-module.exports = new GConsole();
+export default new GConsole();

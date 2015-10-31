@@ -1,5 +1,5 @@
 // Game.data.words
-module.exports = {
+export default {
   // '月': {
   //   english: 'month',
   //   chinese: '月',

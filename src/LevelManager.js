@@ -1,17 +1,17 @@
-var {deepClone, shuffle, getRandom} = require('./util.js');
+import {deepClone, shuffle, getRandom} from './util';
 
-var data = require('./data/index');
+import data from './data/index';
 
 var dataLevels = deepClone(data.levels);
 var dataEnemies = deepClone(data.enemies);
 var dataWords = deepClone(data.words);
 
-var Vector = require('./Vector');
-var Word = require('./Word');
-var WordpartSet = require('./WordpartSet');
-var Enemy = require('./entities/enemy.js');
+import Vector from './Vector';
+import Word from './Word';
+import WordpartSet from './WordpartSet';
+import Enemy from './entities/enemy';
 
-var config = require('./config');
+import config from './config';
 
 function pad(n) {
   return ('00000' + n).slice(-5);
@@ -55,7 +55,7 @@ function generateMissingParts(generateFn, wparts, numPoints) {
   return shuffle(parts);
 }
 
-class LevelManager {
+export default class LevelManager {
   constructor(level) {
     this.levelNumber = level;
     var levelData = this.data = dataLevels[level];
@@ -135,5 +135,3 @@ class LevelManager {
     this.wordpartSet.container.destroy();
   }
 }
-
-module.exports = LevelManager;

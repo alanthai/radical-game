@@ -1,28 +1,31 @@
-define(function (require, exports, module) {
+define(["exports", "module", "./util", "./data/index", "./Vector", "./Word", "./WordpartSet", "./entities/enemy", "./config"], function (exports, module, _util, _dataIndex, _Vector, _Word, _WordpartSet, _entitiesEnemy, _config) {
   "use strict";
+
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var _require = require("./util.js");
+  var deepClone = _util.deepClone;
+  var shuffle = _util.shuffle;
+  var getRandom = _util.getRandom;
 
-  var deepClone = _require.deepClone;
-  var shuffle = _require.shuffle;
-  var getRandom = _require.getRandom;
-
-  var data = require("./data/index");
+  var data = _interopRequire(_dataIndex);
 
   var dataLevels = deepClone(data.levels);
   var dataEnemies = deepClone(data.enemies);
   var dataWords = deepClone(data.words);
 
-  var Vector = require("./Vector");
-  var Word = require("./Word");
-  var WordpartSet = require("./WordpartSet");
-  var Enemy = require("./entities/enemy.js");
+  var Vector = _interopRequire(_Vector);
 
-  var config = require("./config");
+  var Word = _interopRequire(_Word);
+
+  var WordpartSet = _interopRequire(_WordpartSet);
+
+  var Enemy = _interopRequire(_entitiesEnemy);
+
+  var config = _interopRequire(_config);
 
   function pad(n) {
     return ("00000" + n).slice(-5);

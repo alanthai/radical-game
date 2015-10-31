@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(["exports", "module"], function (exports, module) {
   "use strict";
 
   var IMG_PATH = "img";

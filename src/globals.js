@@ -1,4 +1,5 @@
-var util = require('./util');
+import util from './util';
+
 var getValues = util.getValues;
 
 class Ticker {
@@ -30,17 +31,15 @@ class Ticker {
   }
 
   removeListener(id) {
-    debugger;
-    this.callbacks[id] = null;
+    delete this.callbacks[id];
   }
 
   removeAllListeners() {
-    debugger;
     this.callbacks = {};
   }
 }
 
-module.exports = {
+export default {
   util,
   data: require('./data/index'),
   ticker: new Ticker()

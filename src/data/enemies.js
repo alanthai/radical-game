@@ -1,5 +1,5 @@
 // Game.data.enemies
-module.exports = {
+export default {
   enemy1: {
     name: 'Enemy 1',
     points: 10,

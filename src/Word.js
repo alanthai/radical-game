@@ -1,5 +1,6 @@
-var data = require('./data/index');
-var {deepClone, deepEquals} = require('./util');
+import data from './data/index';
+import {deepClone, deepEquals} from './util';
+
 var dataWords = deepClone(data.words);
 
 /**
@@ -19,7 +20,7 @@ function arraysMatch(a1, a2) {
   return a1.every((e, i) => e === a2[i]);
 }
 
-module.exports = class Word {
+export default class Word {
   constructor(data, variant) {
     this.data = data;
     this.variant = variant;

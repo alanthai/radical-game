@@ -1,7 +1,6 @@
-define(function (require, exports, module) {
+define(["exports", "module"], function (exports, module) {
   // If Chinese characters start to look funny, make sure this file is saved in UTF-8
   // In sublime text: File > Save with Encoding > UTF-8 with BOM
-  // Game.data.words = Game.data.words || {};
 
   // Game.data.radicals
   "use strict";

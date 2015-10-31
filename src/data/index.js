@@ -1,9 +1,9 @@
-var levels = require('./levels');
-var enemies = require('./enemies');
-var radicals = require('./radicals');
-var words = require('./words');
+import levels from './levels';
+import enemies from './enemies';
+import radicals from './radicals';
+import words from './words';
 
-module.exports = {
+export default {
   levels,
   enemies,
   radicals,

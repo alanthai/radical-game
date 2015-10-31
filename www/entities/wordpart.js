@@ -1,20 +1,23 @@
-define(function (require, exports, module) {
+define(["exports", "module", "../config", "../Vector", "../globals"], function (exports, module, _config, _Vector, _globals) {
   "use strict";
+
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var config = require("../config");
-  var Vector = require("../Vector");
+  // import {wordpart as imgs} from '../config';
 
-  var _require = require("../globals.js");
+  var config = _interopRequire(_config);
 
-  var ticker = _require.ticker;
+  var Vector = _interopRequire(_Vector);
+
+  var ticker = _globals.ticker;
 
   var imgs = config.wordpart;
 
-  module.exports = (function () {
+  var Wordpart = (function () {
     function Wordpart(part, point) {
       _classCallCheck(this, Wordpart);
 
@@ -68,30 +71,35 @@ define(function (require, exports, module) {
       },
       highlight: {
         value: function highlight() {
+          var _this = this;
+
           var container = this.container;
 
-          var radius = 0;
+          var radius = 64 * 2;
           var hiSprite = this.hiSprite = new PIXI.Graphics();
           hiSprite.lineStyle(2, 0, 1);
-          hiSprite.drawCircle(container.x, container.y, radius);
+          hiSprite.drawCircle(0, 0, radius);
           container.addChild(hiSprite);
 
           var theta = 0;
-          var tf = 1500; // total time (in ms) to complete one turn
+          var tf = 1200; // total time (in ms) to complete one turn
           var TAU = 2 * Math.PI; // full circle
+          var dr = 25;
 
           this.ticker = ticker.onTick(function (tick, diff) {
-            console.log("hello?");
-            // var baseRadius = this.baseSprite.height;
-            // theta += TAU * diff / 1500;
-            // radius = baseRadius + 30 * Math.sin(theta);
+            var baseRadius = _this.baseSprite.height + dr;
+            theta += TAU * diff / tf;
+            radius = baseRadius + dr * Math.sin(theta);
+            hiSprite.height = hiSprite.width = radius;
           });
           // animate wordpart for hint
         }
       },
       unhighlight: {
         value: function unhighlight() {
-          this.container.removeChild(this.hiSprite);
+          if (!this.hiSprite) {
+            return;
+          }this.container.removeChild(this.hiSprite);
           ticker.removeListener(this.ticker);
           this.hiSprite.destroy();
           this.hiSprite = null;
@@ -112,6 +120,7 @@ define(function (require, exports, module) {
         value: function select() {
           this.selected = true;
           this.baseSprite.texture = this.activeTexture;
+          this.container.parent.emit("wordpart:select", event, this);
         }
       },
       deselect: {
@@ -124,4 +133,6 @@ define(function (require, exports, module) {
 
     return Wordpart;
   })();
+
+  module.exports = Wordpart;
 });

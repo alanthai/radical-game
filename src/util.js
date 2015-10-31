@@ -4,7 +4,7 @@ function isObject(o) {
   return toString.call(o) === '[object Object]';
 }
 
-module.exports = {
+export default {
   // Do not use this on objects with circular reference!
   deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));

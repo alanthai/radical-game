@@ -2,7 +2,7 @@ var IMG_PATH = 'img';
 var SCREEN_WIDTH = 640;
 var SCREEN_HEIGHT = 1024;
 
-module.exports = {
+export default {
   screen: [SCREEN_WIDTH, SCREEN_HEIGHT],
   backgroundColor: 0x888888,
 

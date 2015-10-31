@@ -1,10 +1,10 @@
-var Wordpart = require('./entities/wordpart.js');
-var Word = require('./Word.js');
-var config = require('./config.js');
-var Vector = require('./Vector.js');
+import Wordpart from './entities/wordpart';
+import Word from './Word';
+import config from './config';
+import Vector from './Vector';
 
-var data = require('./data/index');
-var {getValues} = require('./util');
+import data from './data/index';
+import {getValues} from './util';
 
 var dataWordparts = getValues(data.radicals);
 
@@ -66,7 +66,6 @@ class WordpartSet {
     container.on('wordpart:mouseover', (event, wordpart) => {
       isContactingWordpart = true;
       if (!wordpart.selected && dragging) {
-        container.emit('wordpart:select', event, wordpart);
         wordpart.select();
       }
     });
@@ -93,7 +92,7 @@ class WordpartSet {
       if (isContactingWordpart) {
         this.word.buildsFrom(this.getSelected())
           ? container.emit('word:completed')
-          : container.emit('word:incomplete');
+          : container.emit('word:incorrect');
       }
       clear();
     });
@@ -135,6 +134,12 @@ var WordpartSetHinter = {
         && this.highlightNextHint();
     });
 
+    this.container.on('wordpart:select', (event, wordpart) => {
+      wordpart.unhighlight();
+    });
+
+    this.container.on('word:incorrect', () => this.resetHints());
+
     this.container.on('wordpart:mouseup', () => this.resetHints());
   },
 
@@ -155,6 +160,7 @@ var WordpartSetHinter = {
   },
 
   resetHints() {
+    this.wordparts.forEach(wp => wp.unhighlight());
     this.hints = [null, ...this.word.getPieces()];
     this.highlightNextHint();
   }
@@ -246,4 +252,4 @@ Object.keys(mixins).forEach(prop => {
 
 Object.defineProperties(WordpartSet.prototype, mixins);
 
-module.exports = WordpartSet;
+export default WordpartSet;

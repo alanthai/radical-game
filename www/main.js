@@ -1,14 +1,19 @@
-define(function (require, exports, module) {
+define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"], function (exports, _WordpartSet, _GConsole, _LevelManager, _config) {
   "use strict";
 
   var _PIXI;
 
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
   var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
-  var WordpartSet = require("./WordpartSet.js");
-  var gconsole = require("./GConsole.js");
-  var LevelManager = require("./LevelManager.js");
-  var config = require("./config.js");
+  var WordpartSet = _interopRequire(_WordpartSet);
+
+  var gconsole = _interopRequire(_GConsole);
+
+  var LevelManager = _interopRequire(_LevelManager);
+
+  var config = _interopRequire(_config);
 
   // New instance of a pixi stage
   var stage = new PIXI.Container();

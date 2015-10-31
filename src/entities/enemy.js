@@ -1,9 +1,9 @@
 
-var dataEnemies = require('../data/enemies');
-var Vector = require('../Vector');
-var config = require('../config');
+import dataEnemies from '../data/enemies';
+import Vector from '../Vector';
+import config from '../config';
 
-module.exports = class Enemy {
+export default class Enemy {
   constructor(wordVariant, data) {
     this.wordVariant = wordVariant;
 

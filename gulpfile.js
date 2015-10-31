@@ -14,7 +14,7 @@ var paths = {
 var simplerequirejs = require('./simplerequirejs.js');
 gulp.task('build:js', function () {
   return gulp.src(paths.js)
-    .pipe(babel({modules: simplerequirejs}))
+    .pipe(babel({modules: 'amd'}))
     .pipe(gulp.dest(paths.dist));
 });
 

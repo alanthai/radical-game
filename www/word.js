@@ -1,16 +1,16 @@
-define(function (require, exports, module) {
+define(["exports", "module", "./data/index", "./util"], function (exports, module, _dataIndex, _util) {
   "use strict";
+
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var data = require("./data/index");
+  var data = _interopRequire(_dataIndex);
 
-  var _require = require("./util");
-
-  var deepClone = _require.deepClone;
-  var deepEquals = _require.deepEquals;
+  var deepClone = _util.deepClone;
+  var deepEquals = _util.deepEquals;
 
   var dataWords = deepClone(data.words);
 
@@ -33,7 +33,7 @@ define(function (require, exports, module) {
     });
   }
 
-  module.exports = (function () {
+  var Word = (function () {
     function Word(data, variant) {
       _classCallCheck(this, Word);
 
@@ -73,4 +73,6 @@ define(function (require, exports, module) {
 
     return Word;
   })();
+
+  module.exports = Word;
 });

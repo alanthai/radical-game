@@ -1,6 +1,5 @@
 ﻿// If Chinese characters start to look funny, make sure this file is saved in UTF-8
 // In sublime text: File > Save with Encoding > UTF-8 with BOM
-// Game.data.words = Game.data.words || {};
 
 // Game.data.radicals
 var radicals = {
@@ -223,4 +222,4 @@ var radicals = {
 
 Object.keys(radicals).forEach(k => radicals[k].parts = [k]);
 
-module.exports = radicals;
+export default radicals;
