@@ -1,40 +1,49 @@
-var Word = (() => {
-  /**
-   * `partsCount` is a dictionary that holds the parts and its count.
-   * It's used when verifying whether all parts
-   *
-   * var word = {
-   *   english: 'late',
-   *   simplified: '晚',
-   *   partials: ['日', '免']
-   * };
-   * getPartsCount(word.partials); // {'日': 1, '免': 1}
-   */
-  function getPartsCount(parts) {
-    return parts.reduce((map, part) => {
-      map[part.chinese] = (map[part.chinese] || 0) + 1;
-      return map;
-    }, {});
+var data = require('./data/index');
+var {deepClone, deepEquals} = require('./util');
+var dataWords = deepClone(data.words);
+
+/**
+ * `partsCount` is a dictionary that holds the parts and its count.
+ * It's used when verifying whether all parts
+ */
+function getPiecesCount(parts) {
+  return parts.reduce((map, part) => {
+    map[part] = (map[part] || 0) + 1;
+    return map;
+  }, {});
+}
+
+function arraysMatch(a1, a2) {
+  if (a1.length != a2.length) return false;
+
+  return a1.every((e, i) => e === a2[i]);
+}
+
+module.exports = class Word {
+  constructor(data, variant) {
+    this.data = data;
+    this.variant = variant;
   }
 
-  return class Word {
-    constructor(wordObj) {
-      var parts = this.parts = wordObj.parts;
-      this.partsCount = getPartsCount(parts);
+  buildsFrom(pieces, variant) {
+    variant = variant || this.variant;
+
+    if (!variant) {
+      return ['chinese', 'english', 'pinyin', 'parts']
+        .some(varnt => this.buildFrom(parts, varnt));
     }
 
-    buildsFrom(parts) {
-      parts = parts.map(p => p.part);
-      var partsCount = getPartsCount(parts);
-      var wPartsCount = this.partsCount;
+    // ordered match
+    // return arraysMatch(this.getPieces(variant), pieces);
 
-      if (parts.length !== this.parts.length) return false;
+    var wPiecesCount = getPiecesCount(this.getPieces(variant));
+    var piecesCount = getPiecesCount(pieces);
 
-      return Object.keys(wPartsCount).every(part => {
-        return partsCount[part] === wPartsCount[part];
-      });
-    }
-  };
-})();
+    return deepEquals(wPiecesCount, piecesCount);
+  }
 
-export default Word;
+  getPieces(variant) {
+    variant = variant || this.variant;
+    return [].concat(this.data[variant] || []);
+  }
+};

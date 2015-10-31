@@ -1,19 +1,18 @@
-var GConsole = (() => {
-  return class GConsole {
-    constructor() {
-      this.pixiText = new PIXI.Text('');
-      Vector.move(this.pixiText, {x: 500, y: 500});
-    }
+var Vector = require('./Vector.js');
 
-    log(text) {
-      this.pixiText.text += text + '\n';
-    }
+class GConsole {
+  constructor() {
+    this.pixiText = new PIXI.Text('');
+    Vector.move(this.pixiText, {x: 200, y: 400});
+  }
 
-    clear() {
-      this.pixiText.text = '';
-    }
-  };
-})();
+  log(text) {
+    this.pixiText.text += text + '\n';
+  }
 
-var gconsole = new GConsole();
-export default gconsole;
+  clear() {
+    this.pixiText.text = '';
+  }
+};
+
+module.exports = new GConsole();

@@ -1,6 +1,7 @@
 DOING
 -----
   Order matters
+  Tutorial mode on first learn
 
 TODO
 ----
@@ -23,3 +24,7 @@ TODO
 
   Vocab view
   Bonus points and buy scrolls?
+
+  Rename wordpartSet->buildSet, wordpart->buildpart
+    Or wordpartSet-> choices, wordpart->choice
+  Rename LaserChain to Chain?

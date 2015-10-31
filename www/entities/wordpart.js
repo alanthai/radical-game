@@ -1,15 +1,20 @@
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-var Wordpart = (function () {
+define(function (require, exports, module) {
   "use strict";
+
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+  var config = require("../config");
+  var Vector = require("../Vector");
+
+  var _require = require("../globals.js");
+
+  var ticker = _require.ticker;
 
   var imgs = config.wordpart;
 
-  return (function () {
+  module.exports = (function () {
     function Wordpart(part, point) {
       _classCallCheck(this, Wordpart);
 
@@ -48,17 +53,49 @@ var Wordpart = (function () {
           sprite.mouseover = emitEvent("wordpart:mouseover");
           sprite.mouseout = emitEvent("wordpart:mouseout");
 
-          center(sprite);
+          Vector.center(sprite);
 
           this.container.addChild(sprite);
         }
       },
       initText: {
         value: function initText() {
-          var text = new PIXI.Text(this.part.chinese, { font: "30px MySimHei" });
-          center(text);
+          var text = new PIXI.Text(this.part, { font: "30px MySimHei" });
+          Vector.center(text);
 
           this.container.addChild(text);
+        }
+      },
+      highlight: {
+        value: function highlight() {
+          var container = this.container;
+
+          var radius = 0;
+          var hiSprite = this.hiSprite = new PIXI.Graphics();
+          hiSprite.lineStyle(2, 0, 1);
+          hiSprite.drawCircle(container.x, container.y, radius);
+          container.addChild(hiSprite);
+
+          var theta = 0;
+          var tf = 1500; // total time (in ms) to complete one turn
+          var TAU = 2 * Math.PI; // full circle
+
+          this.ticker = ticker.onTick(function (tick, diff) {
+            console.log("hello?");
+            // var baseRadius = this.baseSprite.height;
+            // theta += TAU * diff / 1500;
+            // radius = baseRadius + 30 * Math.sin(theta);
+          });
+          // animate wordpart for hint
+        }
+      },
+      unhighlight: {
+        value: function unhighlight() {
+          this.container.removeChild(this.hiSprite);
+          ticker.removeListener(this.ticker);
+          this.hiSprite.destroy();
+          this.hiSprite = null;
+          this.ticker = 0;
         }
       },
       move: {
@@ -87,4 +124,4 @@ var Wordpart = (function () {
 
     return Wordpart;
   })();
-})();
+});

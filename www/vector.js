@@ -1,12 +1,12 @@
-"use strict";
+define(function (require, exports, module) {
+  "use strict";
 
-var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+  var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var Vector = (function () {
   function getXY(v) {
     if (Array.isArray(v)) {
       return v;
@@ -15,7 +15,7 @@ var Vector = (function () {
     return [v.x, v.y];
   }
 
-  var Vector = (function () {
+  module.exports = (function () {
     function Vector(x, y) {
       _classCallCheck(this, Vector);
 
@@ -72,16 +72,22 @@ var Vector = (function () {
           return new Vector(this.x, this.y);
         }
       }
+    }, {
+      move: {
+        value: function move(dp, point) {
+          dp.x = point.x;
+          dp.y = point.y;
+          return dp;
+        }
+      },
+      center: {
+        value: function center(sprite) {
+          sprite.anchor.x = 0.5;
+          sprite.anchor.y = 0.5;
+        }
+      }
     });
 
     return Vector;
   })();
-
-  Vector.move = function (dp, point) {
-    dp.x = point.x;
-    dp.y = point.y;
-    return dp;
-  };
-
-  return Vector;
-})();
+});

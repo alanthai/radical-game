@@ -1,16 +1,16 @@
-"use strict";
-
-var config = (function () {
+define(function (require, exports, module) {
   "use strict";
 
   var IMG_PATH = "img";
+  var SCREEN_WIDTH = 640;
+  var SCREEN_HEIGHT = 1024;
 
-  return {
-    screen: [640, 1024],
+  module.exports = {
+    screen: [SCREEN_WIDTH, SCREEN_HEIGHT],
     backgroundColor: 8947848,
 
     wordpartSet: {
-      center: [300, 500],
+      center: [SCREEN_WIDTH / 2, 700],
       radius: 150, // pixel
       laserImg: "" + IMG_PATH + "/laser.png",
       boundaryColor: 16776960
@@ -21,7 +21,12 @@ var config = (function () {
       inactive: "" + IMG_PATH + "/circle-inactive.png" },
 
     enemy: {
-      center: [200, 0],
-      textOffset: [30, 180] }
+      center: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
+      textOffset: [0, 65] },
+
+    levelManager: {
+      scoreboard: [50, 50],
+      levelDisplay: [SCREEN_WIDTH - 50, 50] // right justified
+    }
   };
-})();
+});

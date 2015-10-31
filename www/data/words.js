@@ -1,66 +1,64 @@
-"use strict";
+define(function (require, exports, module) {
+  // Game.data.words
+  "use strict";
 
-Game.data.words = Game.data.words || {};
-
-extend(Game.data.words, {
-  八八: {
-    english: "eighty-eight",
-    chinese: "八八",
-    parts: ["八", "八"]
-  },
-  二二: {
-    english: "twenty-two",
-    chinese: "二二",
-    parts: ["二", "二"]
-  },
-  夜: {
-    english: "night",
-    chinese: "夜",
-    parts: ["亠", "亻", "夕", "丶"]
-  },
-  晚: {
-    english: "late",
-    chinese: "晚",
-    parts: ["日", "免"]
-  },
-  日: {
-    english: "day",
-    chinese: "日",
-    parts: ["日"]
-  },
-  早: {
-    english: "early",
-    chinese: "早",
-    parts: ["日", "十"]
-  } });
-
-// {
-//   english: '',
-//   chinese: '',
-//   parts: []
-// },
-// {
-//   english: 'tea',
-//   chinese: '茶',
-//   parts: ['艹', '']
-// },
-// {
-//   english: 'month',
-//   chinese: '',
-//   parts: []
-// },
-// {
-//   english: 'clear',
-//   chinese: '',
-//   parts: []
-// },
-// {
-//   english: 'white',
-//   chinese: '',
-//   parts: []
-// },
-// {
-//   english: 'black',
-//   chinese: '',
-//   parts: []
-// },
+  module.exports = {
+    // '月': {
+    //   english: 'month',
+    //   chinese: '月',
+    //   parts: ['月']
+    // },
+    // '日': {
+    //   english: 'day',
+    //   chinese: '日',
+    //   parts: ['日']
+    // },
+    // '女': {
+    //   english: 'female',
+    //   chinese: '女',
+    //   parts: ['女']
+    // },
+    明: {
+      english: "bright",
+      chinese: "明",
+      pinyin: "míng",
+      parts: ["日", "月"]
+    },
+    有: {
+      english: "have",
+      chinese: "有",
+      pinyin: "yǒu",
+      parts: ["𠂇", "月"]
+    },
+    晚: {
+      english: "late",
+      chinese: "晚",
+      pinyin: "wǎn",
+      parts: ["日", "免"]
+    },
+    早: {
+      english: "early",
+      chinese: "早",
+      pinyin: "zǎo",
+      parts: ["日", "十"]
+    },
+    时: {
+      english: "time",
+      chinese: "时",
+      pinyin: "shí",
+      parts: ["日", "寸"]
+    },
+    是: {
+      english: "to be",
+      chinese: "是",
+      pinyin: "shì",
+      parts: ["日", "𤴓"]
+    },
+    男: {
+      english: "male",
+      chinese: "男",
+      pinyin: "nán",
+      parts: ["田", "力"]
+    }
+  };
+});

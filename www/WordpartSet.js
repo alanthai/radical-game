@@ -1,11 +1,24 @@
-"use strict";
+define(function (require, exports, module) {
+  "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var WordpartSet = (function () {
-  var dataWordparts = getValues(Game.data.radicals);
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+  var Wordpart = require("./entities/wordpart.js");
+  var Word = require("./Word.js");
+  var config = require("./config.js");
+  var Vector = require("./Vector.js");
+
+  var data = require("./data/index");
+
+  var _require = require("./util");
+
+  var getValues = _require.getValues;
+
+  var dataWordparts = getValues(data.radicals);
 
   function getPoints(numPoints) {
     var angle = 2 * Math.PI / numPoints;
@@ -16,39 +29,190 @@ var WordpartSet = (function () {
     return points;
   }
 
-  function getRandomPart() {
-    return getRandom(dataWordparts);
-  }
-
-  /**
-   * Fills `parts` array with random parts
-   * until it reaches `numPoints` elements
-   * @param existingParts 
-   */
-  function generateMissingParts(wparts, numPoints) {
-    var parts = wparts.slice(0);
-    for (var i = 0, len = numPoints - parts.length; i < len; i++) {
-      parts.push(getRandomPart());
-    }
-
-    return shuffle(parts);
-  }
-
   var _config = config.wordpartSet;
   var center = new Vector(_config.center);
   var radius = _config.radius;
   var r = new Vector(radius, radius);
 
-  var LaserChain = (function () {
-    function LaserChain() {
-      _classCallCheck(this, LaserChain);
+  var WordpartSet = (function () {
+    function WordpartSet(word, parts) {
+      var giveHints = arguments[2] === undefined ? false : arguments[2];
+
+      _classCallCheck(this, WordpartSet);
+
+      this.word = word;
+      this.parts = parts;
+
+      var container = this.container = new PIXI.Container();
+      Vector.move(container, center);
+
+      container.interactive = true;
+      container.interactiveChildren = true;
+
+      container.word = this.word;
+      this.buildWordparts();
+
+      this.wordparts.forEach(function (wordpart) {
+        container.addChild(wordpart.container);
+      });
+
+      this.initInteractions();
+    }
+
+    _createClass(WordpartSet, {
+      initInteractions: {
+        value: function initInteractions() {
+          var _this = this;
+
+          var container = this.container;
+          var isContactingWordpart = false;
+          var dragging = false;
+
+          var boundaries = new PIXI.Graphics();
+          boundaries.beginFill(_config.boundaryColor);
+          boundaries.alpha = 0.1;
+          boundaries.drawRect(-200, -200, 400, 400);
+
+          container.addChild(boundaries);
+
+          container.on("wordpart:mousedown", function (event, wordpart) {
+            isContactingWordpart = true;
+            dragging = true;
+
+            wordpart.select();
+          });
+
+          container.on("wordpart:mouseover", function (event, wordpart) {
+            isContactingWordpart = true;
+            if (!wordpart.selected && dragging) {
+              container.emit("wordpart:select", event, wordpart);
+              wordpart.select();
+            }
+          });
+
+          container.on("wordpart:mouseout", function () {
+            isContactingWordpart = false;
+          });
+
+          var emitEvent = function (eventName) {
+            return function (event) {
+              return _this.container.emit(eventName, event);
+            };
+          };
+
+          container.mousemove = emitEvent("wordpartSet:mousemove");
+          container.mouseup = emitEvent("wordpartSet:mouseup");
+          container.mouseupoutside = emitEvent("wordpartSet:mouseupoutside");
+
+          var clear = function () {
+            dragging = false;
+            isContactingWordpart = false;
+            _this.clear();
+          };
+
+          container.on("wordpartSet:mouseup", function () {
+            if (isContactingWordpart) {
+              _this.word.buildsFrom(_this.getSelected()) ? container.emit("word:completed") : container.emit("word:incomplete");
+            }
+            clear();
+          });
+
+          container.on("wordpartSet:mouseupoutside", clear);
+
+          this.initHinter();
+          this.initChain();
+        }
+      },
+      buildWordparts: {
+        value: function buildWordparts() {
+          var _this = this;
+
+          var points = getPoints(this.parts.length);
+          points = points.map(function (pt) {
+            return new Vector(pt).mult(r);
+          });
+          this.wordparts = points.map(function (pt, i) {
+            return new Wordpart(_this.parts[i], pt);
+          });
+        }
+      },
+      getSelected: {
+        value: function getSelected() {
+          return this.wordparts.filter(function (wordpart) {
+            return wordpart.selected;
+          }).map(function (wordpart) {
+            return wordpart.part;
+          });
+        }
+      },
+      select: {
+        value: function select(wordpart) {
+          wordpart.select();
+        }
+      },
+      clear: {
+        value: function clear() {
+          this.wordparts.forEach(function (wordpart) {
+            return wordpart.deselect();
+          });
+        }
+      }
+    });
+
+    return WordpartSet;
+  })();
+
+  var WordpartSetHinter = {
+    initHinter: function initHinter() {
+      var _this = this;
+
+      this.resetHints();
+
+      this.container.on("wordpart:mousedown", function (event, wordpart) {
+        _this.getHint() === wordpart.part && _this.highlightNextHint();
+      });
+
+      this.container.on("wordpart:mouseup", function () {
+        return _this.resetHints();
+      });
+    },
+
+    highlightNextHint: function highlightNextHint() {
+      this.hints.shift();
+      this.highlightHint();
+    },
+
+    highlightHint: function highlightHint() {
+      var hint = this.getHint();
+      var wordpart = this.wordparts.find(function (wp) {
+        return hint === wp.part;
+      });
+
+      if (wordpart) wordpart.highlight();
+    },
+
+    getHint: function getHint() {
+      return this.hints[0];
+    },
+
+    resetHints: function resetHints() {
+      this.hints = [null].concat(_toConsumableArray(this.word.getPieces()));
+      this.highlightNextHint();
+    }
+  };
+
+  var tol = 0.1; // pixel tolerance
+
+  var Chain = (function () {
+    function Chain() {
+      _classCallCheck(this, Chain);
 
       this.container = new PIXI.Container();
       this.lasers = [];
       this.laserImg = PIXI.Texture.fromImage(_config.laserImg);
     }
 
-    _createClass(LaserChain, {
+    _createClass(Chain, {
       addLaser: {
         value: function addLaser(startPos) {
           var start = Vector.move(new PIXI.Point(0, 0), startPos);
@@ -71,12 +235,6 @@ var WordpartSet = (function () {
           Vector.move(head, point);
         }
       },
-      isCurrentTargeting: {
-        value: function isCurrentTargeting(point) {
-          var head = this.current.points[0];
-          return head.x === point.x && head.y === point.y;
-        }
-      },
       destroy: {
         value: function destroy() {
           this.container.destroy();
@@ -84,143 +242,61 @@ var WordpartSet = (function () {
       }
     });
 
-    return LaserChain;
+    return Chain;
   })();
 
-  return (function () {
-    function WordpartSet(wordObj) {
-      var numPoints = arguments[1] === undefined ? 6 : arguments[1];
+  var WordpartSetChain = {
+    initChain: function initChain() {
+      var container = this.container;
+      var chain;
 
-      _classCallCheck(this, WordpartSet);
-
-      var container = this.container = new PIXI.Container();
-      Vector.move(container, center);
-
-      container.interactive = true;
-      container.interactiveChildren = true;
-
-      this.initInteractions();
-
-      this.word = new Word(wordObj);
-      container.word = this.word;
-      this.numPoints = numPoints;
-      this.set = this.buildWordparts();
-
-      this.wordparts.forEach(function (wordpart) {
-        container.addChild(wordpart.container);
+      container.on("wordpart:mousedown", function (event, wordpart) {
+        chain = new Chain();
+        chain.addLaser(wordpart.container);
+        container.addChild(chain.container);
       });
-    }
 
-    _createClass(WordpartSet, {
-      initInteractions: {
-        value: function initInteractions() {
-          var _this = this;
+      container.on("wordpart:select", function (event, wordpart) {
+        if (!chain) return;
 
-          var container = this.container;
-          var isContactingWordpart = false;
-          var dragging = false;
+        chain.pointCurrentTo(wordpart.container);
+        chain.addLaser(wordpart.container);
+      });
 
-          var laserChain;
+      container.on("wordpart:mouseover", function () {
+        if (!chain) return;
+        chain.container.alpha = 1;
+      });
 
-          var boundaries = new PIXI.Graphics();
-          boundaries.beginFill(_config.boundaryColor);
-          boundaries.alpha = 0.1;
-          boundaries.drawRect(-200, -200, 400, 400);
+      container.on("wordpart:mouseout", function () {
+        if (!chain) return;
+        chain.container.alpha = 0.5;
+      });
 
-          container.addChild(boundaries);
+      container.on("wordpartSet:mousemove", function (event) {
+        if (!chain) return;
+        var pos = event.data.getLocalPosition(container);
+        chain.pointCurrentTo(pos);
+      });
 
-          container.on("wordpart:mousedown", function (event, wordpart) {
-            isContactingWordpart = true;
-            dragging = true;
-
-            laserChain = new LaserChain();
-            laserChain.addLaser(wordpart.container);
-            container.addChild(laserChain.container);
-
-            wordpart.select();
-          });
-
-          container.on("wordpart:mouseover", function (event, wordpart) {
-            isContactingWordpart = true;
-            if (!dragging) return;
-
-            if (laserChain) {
-              if (!wordpart.selected) {
-                laserChain.pointCurrentTo(wordpart.container);
-                laserChain.addLaser(wordpart.container);
-                laserChain.container.alpha = 1;
-              } else if (laserChain.isCurrentTargeting(wordpart.container)) {
-                laserChain.container.alpha = 1;
-              }
-            }
-
-            wordpart.select();
-          });
-
-          container.on("wordpart:mouseout", function () {
-            isContactingWordpart = false;
-            if (!laserChain) return;
-            laserChain.container.alpha = 0.5;
-          });
-
-          container.mousemove = function (event) {
-            if (!dragging) return;
-            var pos = event.data.getLocalPosition(container);
-            laserChain.pointCurrentTo(pos);
-          };
-
-          container.mouseup = function () {
-            dragging = false;
-            if (isContactingWordpart) {
-              var wordIsSelected = _this.word.buildsFrom(_this.getSelected());
-              wordIsSelected && container.emit("word:completed");
-            }
-            _this.clear();
-            container.removeChild(laserChain.container);
-            laserChain.destroy();
-          };
-
-          container.mouseupoutside = function () {
-            dragging = false;
-            _this.clear();
-            container.removeChild(laserChain.container);
-            laserChain.destroy();
-          };
-        }
-      },
-      buildWordparts: {
-        value: function buildWordparts() {
-          var points = getPoints(this.numPoints);
-          var parts = generateMissingParts(this.word.parts, this.numPoints);
-          points = points.map(function (pt) {
-            return new Vector(pt).mult(r);
-          });
-          this.wordparts = points.map(function (pt, i) {
-            return new Wordpart(parts[i], pt);
-          });
-        }
-      },
-      getSelected: {
-        value: function getSelected() {
-          return this.wordparts.filter(function (wordpart) {
-            return wordpart.selected;
-          });
-        }
-      },
-      select: {
-        value: function select(wordpart) {
-          wordpart.select();
-        }
-      },
-      clear: {
-        value: function clear() {
-          this.wordparts.forEach(function (wordpart) {
-            return wordpart.deselect();
-          });
-        }
+      function destroy() {
+        container.removeChild(chain.container);
+        chain.destroy();
+        chain = null;
       }
-    });
 
-    return WordpartSet;
-  })();
-})();
+      container.on("wordpartSet:mouseup", destroy);
+      container.on("wordpartSet:mouseupoutside", destroy);
+    }
+  };
+
+  var mixins = Object.assign({}, WordpartSetHinter, WordpartSetChain);
+
+  Object.keys(mixins).forEach(function (prop) {
+    mixins[prop] = { value: mixins[prop] };
+  });
+
+  Object.defineProperties(WordpartSet.prototype, mixins);
+
+  module.exports = WordpartSet;
+});

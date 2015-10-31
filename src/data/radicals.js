@@ -1,8 +1,9 @@
 ﻿// If Chinese characters start to look funny, make sure this file is saved in UTF-8
 // In sublime text: File > Save with Encoding > UTF-8 with BOM
-Game.data.words = Game.data.words || {};
+// Game.data.words = Game.data.words || {};
 
-Game.data.radicals = {
+// Game.data.radicals
+var radicals = {
   '一': {chinese: '一', pinyin: 'yī', strokes: 1, english: 'one'},
   '丨': {chinese: '丨', pinyin: 'shù', strokes: 1, english: 'line'},
   '丶': {chinese: '丶', pinyin: 'diǎn', strokes: 1, english: 'dot'},
@@ -12,6 +13,7 @@ Game.data.radicals = {
   '二': {chinese: '二', pinyin: 'èr', strokes: 2, english: 'two'},
   '亠': {chinese: '亠', pinyin: 'tóu', strokes: 2, english: 'lid'},
   '人': {chinese: '人', pinyin: 'rén', strokes: 2, english: 'person', alt: '亻'},
+  '亻': {chinese: '亻', pinyin: 'rén', strokes: 2, english: 'person'},
   '儿': {chinese: '儿', pinyin: 'ér', strokes: 2, english: 'legs'},
   '入': {chinese: '入', pinyin: 'rù', strokes: 2, english: 'enter'},
   '八': {chinese: '八', pinyin: 'bā', strokes: 2, english: 'eight', alt: '丷'},
@@ -217,6 +219,8 @@ Game.data.radicals = {
   '龙': {chinese: '龙', pinyin: 'lóng', strokes: 5, english: 'dragon', traditional: '龍'},
   '龟': {chinese: '龟', pinyin: 'guī', strokes: 7, english: 'turtle', traditional: '龜'},
   '龠': {chinese: '龠', pinyin: 'yuè', strokes: 17, english: 'flute'}
-}
+};
 
-extend(Game.data.words, Game.data.radicals);
+Object.keys(radicals).forEach(k => radicals[k].parts = [k]);
+
+module.exports = radicals;

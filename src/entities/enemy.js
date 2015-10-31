@@ -1,33 +1,36 @@
-var Enemy = (() => {
-  var dataEnemies = Game.data.enemies;
 
-  return class Enemy {
-    constructor(word, data) {
-      this.word = word;
+var dataEnemies = require('../data/enemies');
+var Vector = require('../Vector');
+var config = require('../config');
 
-      this.container = new PIXI.Container();
-      this.data = data;
+module.exports = class Enemy {
+  constructor(wordVariant, data) {
+    this.wordVariant = wordVariant;
 
-      this.initSprite();
-      this.initText();
+    this.container = new PIXI.Container();
+    this.data = data;
 
-      var position = new Vector(config.enemy.center);
-      Vector.move(this.container, position);
-    }
+    this.initSprite();
+    this.initText();
 
-    initSprite() {
-      var texture = PIXI.Texture.fromImage(this.data.img);
-      var sprite = new PIXI.Sprite(texture);
-      this.container.addChild(sprite);
-    }
+    var position = new Vector(config.enemy.center);
+    Vector.move(this.container, position);
+  }
 
-    initText() {
-      var text = new PIXI.Text(this.word.english);
-      var offset = new Vector(config.enemy.textOffset);
-      Vector.move(text, offset);
-      this.container.addChild(text);
-    }
+  initSprite() {
+    var texture = PIXI.Texture.fromImage(this.data.img);
+    var sprite = new PIXI.Sprite(texture);
+    Vector.center(sprite);
+    this.container.addChild(sprite);
+  }
 
-    centerText() {}
-  };
-})();
+  initText() {
+    var text = new PIXI.Text(this.wordVariant);
+    var offset = new Vector(config.enemy.textOffset);
+    Vector.center(text);
+    Vector.move(text, offset);
+    this.container.addChild(text);
+  }
+
+  centerText() {}
+};

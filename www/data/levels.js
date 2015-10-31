@@ -1,4 +1,7 @@
-"use strict";
+define(function (require, exports, module) {
+  // Game.data.levels
+  "use strict";
 
-Game.data.levels = [{}, // skip level 0
-{ enemies: ["enemy1"], words: ["八八", "二二"], pointsGoal: 1000 }, { enemies: ["enemy1"], words: ["夜", "晚", "日", "早"], pointsGoal: 1000 }];
+  module.exports = [{}, // skip level 0
+  { enemies: ["enemy1"], words: ["明", "月", "日", "有", "晚", "早", "时", "是", "女", "男"], variants: { learn: "chinese", build: "parts" }, pointsGoal: 40 }, { enemies: ["enemy1"], words: ["明", "月", "日", "有", "晚", "早", "时", "是", "女", "男"], variants: { learn: "english", build: "chinese" }, pointsGoal: 40 }, { enemies: ["enemy1"], words: ["明", "月", "日", "有", "晚", "早", "时", "是", "女", "男"], variants: { learn: "english", build: "pinyin" }, pointsGoal: 40 }, { enemies: ["enemy1"], words: ["明", "月", "日", "有", "晚", "早", "时", "是", "女", "男"], variants: { learn: "chinese", build: "pinyin" }, pointsGoal: 40 }, { enemies: ["enemy1"], words: ["明", "月", "日", "有", "晚", "早", "时", "是", "女", "男"], variants: { learn: "chinese", build: "pinyin" }, pointsGoal: 40 }];
+});
