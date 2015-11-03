@@ -15,7 +15,7 @@ function getPiecesCount(parts) {
 }
 
 function arraysMatch(a1, a2) {
-  if (a1.length != a2.length) return false;
+  if (a1.length !== a2.length) return false;
 
   return a1.every((e, i) => e === a2[i]);
 }
@@ -35,12 +35,13 @@ export default class Word {
     }
 
     // ordered match
-    // return arraysMatch(this.getPieces(variant), pieces);
+    return arraysMatch(this.getPieces(variant), pieces);
 
-    var wPiecesCount = getPiecesCount(this.getPieces(variant));
-    var piecesCount = getPiecesCount(pieces);
+    // unordered
+    // var wPiecesCount = getPiecesCount(this.getPieces(variant));
+    // var piecesCount = getPiecesCount(pieces);
 
-    return deepEquals(wPiecesCount, piecesCount);
+    // return deepEquals(wPiecesCount, piecesCount);
   }
 
   getPieces(variant) {

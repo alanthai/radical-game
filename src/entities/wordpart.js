@@ -51,26 +51,34 @@ export default class Wordpart {
   }
 
   highlight() {
-    var container = this.container;
+    if (this.hiSprite) return;
 
-    var radius = 64*2;
     var hiSprite = this.hiSprite = new PIXI.Graphics();
     hiSprite.lineStyle(2, 0x000000, 1);
-    hiSprite.drawCircle(0, 0, radius);
-    container.addChild(hiSprite);
+    hiSprite.drawCircle(0, 0, 64);
 
     var theta = 0;
     var tf = 1200; // total time (in ms) to complete one turn
     var TAU = 2 * Math.PI; // full circle 
     var dr = 25;
 
-    this.ticker = ticker.onTick((tick, diff) => {
+    // On first tick, do nothing (except add the real onTick)
+    // Fixes bug: On highlight and unhighlight on same frame,
+    // Two highlights show at the same time.
+    var firstTick = () => {
+      this.container.addChild(hiSprite);
+      ticker.removeListener(firstTicker);
+      this.ticker = ticker.onTick(onTick);
+    }
+
+    var onTick = (tick, diff) => {
       var baseRadius = this.baseSprite.height + dr;
       theta += TAU * diff / tf;
-      radius = baseRadius + dr * Math.sin(theta);
+      var radius = baseRadius + dr * Math.sin(theta);
       hiSprite.height = hiSprite.width = radius;
-    });
-    // animate wordpart for hint
+    }
+
+    var firstTicker = ticker.onTick(firstTick);
   }
 
   unhighlight() {

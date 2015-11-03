@@ -153,7 +153,7 @@ define(["exports", "module", "./util", "./data/index", "./Vector", "./Word", "./
           this.container.addChild(this.enemy.container);
           this.wordpartSet.container.on("word:completed", function () {
             _this.wordpartSet.container.removeAllListeners();
-            setTimeout(_this.step, 1000);
+            setTimeout(_this.step, 500);
           });
         }
       },

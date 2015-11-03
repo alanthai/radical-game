@@ -59,6 +59,8 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
         container.addChild(wordpart.container);
       });
 
+      this.selected = [];
+
       this.initInteractions();
     }
 
@@ -82,13 +84,13 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
             isContactingWordpart = true;
             dragging = true;
 
-            wordpart.select();
+            _this.select(wordpart);
           });
 
           container.on("wordpart:mouseover", function (event, wordpart) {
             isContactingWordpart = true;
             if (!wordpart.selected && dragging) {
-              wordpart.select();
+              _this.select(wordpart);
             }
           });
 
@@ -114,7 +116,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
 
           container.on("wordpartSet:mouseup", function () {
             if (isContactingWordpart) {
-              _this.word.buildsFrom(_this.getSelected()) ? container.emit("word:completed") : container.emit("word:incorrect");
+              _this.word.buildsFrom(_this.selected) ? container.emit("word:completed") : container.emit("word:incorrect");
             }
             clear();
           });
@@ -138,22 +140,15 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
           });
         }
       },
-      getSelected: {
-        value: function getSelected() {
-          return this.wordparts.filter(function (wordpart) {
-            return wordpart.selected;
-          }).map(function (wordpart) {
-            return wordpart.part;
-          });
-        }
-      },
       select: {
         value: function select(wordpart) {
+          this.selected.push(wordpart.part);
           wordpart.select();
         }
       },
       clear: {
         value: function clear() {
+          this.selected = [];
           this.wordparts.forEach(function (wordpart) {
             return wordpart.deselect();
           });
@@ -175,7 +170,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
       });
 
       this.container.on("wordpart:select", function (event, wordpart) {
-        wordpart.unhighlight();
+        _this.wordparts.forEach(function (wp) {
+          return wp.unhighlight();
+        });
       });
 
       this.container.on("word:incorrect", function () {

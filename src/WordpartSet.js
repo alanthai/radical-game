@@ -41,6 +41,8 @@ class WordpartSet {
       container.addChild(wordpart.container);
     });
 
+    this.selected = [];
+
     this.initInteractions();
   }
 
@@ -60,13 +62,13 @@ class WordpartSet {
       isContactingWordpart = true;
       dragging = true;
 
-      wordpart.select();
+      this.select(wordpart);
     });
 
     container.on('wordpart:mouseover', (event, wordpart) => {
       isContactingWordpart = true;
       if (!wordpart.selected && dragging) {
-        wordpart.select();
+        this.select(wordpart);
       }
     });
 
@@ -90,7 +92,7 @@ class WordpartSet {
 
     container.on('wordpartSet:mouseup', () => {
       if (isContactingWordpart) {
-        this.word.buildsFrom(this.getSelected())
+        this.word.buildsFrom(this.selected)
           ? container.emit('word:completed')
           : container.emit('word:incorrect');
       }
@@ -109,17 +111,13 @@ class WordpartSet {
     this.wordparts = points.map((pt, i) => new Wordpart(this.parts[i], pt));
   }
 
-  getSelected() {
-    return this.wordparts
-      .filter(wordpart => wordpart.selected)
-      .map(wordpart => wordpart.part);
-  }
-
   select(wordpart) {
+    this.selected.push(wordpart.part);
     wordpart.select();
   }
 
   clear() {
+    this.selected = [];
     this.wordparts.forEach(wordpart => wordpart.deselect());
   }
 }
@@ -135,7 +133,7 @@ var WordpartSetHinter = {
     });
 
     this.container.on('wordpart:select', (event, wordpart) => {
-      wordpart.unhighlight();
+      this.wordparts.forEach(wp => wp.unhighlight());
     });
 
     this.container.on('word:incorrect', () => this.resetHints());

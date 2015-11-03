@@ -11,7 +11,6 @@ var paths = {
   dist: './www/'
 };
 
-var simplerequirejs = require('./simplerequirejs.js');
 gulp.task('build:js', function () {
   return gulp.src(paths.js)
     .pipe(babel({modules: 'amd'}))

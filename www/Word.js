@@ -26,7 +26,7 @@ define(["exports", "module", "./data/index", "./util"], function (exports, modul
   }
 
   function arraysMatch(a1, a2) {
-    if (a1.length != a2.length) {
+    if (a1.length !== a2.length) {
       return false;
     }return a1.every(function (e, i) {
       return e === a2[i];
@@ -55,12 +55,13 @@ define(["exports", "module", "./data/index", "./util"], function (exports, modul
           }
 
           // ordered match
-          // return arraysMatch(this.getPieces(variant), pieces);
+          return arraysMatch(this.getPieces(variant), pieces);
 
-          var wPiecesCount = getPiecesCount(this.getPieces(variant));
-          var piecesCount = getPiecesCount(pieces);
+          // unordered
+          // var wPiecesCount = getPiecesCount(this.getPieces(variant));
+          // var piecesCount = getPiecesCount(pieces);
 
-          return deepEquals(wPiecesCount, piecesCount);
+          // return deepEquals(wPiecesCount, piecesCount);
         }
       },
       getPieces: {

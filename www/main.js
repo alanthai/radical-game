@@ -51,7 +51,7 @@ define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"],
     requestAnimationFrame(animate);
 
     var active = levelMgr.wordpartSet;
-    var selected = active.getSelected();
+    var selected = active.selected;
 
     gconsole.clear();
     gconsole.log("match? " + active.word.buildsFrom(selected));

@@ -125,7 +125,7 @@ export default class LevelManager {
     this.container.addChild(this.enemy.container);
     this.wordpartSet.container.on('word:completed', () => {
       this.wordpartSet.container.removeAllListeners();
-      setTimeout(this.step, 1000);
+      setTimeout(this.step, 500);
     });
   }
 
