@@ -1,4 +1,4 @@
-define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"], function (exports, _WordpartSet, _GConsole, _LevelManager, _config) {
+define(["exports", "./GConsole", "./Game", "./config"], function (exports, _GConsole, _Game, _config) {
   "use strict";
 
   var _PIXI;
@@ -7,11 +7,9 @@ define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"],
 
   var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
-  var WordpartSet = _interopRequire(_WordpartSet);
-
   var gconsole = _interopRequire(_GConsole);
 
-  var LevelManager = _interopRequire(_LevelManager);
+  var Game = _interopRequire(_Game);
 
   var config = _interopRequire(_config);
 
@@ -24,24 +22,9 @@ define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"],
 
   document.body.appendChild(renderer.view);
 
-  var levelMgr = null;
-  function stepLevel(level) {
-    if (levelMgr) {
-      stage.removeChild(levelMgr.container);
-      levelMgr.container.destroy();
-    }
+  var game = new Game();
 
-    levelMgr = new LevelManager(level);
-    levelMgr.container.on("level:completed", function (lvl) {
-      stepLevel(lvl + 1);
-    });
-
-    stage.addChild(levelMgr.container);
-  }
-
-  stepLevel(1);
-
-  stage.addChild(gconsole.pixiText);
+  game.stage.addChild(gconsole.pixiText);
 
   var _require = require("./globals");
 
@@ -50,7 +33,7 @@ define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"],
   function animate() {
     requestAnimationFrame(animate);
 
-    var active = levelMgr.wordpartSet;
+    var active = game.currentScreen.wordpartSet;
     var selected = active.selected;
 
     gconsole.clear();
@@ -59,7 +42,7 @@ define(["exports", "./WordpartSet", "./GConsole", "./LevelManager", "./config"],
       return gconsole.log(s);
     });
 
-    renderer.render(stage);
+    renderer.render(game.stage);
     ticker.tick();
   }
 

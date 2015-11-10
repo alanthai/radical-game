@@ -1,7 +1,7 @@
 import Wordpart from './entities/wordpart';
 import Word from './Word';
 import config from './config';
-import Vector from './Vector';
+import V from './Vector';
 
 import data from './data/index';
 import {getValues} from './util';
@@ -18,9 +18,9 @@ function getPoints(numPoints) {
 }
 
 var _config = config.wordpartSet;
-var center = new Vector(_config.center);
+var center = V(_config.center);
 var radius = _config.radius;
-var r = new Vector(radius, radius);
+var r = V(radius, radius);
 
 
 class WordpartSet {
@@ -29,7 +29,7 @@ class WordpartSet {
     this.parts = parts;
 
     var container = this.container = new PIXI.Container();
-    Vector.move(container, center);
+    V.move(container, center);
 
     container.interactive = true;
     container.interactiveChildren = true;
@@ -107,7 +107,7 @@ class WordpartSet {
 
   buildWordparts() {
     var points = getPoints(this.parts.length);
-    points = points.map(pt => new Vector(pt).mult(r));
+    points = points.map(pt => V(pt).mult(r));
     this.wordparts = points.map((pt, i) => new Wordpart(this.parts[i], pt));
   }
 
@@ -168,14 +168,13 @@ var tol = 0.1; // pixel tolerance
 class Chain {
   constructor() {
     this.container = new PIXI.Container();
-    this.lasers = [];
-    this.laserImg = PIXI.Texture.fromImage(_config.laserImg);
+    this.imgChain = PIXI.Texture.fromImage(_config.imgChain);
   }
 
-  addLaser(startPos) {
-    var start = Vector.move(new PIXI.Point(0, 0), startPos);
-    var end = Vector.move(new PIXI.Point(0, 0), startPos);
-    this.current = new PIXI.mesh.Rope(this.laserImg, [start, end]);
+  lockTo(startPos) {
+    var start = V.move(new PIXI.Point(0, 0), startPos);
+    var end = V.move(new PIXI.Point(0, 0), startPos);
+    this.current = new PIXI.mesh.Rope(this.imgChain, [start, end]);
 
     this.container.addChild(this.current);
   }
@@ -188,7 +187,7 @@ class Chain {
 
   pointCurrentTo(point) {
     var head = this.current.points.slice(-1)[0];
-    Vector.move(head, point);
+    V.move(head, point);
   }
 
   destroy() {
@@ -203,7 +202,7 @@ var WordpartSetChain = {
     
     container.on('wordpart:mousedown', (event, wordpart) => {
       chain = new Chain();
-      chain.addLaser(wordpart.container);
+      chain.lockTo(wordpart.container);
       container.addChild(chain.container);
     });
 
@@ -211,7 +210,7 @@ var WordpartSetChain = {
       if (!chain) return;
 
       chain.pointCurrentTo(wordpart.container);
-      chain.addLaser(wordpart.container);
+      chain.lockTo(wordpart.container);
     });
 
     container.on('wordpart:mouseover', () => {

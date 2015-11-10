@@ -15,20 +15,24 @@ define(["exports", "module"], function (exports, module) {
     return [v.x, v.y];
   }
 
-  var Vector = (function () {
-    function Vector(x, y) {
-      _classCallCheck(this, Vector);
+  var VectorClass = (function () {
+    function VectorClass(x, y) {
+      _classCallCheck(this, VectorClass);
 
       if (Array.isArray(x)) {
-        y = x[1];
-        x = x[0];
+        var _ref = x;
+
+        var _ref2 = _slicedToArray(_ref, 2);
+
+        x = _ref2[0];
+        y = _ref2[1];
       }
 
       this.x = x;
       this.y = y;
     }
 
-    _createClass(Vector, {
+    _createClass(VectorClass, {
       _add: {
         value: function _add(v) {
           var _getXY = getXY(v);
@@ -72,24 +76,27 @@ define(["exports", "module"], function (exports, module) {
           return new Vector(this.x, this.y);
         }
       }
-    }, {
-      move: {
-        value: function move(dp, point) {
-          dp.x = point.x;
-          dp.y = point.y;
-          return dp;
-        }
-      },
-      center: {
-        value: function center(sprite) {
-          sprite.anchor.x = 0.5;
-          sprite.anchor.y = 0.5;
-        }
-      }
     });
 
-    return Vector;
+    return VectorClass;
   })();
+
+  ;
+
+  var Vector = function (x, y) {
+    return new VectorClass(x, y);
+  };
+
+  Vector.move = function (dp, point) {
+    dp.x = point.x;
+    dp.y = point.y;
+    return dp;
+  };
+
+  Vector.center = function (sprite) {
+    sprite.anchor.x = 0.5;
+    sprite.anchor.y = 0.5;
+  };
 
   module.exports = Vector;
 });

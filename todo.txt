@@ -4,6 +4,10 @@ DOING
   // Fix bug
   Hint mode on first learn
     - set tutorial mode on/off
+  Screen management
+  Basic fighting system
+  Review vs Learning level separation
+
 
 TODO
 ----
@@ -18,7 +22,6 @@ TODO
     Monster health and levels
   Level system
     Learning progression
-    Create first 5 levels
 
   Spaced Repitition system
   Set up build system for phone

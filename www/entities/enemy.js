@@ -9,7 +9,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
 
   var dataEnemies = _interopRequire(_dataEnemies);
 
-  var Vector = _interopRequire(_Vector);
+  var V = _interopRequire(_Vector);
 
   var config = _interopRequire(_config);
 
@@ -17,16 +17,15 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
     function Enemy(wordVariant, data) {
       _classCallCheck(this, Enemy);
 
-      this.wordVariant = wordVariant;
-
       this.container = new PIXI.Container();
-      this.data = data;
+      this.data = Object.assign({}, data);
 
       this.initSprite();
-      this.initText();
 
-      var position = new Vector(config.enemy.center);
-      Vector.move(this.container, position);
+      this.text = new PIXI.Container(); // placeholder
+      this.nextWordVariant(wordVariant);
+
+      V.move(this.container, V(config.enemy.center));
     }
 
     _createClass(Enemy, {
@@ -34,17 +33,52 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
         value: function initSprite() {
           var texture = PIXI.Texture.fromImage(this.data.img);
           var sprite = new PIXI.Sprite(texture);
-          Vector.center(sprite);
+          V.center(sprite);
           this.container.addChild(sprite);
         }
       },
-      initText: {
-        value: function initText() {
-          var text = new PIXI.Text(this.wordVariant);
-          var offset = new Vector(config.enemy.textOffset);
-          Vector.center(text);
-          Vector.move(text, offset);
+      nextWordVariant: {
+        value: function nextWordVariant(wordVariant) {
+          this.container.removeChild(this.text);
+
+          var text = this.text = new PIXI.Text(wordVariant);
+          var offset = V(config.enemy.textOffset);
+          V.center(text);
+          V.move(text, offset);
           this.container.addChild(text);
+        }
+      },
+      miss: {
+        value: function miss() {
+          this.data.fleeAfter--;
+
+          if (this.fled()) {
+            this.container.emit("enemy:fled", this);
+            // animate fled
+          }
+        }
+      },
+      attack: {
+        value: function attack(damage) {
+          this.data.health = Math.max(this.data.health - damage, 0);
+
+          if (this.died()) {
+            this.container.emit("enemy:died", this);
+            // animate death
+          } else {
+            this.container.emit("enemy:hurt", this);
+            // animate hurt
+          }
+        }
+      },
+      died: {
+        value: function died() {
+          return this.data.health <= 0;
+        }
+      },
+      fled: {
+        value: function fled() {
+          return this.data.fleeAfter < 1;
         }
       },
       centerText: {

@@ -6,11 +6,10 @@ function getXY(v) {
   return [v.x, v.y];
 }
 
-export default class Vector {
+class VectorClass {
   constructor(x, y) {
     if (Array.isArray(x)) {
-      y = x[1];
-      x = x[0];
+      [x, y] = x;
     }
 
     this.x = x;
@@ -43,15 +42,19 @@ export default class Vector {
   clone() {
     return new Vector(this.x, this.y);
   }
-
-  static move(dp, point) {
-    dp.x = point.x;
-    dp.y = point.y;
-    return dp;
-  }
-
-  static center(sprite) {
-    sprite.anchor.x = 0.5;
-    sprite.anchor.y = 0.5;
-  }
 };
+
+var Vector = (x, y) => new VectorClass(x, y);
+
+Vector.move = function(dp, point) {
+  dp.x = point.x;
+  dp.y = point.y;
+  return dp;
+}
+
+Vector.center = function(sprite) {
+  sprite.anchor.x = 0.5;
+  sprite.anchor.y = 0.5;
+}
+
+export default Vector;

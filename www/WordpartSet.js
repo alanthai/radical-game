@@ -15,7 +15,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
 
   var config = _interopRequire(_config2);
 
-  var Vector = _interopRequire(_Vector);
+  var V = _interopRequire(_Vector);
 
   var data = _interopRequire(_dataIndex);
 
@@ -33,9 +33,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
   }
 
   var _config = config.wordpartSet;
-  var center = new Vector(_config.center);
+  var center = V(_config.center);
   var radius = _config.radius;
-  var r = new Vector(radius, radius);
+  var r = V(radius, radius);
 
   var WordpartSet = (function () {
     function WordpartSet(word, parts) {
@@ -47,7 +47,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
       this.parts = parts;
 
       var container = this.container = new PIXI.Container();
-      Vector.move(container, center);
+      V.move(container, center);
 
       container.interactive = true;
       container.interactiveChildren = true;
@@ -133,7 +133,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
 
           var points = getPoints(this.parts.length);
           points = points.map(function (pt) {
-            return new Vector(pt).mult(r);
+            return V(pt).mult(r);
           });
           this.wordparts = points.map(function (pt, i) {
             return new Wordpart(_this.parts[i], pt);
@@ -218,16 +218,15 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
       _classCallCheck(this, Chain);
 
       this.container = new PIXI.Container();
-      this.lasers = [];
-      this.laserImg = PIXI.Texture.fromImage(_config.laserImg);
+      this.imgChain = PIXI.Texture.fromImage(_config.imgChain);
     }
 
     _createClass(Chain, {
-      addLaser: {
-        value: function addLaser(startPos) {
-          var start = Vector.move(new PIXI.Point(0, 0), startPos);
-          var end = Vector.move(new PIXI.Point(0, 0), startPos);
-          this.current = new PIXI.mesh.Rope(this.laserImg, [start, end]);
+      lockTo: {
+        value: function lockTo(startPos) {
+          var start = V.move(new PIXI.Point(0, 0), startPos);
+          var end = V.move(new PIXI.Point(0, 0), startPos);
+          this.current = new PIXI.mesh.Rope(this.imgChain, [start, end]);
 
           this.container.addChild(this.current);
         }
@@ -242,7 +241,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
       pointCurrentTo: {
         value: function pointCurrentTo(point) {
           var head = this.current.points.slice(-1)[0];
-          Vector.move(head, point);
+          V.move(head, point);
         }
       },
       destroy: {
@@ -262,7 +261,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
 
       container.on("wordpart:mousedown", function (event, wordpart) {
         chain = new Chain();
-        chain.addLaser(wordpart.container);
+        chain.lockTo(wordpart.container);
         container.addChild(chain.container);
       });
 
@@ -270,7 +269,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
         if (!chain) return;
 
         chain.pointCurrentTo(wordpart.container);
-        chain.addLaser(wordpart.container);
+        chain.lockTo(wordpart.container);
       });
 
       container.on("wordpart:mouseover", function () {

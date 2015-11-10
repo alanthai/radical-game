@@ -16,5 +16,8 @@
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.4",
     "gulp-livereload": "^3.8.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.0.16"
   }
 }

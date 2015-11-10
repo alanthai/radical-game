@@ -1,6 +1,5 @@
-import WordpartSet from './WordpartSet';
 import gconsole from './GConsole';
-import LevelManager from './LevelManager';
+import Game from './Game';
 import config from './config';
 
 // New instance of a pixi stage
@@ -13,38 +12,23 @@ var renderer = PIXI.autoDetectRenderer(...dimensions, {backgroundColor});
 document.body.appendChild(renderer.view);
 
 
-var levelMgr = null;
-function stepLevel(level) {
-  if (levelMgr) {
-    stage.removeChild(levelMgr.container);
-    levelMgr.container.destroy();
-  }
+var game = new Game();
 
-  levelMgr = new LevelManager(level);
-  levelMgr.container.on('level:completed', lvl => {
-    stepLevel(lvl + 1);
-  });
-
-  stage.addChild(levelMgr.container);    
-}
-
-stepLevel(1);
-
-stage.addChild(gconsole.pixiText);
+game.stage.addChild(gconsole.pixiText);
 
 var {ticker} = require('./globals');
 
 function animate() {
   requestAnimationFrame(animate);
 
-  var active = levelMgr.wordpartSet;
+  var active = game.currentScreen.wordpartSet;
   var selected = active.selected;
 
   gconsole.clear();
   gconsole.log('match? ' + active.word.buildsFrom(selected));
   selected.forEach(s => gconsole.log(s));
 
-  renderer.render(stage);
+  renderer.render(game.stage);
   ticker.tick();
 }
 

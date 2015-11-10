@@ -1,0 +1,64 @@
+Levels
+------
+
+World levels:
+- Primary place to kill monsters. It's a review mode that mixes vocab from all training levels.
+- World levels have these things (unlike training levels below)
+  - Gold on monster death
+  - Monster health bars
+  - Monsters flee after X misses
+  - Upgrades are available
+  - Shop is open to buy consumables
+  - Can use 2 types of hints (at a cost) (at the shop?)
+
+
+Training levels:
+- Higher world levels unlocks new training areas where you learn new vocab.
+- Each tranining session includes 5 sub-levels:
+  - level 1: Chinese builds from radicals (This is skipped in later levels)
+  - level 2: English builds from Chinese
+  - level 3: Chinese builds from Pinyin
+  - level 4: English builds from Pinyin
+  - level 5: Mix of levels 1-4
+- Sublevels can be chosen to practice specific things
+- Each training level completed gives you artifacts increasing base damage. Encourages learning more vocab
+- Free auto-hints
+
+Shop
+----
+
+Items:
+- Repel: Used to lower frequency of certain monster types or modifiers. Last for X hours. Can cancel midway.
+- Transmogriphier: Turns certain monster types into other monster types (similar to repel)
+- Radical/Character bonus: Only 1-2/day is sold. Lasts whole day. Building a word or phrase with these characters will provide bonus gold. Used to encourage revisiting older levels for practice.
+
+Upgrades:
+Each category of upgrades will have progression (eg stronger weapons that costs more gold)
+
+Upgrade categories:
+- Increase base damage multiplier
+- Increase critical hit damage
+- Increase base gold per enemy killed
+
+Advanced upgrade categories (Maybe):
+- Combo: Each successful answer increases overall damage to enemies. Discourages random guessing
+- Shrink: Shrinks monster and takes more damage. Usually applies to monsters who have words that are easy for user to remember
+- Hard-kill: Angry monsters drop more gold on death. Rewards users for challenging themselves. Later on deters people from using "Repels"
+- Luck: Increase chance of random drops
+
+Monsters
+--------
+Various monsters. HP and gold depends on current level and monster-specific stats
+
+Monster modifier: Attached prefix modifies the monster. Doesn't matter if the user learns what these modifiers mean so it doesn't affect learning curve.
+- "Angry" monster: Harder to kill, drops more gold. Modifier applied to monsters with words that are tough for the user to remember
+- "Little" monster: Modifier is applied on chance by "Shrink" upgrade.
+
+Monster type: (Maybe) Specify what they're learning (eg, English builds from Chinese)
+- Example: Flying creatures builds English from Chinese
+
+Monster has chance of dropping
+- Weapons (permanent modifiers)
+- Gold
+- Temporary dmg/gold bonus
+- Cosmetics
