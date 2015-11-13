@@ -1,5 +1,4 @@
 define(["exports", "module"], function (exports, module) {
-  // Game.data.enemies
   "use strict";
 
   module.exports = {

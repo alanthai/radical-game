@@ -1,7 +1,5 @@
-define(["exports", "./GConsole", "./Game", "./config"], function (exports, _GConsole, _Game, _config) {
+define(["exports", "./GConsole", "./Game", "./config", "./assetLoader"], function (exports, _GConsole, _Game, _config, _assetLoader) {
   "use strict";
-
-  var _PIXI;
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
@@ -13,38 +11,41 @@ define(["exports", "./GConsole", "./Game", "./config"], function (exports, _GCon
 
   var config = _interopRequire(_config);
 
-  // New instance of a pixi stage
-  var stage = new PIXI.Container();
+  function setup() {
+    var _PIXI;
 
-  var dimensions = config.screen;
-  var backgroundColor = config.backgroundColor;
-  var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
+    var dimensions = config.screen;
+    var backgroundColor = config.backgroundColor;
+    var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
 
-  document.body.appendChild(renderer.view);
+    document.body.appendChild(renderer.view);
 
-  var game = new Game();
+    var game = new Game();
 
-  game.stage.addChild(gconsole.pixiText);
+    game.stage.addChild(gconsole.pixiText);
 
-  var _require = require("./globals");
+    var _require = require("./globals");
 
-  var ticker = _require.ticker;
+    var ticker = _require.ticker;
 
-  function animate() {
+    function animate() {
+      requestAnimationFrame(animate);
+
+      var active = game.currentScreen.wordpartSet;
+      var selected = active.selected;
+
+      gconsole.clear();
+      gconsole.log("match? " + active.word.buildsFrom(selected));
+      selected.forEach(function (s) {
+        return gconsole.log(s);
+      });
+
+      renderer.render(game.stage);
+      ticker.tick();
+    }
+
     requestAnimationFrame(animate);
-
-    var active = game.currentScreen.wordpartSet;
-    var selected = active.selected;
-
-    gconsole.clear();
-    gconsole.log("match? " + active.word.buildsFrom(selected));
-    selected.forEach(function (s) {
-      return gconsole.log(s);
-    });
-
-    renderer.render(game.stage);
-    ticker.tick();
   }
 
-  requestAnimationFrame(animate);
+  PIXI.loader.load(setup);
 });

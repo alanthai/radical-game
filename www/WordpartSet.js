@@ -1,4 +1,4 @@
-define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _config2, _Vector, _dataIndex, _util) {
+define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain", "./config", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _entitiesChain, _config2, _Vector, _dataIndex, _util) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -12,6 +12,8 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
   var Wordpart = _interopRequire(_entitiesWordpart);
 
   var Word = _interopRequire(_Word);
+
+  var Chain = _interopRequire(_entitiesChain);
 
   var config = _interopRequire(_config2);
 
@@ -210,49 +212,6 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./config", "./Vec
       this.highlightNextHint();
     }
   };
-
-  var tol = 0.1; // pixel tolerance
-
-  var Chain = (function () {
-    function Chain() {
-      _classCallCheck(this, Chain);
-
-      this.container = new PIXI.Container();
-      this.imgChain = PIXI.Texture.fromImage(_config.imgChain);
-    }
-
-    _createClass(Chain, {
-      lockTo: {
-        value: function lockTo(startPos) {
-          var start = V.move(new PIXI.Point(0, 0), startPos);
-          var end = V.move(new PIXI.Point(0, 0), startPos);
-          this.current = new PIXI.mesh.Rope(this.imgChain, [start, end]);
-
-          this.container.addChild(this.current);
-        }
-      },
-      pop: {
-        value: function pop() {
-          this.container.removeChild(this.current);
-          this.current.destroy();
-          this.current = this.container.children.slice(-1)[0];
-        }
-      },
-      pointCurrentTo: {
-        value: function pointCurrentTo(point) {
-          var head = this.current.points.slice(-1)[0];
-          V.move(head, point);
-        }
-      },
-      destroy: {
-        value: function destroy() {
-          this.container.destroy();
-        }
-      }
-    });
-
-    return Chain;
-  })();
 
   var WordpartSetChain = {
     initChain: function initChain() {

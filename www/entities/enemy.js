@@ -31,8 +31,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
     _createClass(Enemy, {
       initSprite: {
         value: function initSprite() {
-          var texture = PIXI.Texture.fromImage(this.data.img);
-          var sprite = new PIXI.Sprite(texture);
+          var sprite = PIXI.Sprite.fromImage(this.data.img);
           V.center(sprite);
           this.container.addChild(sprite);
         }

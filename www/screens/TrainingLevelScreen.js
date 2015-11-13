@@ -52,8 +52,6 @@ define(["exports", "module", "./LevelScreen", "../data/training"], function (exp
       },
       fireCompleted: {
         value: function fireCompleted() {
-          var levelId = this.data.levelId;
-          var subLevel = this.data.subLevel;
           this.game.stage.emit("trainingLevel:completed", this);
         }
       },

@@ -1,13 +1,24 @@
 DOING
 -----
-  // Order matters
-  // Fix bug
   Hint mode on first learn
     - set tutorial mode on/off
-  Screen management
-  Basic fighting system
-  Review vs Learning level separation
 
+  Next sprint:
+    - make buttons + level transitions
+    - Training Level Select menu
+    - EnemyInfo (decide on fleeAfter)
+    - next 2 levels + review levels
+    - next 3 enemies
+    - Enemies left counter?
+  
+  Next sprint 2 (Aesthetics):
+    - Background
+    - Overlays + layouts
+    - Temporary "Win!" screen
+    - Fancier text
+    - Animations
+
+  Then show it off to people!
 
 TODO
 ----
@@ -17,15 +28,11 @@ TODO
     Enemy death
     Enemy idle
     Enemy enter
-  Progression
-    Points system
-    Monster health and levels
   Level system
     Learning progression
 
   Spaced Repitition system
   Set up build system for phone
-  Create first 5 enemies
 
   Figure out the right vocab set to let into wordpartset.
 

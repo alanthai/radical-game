@@ -1,5 +1,6 @@
 import Wordpart from './entities/wordpart';
 import Word from './Word';
+import Chain from './entities/chain';
 import config from './config';
 import V from './Vector';
 
@@ -163,37 +164,6 @@ var WordpartSetHinter = {
     this.highlightNextHint();
   }
 };
-
-var tol = 0.1; // pixel tolerance
-class Chain {
-  constructor() {
-    this.container = new PIXI.Container();
-    this.imgChain = PIXI.Texture.fromImage(_config.imgChain);
-  }
-
-  lockTo(startPos) {
-    var start = V.move(new PIXI.Point(0, 0), startPos);
-    var end = V.move(new PIXI.Point(0, 0), startPos);
-    this.current = new PIXI.mesh.Rope(this.imgChain, [start, end]);
-
-    this.container.addChild(this.current);
-  }
-
-  pop() {
-    this.container.removeChild(this.current);
-    this.current.destroy();
-    this.current = this.container.children.slice(-1)[0];
-  }
-
-  pointCurrentTo(point) {
-    var head = this.current.points.slice(-1)[0];
-    V.move(head, point);
-  }
-
-  destroy() {
-    this.container.destroy();
-  }
-}
 
 var WordpartSetChain = {
   initChain() {

@@ -1,7 +1,6 @@
 define(["exports", "module"], function (exports, module) {
   "use strict";
 
-  var IMG_PATH = "img";
   var SCREEN_WIDTH = 640;
   var SCREEN_HEIGHT = 1024;
 
@@ -17,13 +16,8 @@ define(["exports", "module"], function (exports, module) {
     wordpartSet: {
       center: [SCREEN_WIDTH / 2, 700],
       radius: 150, // pixel
-      imgChain: "" + IMG_PATH + "/laser.png",
       boundaryColor: 16776960
     },
-
-    wordpart: {
-      active: "" + IMG_PATH + "/circle-active.png",
-      inactive: "" + IMG_PATH + "/circle-inactive.png" },
 
     enemy: {
       center: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
@@ -36,6 +30,9 @@ define(["exports", "module"], function (exports, module) {
     overlay: {
       gold: [50, 50] },
 
-    SCREENS: SCREENS
+    SCREENS: SCREENS,
+
+    button: {
+      dimensions: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2] }
   };
 });

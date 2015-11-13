@@ -1,4 +1,4 @@
-define(["exports", "module", "../config", "../Vector", "../globals"], function (exports, module, _config, _Vector, _globals) {
+define(["exports", "module", "../config", "../Vector", "../globals", "../assetLoader"], function (exports, module, _config, _Vector, _globals, _assetLoader) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -14,6 +14,7 @@ define(["exports", "module", "../config", "../Vector", "../globals"], function (
   var Vector = _interopRequire(_Vector);
 
   var ticker = _globals.ticker;
+  var getTexture = _assetLoader.getTexture;
 
   var imgs = config.wordpart;
 
@@ -38,8 +39,8 @@ define(["exports", "module", "../config", "../Vector", "../globals"], function (
         value: function initBase() {
           var _this = this;
 
-          this.inactiveTexture = PIXI.Texture.fromImage(imgs.inactive);
-          this.activeTexture = PIXI.Texture.fromImage(imgs.active);
+          this.inactiveTexture = getTexture("wordpart-inactive");
+          this.activeTexture = getTexture("wordpart-active");
 
           var sprite = this.baseSprite = new PIXI.Sprite(this.inactiveTexture);
 

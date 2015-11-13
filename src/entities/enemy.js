@@ -17,8 +17,7 @@ export default class Enemy {
   }
 
   initSprite() {
-    var texture = PIXI.Texture.fromImage(this.data.img);
-    var sprite = new PIXI.Sprite(texture);
+    var sprite = PIXI.Sprite.fromImage(this.data.img);
     V.center(sprite);
     this.container.addChild(sprite);
   }

@@ -1,5 +1,6 @@
 Levels
 ------
+- On screen change, preserve state? (Yes!) But still unload
 
 World levels:
 - Primary place to kill monsters. It's a review mode that mixes vocab from all training levels.
@@ -45,6 +46,7 @@ Advanced upgrade categories (Maybe):
 - Shrink: Shrinks monster and takes more damage. Usually applies to monsters who have words that are easy for user to remember
 - Hard-kill: Angry monsters drop more gold on death. Rewards users for challenging themselves. Later on deters people from using "Repels"
 - Luck: Increase chance of random drops
+- Rapid fire: Speed bonus
 
 Monsters
 --------

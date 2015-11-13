@@ -2,6 +2,7 @@
 import config from '../config';
 import Vector from '../Vector';
 import {ticker} from '../globals';
+import {getTexture} from '../assetLoader';
 
 var imgs = config.wordpart;
 
@@ -20,8 +21,8 @@ export default class Wordpart {
   }
 
   initBase() {
-    this.inactiveTexture = PIXI.Texture.fromImage(imgs.inactive);
-    this.activeTexture = PIXI.Texture.fromImage(imgs.active);
+    this.inactiveTexture = getTexture('wordpart-inactive');
+    this.activeTexture = getTexture('wordpart-active');
 
     var sprite = this.baseSprite = new PIXI.Sprite(this.inactiveTexture);
 

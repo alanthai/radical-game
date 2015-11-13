@@ -1,4 +1,3 @@
-// Game.data.enemies
 export default {
   dummy: {
     name: 'Dummy',
