@@ -1,7 +1,7 @@
 import Wordpart from './entities/wordpart';
 import Word from './Word';
 import Chain from './entities/chain';
-import config from './config';
+import layout from './layout';
 import V from './Vector';
 
 import data from './data/index';
@@ -18,9 +18,9 @@ function getPoints(numPoints) {
   return points;
 }
 
-var _config = config.wordpartSet;
-var center = V(_config.center);
-var radius = _config.radius;
+var _layout = layout.wordpartSet;
+var center = V(_layout.center);
+var radius = _layout.radius;
 var r = V(radius, radius);
 
 
@@ -53,9 +53,10 @@ class WordpartSet {
     var dragging = false;
 
     var boundaries = new PIXI.Graphics();
-    boundaries.beginFill(_config.boundaryColor);
+    boundaries.beginFill(_layout.boundaryColor);
     boundaries.alpha = 0.1;
     boundaries.drawRect(-200, -200, 400, 400);
+    boundaries.endFill();
 
     container.addChild(boundaries);
 

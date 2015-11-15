@@ -32,7 +32,7 @@ define(["exports", "module", "./LevelScreen", "../data/training"], function (exp
 
       // temporary counter to track number of words left
       // until memory system is in place;
-      this.wordsLeft = 10 - 1;
+      this.wordsLeft = 1;
 
       _get(Object.getPrototypeOf(TrainingLevelScreen.prototype), "constructor", this).call(this, game, trainingParams);
     }

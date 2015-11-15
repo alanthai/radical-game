@@ -1,4 +1,4 @@
-define(["exports", "module", "../config", "../Vector", "../globals", "../assetLoader"], function (exports, module, _config, _Vector, _globals, _assetLoader) {
+define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLoader"], function (exports, module, _layout, _Vector, _globals, _assetLoader) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -7,16 +7,16 @@ define(["exports", "module", "../config", "../Vector", "../globals", "../assetLo
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  // import {wordpart as imgs} from '../config';
+  // import {wordpart as imgs} from '../layout';
 
-  var config = _interopRequire(_config);
+  var layout = _interopRequire(_layout);
 
   var Vector = _interopRequire(_Vector);
 
   var ticker = _globals.ticker;
   var getTexture = _assetLoader.getTexture;
 
-  var imgs = config.wordpart;
+  var imgs = layout.wordpart;
 
   var Wordpart = (function () {
     function Wordpart(part, point) {
@@ -78,7 +78,7 @@ define(["exports", "module", "../config", "../Vector", "../globals", "../assetLo
             return;
           }var hiSprite = this.hiSprite = new PIXI.Graphics();
           hiSprite.lineStyle(2, 0, 1);
-          hiSprite.drawCircle(0, 0, 64);
+          hiSprite.drawCircle(0, 0, this.baseSprite.height);
 
           var theta = 0;
           var tf = 1200; // total time (in ms) to complete one turn

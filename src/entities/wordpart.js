@@ -1,10 +1,10 @@
-// import {wordpart as imgs} from '../config';
-import config from '../config';
+// import {wordpart as imgs} from '../layout';
+import layout from '../layout';
 import Vector from '../Vector';
 import {ticker} from '../globals';
 import {getTexture} from '../assetLoader';
 
-var imgs = config.wordpart;
+var imgs = layout.wordpart;
 
 export default class Wordpart {
   constructor(part, point) {
@@ -56,7 +56,7 @@ export default class Wordpart {
 
     var hiSprite = this.hiSprite = new PIXI.Graphics();
     hiSprite.lineStyle(2, 0x000000, 1);
-    hiSprite.drawCircle(0, 0, 64);
+    hiSprite.drawCircle(0, 0, this.baseSprite.height);
 
     var theta = 0;
     var tf = 1200; // total time (in ms) to complete one turn

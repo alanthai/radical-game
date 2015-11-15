@@ -1,22 +1,28 @@
 DOING
 -----
-  Hint mode on first learn
-    - set tutorial mode on/off
-
-  Next sprint:
-    - make buttons + level transitions
-    - Training Level Select menu
-    - EnemyInfo (decide on fleeAfter)
+  Sprint:
+    // - GameOverlay buttons show
+    // - make buttons + level transitions
+    // -- levels unlock on world level increase
+    // - Training Level Menu
+    // -- disable locked levels
+    - No tutorial mode for World levels
+    - EnemyInfo
+    -- Healthbar
+    -- Enemies left counter
+    -- Max misses
+    -- Description
     - next 2 levels + review levels
     - next 3 enemies
-    - Enemies left counter?
   
-  Next sprint 2 (Aesthetics):
+  Sprint 2 (Aesthetics):
     - Background
+    - Dummy
     - Overlays + layouts
     - Temporary "Win!" screen
     - Fancier text
-    - Animations
+    - Animations (death)
+    - Unlocks and highlights
 
   Then show it off to people!
 
@@ -28,10 +34,10 @@ TODO
     Enemy death
     Enemy idle
     Enemy enter
-  Level system
-    Learning progression
 
   Spaced Repitition system
+    - Hint mode on first learn (training mode)
+
   Set up build system for phone
 
   Figure out the right vocab set to let into wordpartset.
@@ -43,3 +49,4 @@ TODO
 
   Rename wordpartSet->buildSet, wordpart->buildpart
     Or wordpartSet-> choices, wordpart->choice
+  Rename training data to learning data

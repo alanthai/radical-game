@@ -1,4 +1,5 @@
 import util from './util';
+import data from './data/index';
 
 var getValues = util.getValues;
 
@@ -41,6 +42,6 @@ class Ticker {
 
 export default {
   util,
-  data: require('./data/index'),
+  data,
   ticker: new Ticker()
 };

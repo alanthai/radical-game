@@ -8,6 +8,9 @@
 PIXI.loader
   .add('chain', 'img/laser.png')
   .add('level-button', 'img/button.png')
+  .add('level-button-disabled', 'img/button-disabled.png')
+  .add('training-button', 'img/training-button.png')
+  .add('world-button', 'img/world-button.png')
   .add('wordpart-active', 'img/circle-active.png')
   .add('wordpart-inactive', 'img/circle-inactive.png')
   .add('img/enemy1.png')

@@ -1,98 +1,24 @@
-import V from './Vector';
-import {SCREENS, overlay} from './config';
-import {getValues} from './util';
+import {SCREENS} from './layout';
+import {levels} from './data/training';
 
 import WorldLevelScreen from './screens/WorldLevelScreen';
 import TrainingLevelScreen from './screens/TrainingLevelScreen';
-// import TrainingMenuScreen from './screens/TrainingMenuScreen';
+import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
-var screenClasses = {
+import GameOverlay from './GameOverlay';
+
+const screenClasses = {
   [SCREENS.WORLD_LEVEL]: WorldLevelScreen,
   [SCREENS.TRAINING_LEVEL]: TrainingLevelScreen,
-  // [SCREENS.TRAINING_MENU]: TrainingMenuScreen,
+  [SCREENS.TRAINING_MENU]: TrainingMenuScreen,
 };
 
 const INITIAL_PLAYER = {
   gold: 0,
-  worldLevel: 0,
-  trainingCompleted: [],
+  worldLevel: 1,
+  trainingUnlocked: {/*levelId: {completed, highlight}*/},
   upgrades: []
 };
-
-var displayScreenOverlay = {
-  [SCREENS.WORLD_LEVEL]() {
-    this.display('gold');
-    // this.display('level');
-
-    // this.game.data.trainingLevel === 2
-    //   && this.display('trainingSelectButton');
-  },
-
-  [SCREENS.TRAINING_MENU]() {
-    this.display('gold');
-    this.display('worldLevelButton');
-  },
-
-  [SCREENS.TRAINING_LEVEL]() {
-    this.display('gold');
-    // this.display('level');
-
-    // this.game.data.worldLevel === 2
-    //   && this.display('trainingSelectButton');
-
-    // this.game.data.worldLevel === 2
-    //   && this.display('worldLevelButton');
-  },
-};
-
-var createItem = {
-  gold() {
-    var gold = new PIXI.Text(this.game.data.gold);
-    this.container.addChild(gold);
-    V.move(gold, V(overlay.gold));
-
-    return gold;
-  },
-
-  worldLevelButton() {
-    // V.move(level, V(overlay.worldLevelButton));
-  },
-
-  trainingSelectButton() {
-    // V.move(level, V(overlay.trainingSelectButton));
-  },
-
-  trainingLevelButton() {
-    // V.move(level, V(overlay.trainingLevelButton));
-  }
-}
-
-class GameOverlay {
-  constructor(game) {
-    this.game = game;
-    this.container = new PIXI.Container();
-    this.items = {};
-  }
-
-  displayScreenOverlay(enumScreen) {
-    this.hideAll();
-    displayScreenOverlay[enumScreen].call(this);
-  }
-
-  display(itemName) {
-    if (!this.items[itemName]) {
-      this.items[itemName] = createItem[itemName].call(this);
-    }
-    this.items[itemName].alpha = 1;
-  }
-
-  hideAll() {
-    var items = this.items;
-    getValues(items).forEach(item => {
-      item.alpha = 1;
-    });
-  }
-}
 
 /**
  * Switches screens
@@ -114,13 +40,14 @@ class Game {
 
     this.initGlobalEventHandlers();
 
-    var goToParams = {levelId: 'basics1', subLevel: 0};
-    this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
+    // var goToParams = {levelId: 'basics1', subLevel: 0};
+    // this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
+    this.goTo(SCREENS.WORLD_LEVEL);
   }
 
   addGold(gold) {
-    this.data.gold = gold;
-    this.overlay.items.gold.text = gold;
+    this.data.gold += gold;
+    this.overlay.items.gold.text = this.data.gold;
   }
 
   goTo(enumScreen, options) {
@@ -136,28 +63,42 @@ class Game {
   }
 
   initGlobalEventHandlers() {
-    // on world level increase,
     this.stage.on('trainingLevel:completed', levelScreen => {
       var data = levelScreen.data;
-      var subLevel = data.subLevel < 4
-        ? data.subLevel + 1
-        : -1;
+      var levelId = data.levelId;
 
-      this.goTo(SCREENS.TRAINING_LEVEL, {levelId: data.levelId, subLevel});
+      if (~data.subLevel) {
+        let subLevel = data.subLevel < 3
+          ? data.subLevel + 1
+          : -1;
+
+        this.goTo(SCREENS.TRAINING_LEVEL, {levelId: levelId, subLevel});
+      } else {
+        if (levelId !== 'basics1') {
+          this.goTo(SCREENS.TRAINING_MENU);
+        }
+
+        this.data.trainingUnlocked[levelId] = {completed: true, highlight: false};
+        this.save();
+      }
     });
 
     this.stage.on('worldLevel:completed', levelScreen => {
       var data = levelScreen.data;
       var highestLevel = this.data.worldLevel;
 
-      if (data.levelNumber >= highestLevel) {
-        this.data.worldLevel++;
-        // check unlocks
+        // unlock new levels
+        // this.data.trainingUnlocked[levelId] = {completed: false, highlight: true}
+
+      // if (data.levelNumber >= highestLevel) {
+        highestLevel++;
+        this.data.worldLevel = highestLevel;
         this.save();
-        this.goTo(SCREENS.WORLD_LEVEL, {levelNumber: highestLevel + 1});
-      } else {
-        // goTo(SCREENS.WORLD_MENU)
-      }
+        this.stage.emit('worldLevel:new', highestLevel);
+        this.goTo(SCREENS.WORLD_LEVEL, {levelNumber: highestLevel});
+      // } else {
+      //   this.goTo(SCREENS.WORLD_MENU)
+      // }
     });
   }
 
@@ -172,7 +113,7 @@ class Game {
   }
 
   save() {
-    localStorage.setItem('player', JSON.parse(this.data));
+    // localStorage.setItem('player', JSON.stringify(this.data));
   }
 }
 

@@ -7,14 +7,14 @@ define(["exports", "module", "./Vector"], function (exports, module, _Vector) {
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var Vector = _interopRequire(_Vector);
+  var V = _interopRequire(_Vector);
 
   var GConsole = (function () {
     function GConsole() {
       _classCallCheck(this, GConsole);
 
       this.pixiText = new PIXI.Text("");
-      Vector.move(this.pixiText, { x: 200, y: 400 });
+      V.move(this.pixiText, { x: 200, y: 400 });
     }
 
     _createClass(GConsole, {

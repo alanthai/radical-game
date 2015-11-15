@@ -1,9 +1,9 @@
-import Vector from './Vector';
+import V from './Vector';
 
 class GConsole {
   constructor() {
     this.pixiText = new PIXI.Text('');
-    Vector.move(this.pixiText, {x: 200, y: 400});
+    V.move(this.pixiText, {x: 200, y: 400});
   }
 
   log(text) {

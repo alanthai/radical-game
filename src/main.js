@@ -1,11 +1,13 @@
 import gconsole from './GConsole';
 import Game from './Game';
-import config from './config';
+import layout from './layout';
+import {ticker} from './globals';
 import './assetLoader';
+import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
 function setup() {
-  var dimensions = config.screen;
-  var backgroundColor = config.backgroundColor;
+  var dimensions = layout.screen;
+  var backgroundColor = layout.backgroundColor;
   var renderer = PIXI.autoDetectRenderer(...dimensions, {backgroundColor});
 
   document.body.appendChild(renderer.view);
@@ -14,17 +16,21 @@ function setup() {
 
   game.stage.addChild(gconsole.pixiText);
 
-  var {ticker} = require('./globals');
+  // var menu = new TrainingMenuScreen(game);
+  // game.stage.addChild(menu.container);
 
   function animate() {
     requestAnimationFrame(animate);
 
     var active = game.currentScreen.wordpartSet;
-    var selected = active.selected;
-
+    
     gconsole.clear();
-    gconsole.log('match? ' + active.word.buildsFrom(selected));
-    selected.forEach(s => gconsole.log(s));
+    if (active) {
+      var selected = active.selected;
+
+      gconsole.log('match? ' + active.word.buildsFrom(selected));
+      selected.forEach(s => gconsole.log(s));
+    }
 
     renderer.render(game.stage);
     ticker.tick();

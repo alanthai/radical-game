@@ -23,16 +23,31 @@ define(["exports", "module"], function (exports, module) {
       center: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
       textOffset: [0, 65] },
 
+    enemyInfo: {
+      container: [],
+      healthbar: {
+        containerWidth: 1,
+        containerBackground: 11184810,
+        background: 16711680,
+        position: [],
+        dimensions: [] },
+      fleeCounter: [],
+      description: [] },
+
     level: {
       display: [SCREEN_WIDTH - 50, 50] // right justified
     },
 
+    trainingButton: {
+      first: [SCREEN_WIDTH / 2, 100],
+      width: 400,
+      offset: 100
+    },
+
     overlay: {
-      gold: [50, 50] },
+      gold: [50, 50],
+      trainingMenuButton: [50, 100],
+      worldLevelButton: [50, 200] },
 
-    SCREENS: SCREENS,
-
-    button: {
-      dimensions: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2] }
-  };
+    SCREENS: SCREENS };
 });

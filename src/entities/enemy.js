@@ -1,39 +1,47 @@
 
 import dataEnemies from '../data/enemies';
 import V from '../Vector';
-import config from '../config';
+import layout from '../layout';
 
 export default class Enemy {
   constructor(wordVariant, data) {
     this.container = new PIXI.Container();
-    this.data = Object.assign({}, data);
+    this.properties = Object.assign({}, data);
+    this.properties.maxHealth = data.health;
+    this.properties.misses = data.maxMisses;
 
     this.initSprite();
 
     this.text = new PIXI.Container(); // placeholder
     this.nextWordVariant(wordVariant);
 
-    V.move(this.container, V(config.enemy.center));
+    V.move(this.container, V(layout.enemy.center));
   }
 
   initSprite() {
-    var sprite = PIXI.Sprite.fromImage(this.data.img);
+    var sprite = PIXI.Sprite.fromImage(this.properties.img);
     V.center(sprite);
     this.container.addChild(sprite);
+  }
+
+  get(key) {
+    return this.properties[key];
   }
 
   nextWordVariant(wordVariant) {
     this.container.removeChild(this.text);
 
     var text = this.text = new PIXI.Text(wordVariant);
-    var offset = V(config.enemy.textOffset);
+    var offset = V(layout.enemy.textOffset);
     V.center(text);
     V.move(text, offset);
     this.container.addChild(text);
   }
 
   miss() {
-    this.data.fleeAfter--;
+    this.properties.misses--;
+
+    this.container.emit('enemy:missed');
 
     if (this.fled()) {
       this.container.emit('enemy:fled', this);
@@ -42,7 +50,7 @@ export default class Enemy {
   }
 
   attack(damage) {
-    this.data.health = Math.max(this.data.health - damage, 0);
+    this.properties.health = Math.max(this.properties.health - damage, 0);
 
     if (this.died()) {
       this.container.emit('enemy:died', this);
@@ -54,11 +62,11 @@ export default class Enemy {
   }
 
   died() {
-    return this.data.health <= 0;
+    return this.properties.health <= 0;
   }
 
   fled() {
-    return this.data.fleeAfter < 1;
+    return this.properties.misses < 1;
   }
 
   centerText() {}

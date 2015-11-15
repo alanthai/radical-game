@@ -1,4 +1,4 @@
-define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../Vector", "../config"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _Vector, _config) {
+define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../Vector", "../layout"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _Vector, _layout) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -25,7 +25,7 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
 
   var V = _interopRequire(_Vector);
 
-  var config = _interopRequire(_config);
+  var layout = _interopRequire(_layout);
 
   /**
    * returns a generator function that takes no arguments.
@@ -58,7 +58,7 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
    * @param numPoints {Integer} number of total parts to return
    */
   function generateMissingParts(generateFn, wparts, numPoints) {
-    var parts = wparts.slice(0);
+    var parts = wparts.slice();
     for (var i = 0, len = numPoints - parts.length; i < len; i++) {
       parts.push(generateFn());
     }
@@ -94,12 +94,14 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
           var display = this.display = new PIXI.Text(this.data.display);
           display.anchor.x = 1;
           container.addChild(display);
-          V.move(display, V(config.level.display));
+          V.move(display, V(layout.level.display));
+
+          // enemy kill required
 
           // has healthbar, name, and description
           // var enemyInfo = this.enemyInfo = new EnemyInfo();
           // container.addChild(enemyInfo);
-          // V.move(enemyInfo, V(config.level.enemyDescription));
+          // V.move(enemyInfo, V(layout.level.enemyDescription));
 
           // placeholders;
           this.enemy = { died: function () {
@@ -186,7 +188,7 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
       addGold: {
         value: function addGold() {
           var levelMultiplier = 1;
-          var earned = this.enemy.data.gold * levelMultiplier;
+          var earned = this.enemy.get("gold") * levelMultiplier;
 
           this.game.addGold(earned);
         }

@@ -3,6 +3,8 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+  var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
+
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -20,6 +22,12 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
 
   var getNRandom = _util.getNRandom;
 
+  function flatten(arr) {
+    var _ref;
+
+    return (_ref = []).concat.apply(_ref, _toConsumableArray(arr));
+  }
+
   /*
    * params includes: 
    *   dataWords, dataEnemies, 
@@ -28,21 +36,32 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
    */
 
   var WorldLevelScreen = (function (_LevelScreen) {
-    function WorldLevelScreen(game, params) {
+    function WorldLevelScreen(game) {
+      var _ref = arguments[1] === undefined ? {} : arguments[1];
+
+      var levelNumber = _ref.levelNumber;
+
       _classCallCheck(this, WorldLevelScreen);
 
-      this.data = params;
-      var levelData = world[params.levelNumber];
+      levelNumber = levelNumber || game.data.worldLevel;
 
-      var worldParams = Object.assign({}, params);
-      worldParams.display = "Level " + params.levelNumber;
+      var levelData = world[levelNumber];
+
+      var worldParams = Object.assign({ levelNumber: levelNumber }, levelData);
+      worldParams.display = "Level " + levelNumber;
       // worldParams.levelChoices = getNRandom(, 3);
       worldParams.levelChoices = ["basics1", "basics2"];
+      // var levelChoices = Object.keys(this.game.data.trainingUnlocked);
+      var levelChoices = worldParams.levelChoices;
+      var words = levelChoices.map(function (level) {
+        return levels[level].words;
+      });
+      worldParams.words = flatten(words);
       worldParams.variants = allVariants;
 
       // The isComplete() check happens before nextEnemy()
       // so we have to start reduced by 1 to get the proper count
-      this.enemiesLeft = params.killsRequired - 1;
+      this.enemiesLeft = worldParams.killsRequired - 1;
 
       _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "constructor", this).call(this, game, worldParams);
     }
@@ -54,9 +73,9 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
         value: function nextEnemy() {
           var _this = this;
 
-          _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "nextEnemy", this).call(this);
+          _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "nextEnemy", this).apply(this, arguments);
           this.enemy.container.on("enemy:died", function () {
-            return _this.enemiesLeft--;
+            _this.enemiesLeft--;
           });
         }
       },
@@ -67,7 +86,7 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
       },
       isComplete: {
         value: function isComplete() {
-          return this.killsRequired < 1;
+          return this.enemiesLeft < 1;
         }
       }
     });

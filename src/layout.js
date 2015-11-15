@@ -22,17 +22,34 @@ export default {
     textOffset: [0, 65],
   },
 
+  enemyInfo: {
+    container: [],
+    healthbar: {
+      containerWidth: 1,
+      containerBackground: 0xAAAAAA,
+      background: 0xFF0000,
+      position: [],
+      dimensions: [],
+    },
+    fleeCounter: [],
+    description: [],
+  },
+
   level: {
     display: [SCREEN_WIDTH - 50, 50] // right justified
   },
 
+  trainingButton: {
+    first: [SCREEN_WIDTH / 2, 100],
+    width: 400,
+    offset: 100
+  },
+
   overlay: {
     gold: [50, 50],
+    trainingMenuButton: [50, 100],
+    worldLevelButton: [50, 200],
   },
 
   SCREENS: SCREENS,
-
-  button: {
-    dimensions: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2],
-  }
 };

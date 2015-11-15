@@ -1,4 +1,4 @@
-define(["exports", "module", "./util"], function (exports, module, _util) {
+define(["exports", "module", "./util", "./data/index"], function (exports, module, _util, _dataIndex) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -8,6 +8,8 @@ define(["exports", "module", "./util"], function (exports, module, _util) {
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var util = _interopRequire(_util);
+
+  var data = _interopRequire(_dataIndex);
 
   var getValues = util.getValues;
 
@@ -62,7 +64,7 @@ define(["exports", "module", "./util"], function (exports, module, _util) {
 
   module.exports = {
     util: util,
-    data: require("./data/index"),
+    data: data,
     ticker: new Ticker()
   };
 });

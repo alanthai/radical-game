@@ -11,7 +11,7 @@ import WordpartSet from '../WordpartSet';
 import Enemy from '../entities/enemy';
 import V from '../Vector';
 
-import config from '../config';
+import layout from '../layout';
 
 /**
  * returns a generator function that takes no arguments.
@@ -42,7 +42,7 @@ function generateRandomWord(variant, levelChoices) {
  * @param numPoints {Integer} number of total parts to return
  */
 function generateMissingParts(generateFn, wparts, numPoints) {
-  var parts = wparts.slice(0);
+  var parts = wparts.slice();
   for (let i = 0, len = numPoints - parts.length; i < len; i++) {
     parts.push(generateFn());
   }
@@ -70,12 +70,14 @@ export default class LevelScreen {
     var display = this.display = new PIXI.Text(this.data.display);
     display.anchor.x = 1;
     container.addChild(display);
-    V.move(display, V(config.level.display));
+    V.move(display, V(layout.level.display));
+
+    // enemy kill required
 
     // has healthbar, name, and description
     // var enemyInfo = this.enemyInfo = new EnemyInfo();
     // container.addChild(enemyInfo);
-    // V.move(enemyInfo, V(config.level.enemyDescription));
+    // V.move(enemyInfo, V(layout.level.enemyDescription));
 
     // placeholders;
     this.enemy = {died: () => true, container: new PIXI.Container()};
@@ -151,7 +153,7 @@ export default class LevelScreen {
 
   addGold() {
     var levelMultiplier = 1;
-    var earned = this.enemy.data.gold * levelMultiplier;
+    var earned = this.enemy.get('gold') * levelMultiplier;
 
     this.game.addGold(earned);
   }

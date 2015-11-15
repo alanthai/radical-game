@@ -4,6 +4,10 @@ import {levels, allVariants} from '../data/training';
 import world from '../data/world';
 import {getNRandom} from '../util';
 
+function flatten(arr) {
+  return [].concat(...arr);
+}
+
 /*
  * params includes: 
  *   dataWords, dataEnemies, 
@@ -11,26 +15,31 @@ import {getNRandom} from '../util';
  *   levelId and subLevel
  */
 class WorldLevelScreen extends LevelScreen {
-  constructor(game, params) {
-    this.data = params;
-    var levelData = world[params.levelNumber];
+  constructor(game, {levelNumber} = {}) {
+    levelNumber = levelNumber || game.data.worldLevel;
 
-    var worldParams = Object.assign({}, params);
-    worldParams.display = `Level ${params.levelNumber}`;
+    var levelData = world[levelNumber];
+
+    var worldParams = Object.assign({levelNumber}, levelData);
+    worldParams.display = `Level ${levelNumber}`;
     // worldParams.levelChoices = getNRandom(, 3);
     worldParams.levelChoices = ['basics1', 'basics2'];
+    // var levelChoices = Object.keys(this.game.data.trainingUnlocked);
+    var levelChoices = worldParams.levelChoices;
+    var words = levelChoices.map(level => levels[level].words);
+    worldParams.words = flatten(words);
     worldParams.variants = allVariants;
 
     // The isComplete() check happens before nextEnemy()
     // so we have to start reduced by 1 to get the proper count
-    this.enemiesLeft = params.killsRequired - 1;
+    this.enemiesLeft = worldParams.killsRequired - 1;
     
     super(game, worldParams);
   }
 
   nextEnemy() {
-    super.nextEnemy();
-    this.enemy.container.on('enemy:died', () => this.enemiesLeft--);
+    super.nextEnemy(...arguments);
+    this.enemy.container.on('enemy:died', () => {this.enemiesLeft--});
   }
 
   fireCompleted() {
@@ -38,7 +47,7 @@ class WorldLevelScreen extends LevelScreen {
   }
 
   isComplete() {
-    return this.killsRequired < 1;
+    return this.enemiesLeft < 1;
   }
 }
 

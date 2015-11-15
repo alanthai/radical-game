@@ -18,7 +18,7 @@ class TrainingLevelScreen extends LevelScreen {
 
     // temporary counter to track number of words left
     // until memory system is in place;
-    this.wordsLeft = 10 - 1;
+    this.wordsLeft = 1;
 
     super(game, trainingParams);
   }

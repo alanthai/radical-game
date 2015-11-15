@@ -1,4 +1,4 @@
-define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain", "./config", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _entitiesChain, _config2, _Vector, _dataIndex, _util) {
+define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain", "./layout", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _entitiesChain, _layout2, _Vector, _dataIndex, _util) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -15,7 +15,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
   var Chain = _interopRequire(_entitiesChain);
 
-  var config = _interopRequire(_config2);
+  var layout = _interopRequire(_layout2);
 
   var V = _interopRequire(_Vector);
 
@@ -34,9 +34,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
     return points;
   }
 
-  var _config = config.wordpartSet;
-  var center = V(_config.center);
-  var radius = _config.radius;
+  var _layout = layout.wordpartSet;
+  var center = V(_layout.center);
+  var radius = _layout.radius;
   var r = V(radius, radius);
 
   var WordpartSet = (function () {
@@ -76,9 +76,10 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
           var dragging = false;
 
           var boundaries = new PIXI.Graphics();
-          boundaries.beginFill(_config.boundaryColor);
+          boundaries.beginFill(_layout.boundaryColor);
           boundaries.alpha = 0.1;
           boundaries.drawRect(-200, -200, 400, 400);
+          boundaries.endFill();
 
           container.addChild(boundaries);
 

@@ -7,13 +7,35 @@ define(["exports", "module", "../assetLoader"], function (exports, module, _asse
 
   var getTexture = _assetLoader.getTexture;
 
+  function emptyArray(n) {
+    var value = arguments[1] === undefined ? 0 : arguments[1];
+    return Array(n).fill(value);
+  }
+
+  function zip(coll1, coll2, cb) {
+    var len = Math.min(coll1.length, coll2.length);
+
+    for (var i = 0; i < len; i++) {
+      cb(coll1[i], coll2[i]);
+    }
+  }
+
   var LevelButton = (function () {
-    function LevelButton(text) {
+    // minimum width is 96px;
+
+    function LevelButton(text, width) {
       _classCallCheck(this, LevelButton);
 
-      this.container = new PIXI.Container();
+      var container = this.container = new PIXI.Container();
+      container.interactive = true;
+      container.mouseup = this.fire.bind(this);
 
-      this.initButtonSprite();
+      this.enabled = true;
+
+      this.enabledTexture = getTexture("level-button");
+      this.disabledTexture = getTexture("level-button-disabled");
+
+      this.initButtonSprite(width);
       this.initText(text);
     }
 
@@ -28,28 +50,89 @@ define(["exports", "module", "../assetLoader"], function (exports, module, _asse
         }
       },
       initButtonSprite: {
-        value: function initButtonSprite() {
-          if (this.baseTexture) {
+        value: function initButtonSprite(fullWidth) {
+          var enabledTexture = this.enabledTexture;
+
+          var dw = enabledTexture.width / 3;
+          var dx = fullWidth - enabledTexture.width;
+
+          var spriteContainer = this.spriteContainer = new PIXI.Container();
+          this.container.addChild(spriteContainer);
+
+          var textures = this.getTextures().enabled;
+          var sprites = this.spriteParts = emptyArray(3).map(function (_, i) {
+            var sprite = new PIXI.Sprite(textures[i]);
+
+            sprite.anchor.set(0.5);
+            sprite.position.x = (i - 1) * (dw + dx / 2);
+            spriteContainer.addChild(sprite);
+
+            return sprite;
+          });
+
+          sprites[1].width += dx;
+        }
+      },
+      getTextures: {
+        value: (function (_getTextures) {
+          var _getTexturesWrapper = function getTextures() {
+            return _getTextures.apply(this, arguments);
+          };
+
+          _getTexturesWrapper.toString = function () {
+            return _getTextures.toString();
+          };
+
+          return _getTexturesWrapper;
+        })(function () {
+          var _this = this;
+
+          if (this.textures) return this.textures;
+
+          var enabledTexture = this.enabledTexture;
+          var dw = enabledTexture.width / 3;
+          var dh = enabledTexture.height;
+
+          var getTextures = function (state) {
+            return emptyArray(3).map(function (_, i) {
+              var rect = new PIXI.Rectangle(i * dw, 0, dw, dh);
+              return new PIXI.Texture(_this["" + state + "Texture"], rect);
+            });
+          };
+
+          var enabled = getTextures("enabled");
+          var disabled = getTextures("disabled");
+
+          this.textures = { enabled: enabled, disabled: disabled };
+          return this.textures;
+        })
+      },
+      fire: {
+        value: function fire() {
+          if (!this.enabled) {
             return;
-          }var base = this.baseTexture = getTexture("level-button");
+          }this.container.emit("button:clicked", this);
+        }
+      },
+      toggleEnable: {
+        value: function toggleEnable() {
+          var enable = arguments[0] === undefined ? true : arguments[0];
 
-          var dw = 92 / 3;
-          var dh = 92;
-          var txleft = new PIXI.Texture(base, new PIXI.Rectangle(0, 0, dw, dh));
-          var txmid = new PIXI.Texture(base, new PIXI.Rectangle(dw, 0, dw, dh));
-          var txright = new PIXI.Texture(base, new PIXI.Rectangle(2 * dw, 0, dw, dh));
-
-          var left = this.left = new PIXI.Sprite(txleft);
-          var mid = this.mid = new PIXI.Sprite(txmid);
-          var right = this.right = new PIXI.Sprite(txright);
-          mid.x = dw;
-          mid.width += 200;
-          right.x = 2 * dw + 200;
-
-          var container = this.container;
-          container.addChild(this.left);
-          container.addChild(this.mid);
-          container.addChild(this.right);
+          this.enabled = enable;
+          var textures = this.getTextures()[enable ? "enabled" : "disabled"];
+          zip(this.spriteParts, textures, function (part, texture) {
+            part.texture = texture;
+          });
+        }
+      },
+      enable: {
+        value: function enable() {
+          this.toggleEnable(true);
+        }
+      },
+      disable: {
+        value: function disable() {
+          this.toggleEnable(false);
         }
       }
     });

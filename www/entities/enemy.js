@@ -1,4 +1,4 @@
-define(["exports", "module", "../data/enemies", "../Vector", "../config"], function (exports, module, _dataEnemies, _Vector, _config) {
+define(["exports", "module", "../data/enemies", "../Vector", "../layout"], function (exports, module, _dataEnemies, _Vector, _layout) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -11,29 +11,36 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
 
   var V = _interopRequire(_Vector);
 
-  var config = _interopRequire(_config);
+  var layout = _interopRequire(_layout);
 
   var Enemy = (function () {
     function Enemy(wordVariant, data) {
       _classCallCheck(this, Enemy);
 
       this.container = new PIXI.Container();
-      this.data = Object.assign({}, data);
+      this.properties = Object.assign({}, data);
+      this.properties.maxHealth = data.health;
+      this.properties.misses = data.maxMisses;
 
       this.initSprite();
 
       this.text = new PIXI.Container(); // placeholder
       this.nextWordVariant(wordVariant);
 
-      V.move(this.container, V(config.enemy.center));
+      V.move(this.container, V(layout.enemy.center));
     }
 
     _createClass(Enemy, {
       initSprite: {
         value: function initSprite() {
-          var sprite = PIXI.Sprite.fromImage(this.data.img);
+          var sprite = PIXI.Sprite.fromImage(this.properties.img);
           V.center(sprite);
           this.container.addChild(sprite);
+        }
+      },
+      get: {
+        value: function get(key) {
+          return this.properties[key];
         }
       },
       nextWordVariant: {
@@ -41,7 +48,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
           this.container.removeChild(this.text);
 
           var text = this.text = new PIXI.Text(wordVariant);
-          var offset = V(config.enemy.textOffset);
+          var offset = V(layout.enemy.textOffset);
           V.center(text);
           V.move(text, offset);
           this.container.addChild(text);
@@ -49,7 +56,9 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
       },
       miss: {
         value: function miss() {
-          this.data.fleeAfter--;
+          this.properties.misses--;
+
+          this.container.emit("enemy:missed");
 
           if (this.fled()) {
             this.container.emit("enemy:fled", this);
@@ -59,7 +68,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
       },
       attack: {
         value: function attack(damage) {
-          this.data.health = Math.max(this.data.health - damage, 0);
+          this.properties.health = Math.max(this.properties.health - damage, 0);
 
           if (this.died()) {
             this.container.emit("enemy:died", this);
@@ -72,12 +81,12 @@ define(["exports", "module", "../data/enemies", "../Vector", "../config"], funct
       },
       died: {
         value: function died() {
-          return this.data.health <= 0;
+          return this.properties.health <= 0;
         }
       },
       fled: {
         value: function fled() {
-          return this.data.fleeAfter < 1;
+          return this.properties.misses < 1;
         }
       },
       centerText: {

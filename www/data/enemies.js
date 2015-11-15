@@ -6,14 +6,14 @@ define(["exports", "module"], function (exports, module) {
       name: "Dummy",
       gold: 0,
       health: 1,
-      fleeAfter: Infinity,
+      maxMisses: Infinity,
       img: "img/enemy1.png"
     },
     enemy1: {
       name: "Enemy 1",
       gold: 10,
-      health: 100,
-      fleeAfter: 3, // misses
+      health: 2,
+      maxMisses: 3,
       img: "img/enemy1.png"
     }
   };

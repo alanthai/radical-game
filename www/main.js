@@ -1,4 +1,4 @@
-define(["exports", "./GConsole", "./Game", "./config", "./assetLoader"], function (exports, _GConsole, _Game, _config, _assetLoader) {
+define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoader", "./screens/TrainingMenuScreen"], function (exports, _GConsole, _Game, _layout, _globals, _assetLoader, _screensTrainingMenuScreen) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -9,13 +9,17 @@ define(["exports", "./GConsole", "./Game", "./config", "./assetLoader"], functio
 
   var Game = _interopRequire(_Game);
 
-  var config = _interopRequire(_config);
+  var layout = _interopRequire(_layout);
+
+  var ticker = _globals.ticker;
+
+  var TrainingMenuScreen = _interopRequire(_screensTrainingMenuScreen);
 
   function setup() {
     var _PIXI;
 
-    var dimensions = config.screen;
-    var backgroundColor = config.backgroundColor;
+    var dimensions = layout.screen;
+    var backgroundColor = layout.backgroundColor;
     var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
 
     document.body.appendChild(renderer.view);
@@ -24,21 +28,23 @@ define(["exports", "./GConsole", "./Game", "./config", "./assetLoader"], functio
 
     game.stage.addChild(gconsole.pixiText);
 
-    var _require = require("./globals");
-
-    var ticker = _require.ticker;
+    // var menu = new TrainingMenuScreen(game);
+    // game.stage.addChild(menu.container);
 
     function animate() {
       requestAnimationFrame(animate);
 
       var active = game.currentScreen.wordpartSet;
-      var selected = active.selected;
 
       gconsole.clear();
-      gconsole.log("match? " + active.word.buildsFrom(selected));
-      selected.forEach(function (s) {
-        return gconsole.log(s);
-      });
+      if (active) {
+        var selected = active.selected;
+
+        gconsole.log("match? " + active.word.buildsFrom(selected));
+        selected.forEach(function (s) {
+          return gconsole.log(s);
+        });
+      }
 
       renderer.render(game.stage);
       ticker.tick();
