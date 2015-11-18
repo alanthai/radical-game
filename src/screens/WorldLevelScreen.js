@@ -3,6 +3,8 @@ import LevelScreen from './LevelScreen';
 import {levels, allVariants} from '../data/training';
 import world from '../data/world';
 import {getNRandom} from '../util';
+import {level as layoutLevel} from '../layout.js';
+import {getTexture} from '../assetLoader';
 
 function flatten(arr) {
   return [].concat(...arr);
@@ -30,16 +32,42 @@ class WorldLevelScreen extends LevelScreen {
     worldParams.words = flatten(words);
     worldParams.variants = allVariants;
 
-    // The isComplete() check happens before nextEnemy()
-    // so we have to start reduced by 1 to get the proper count
-    this.enemiesLeft = worldParams.killsRequired - 1;
+    this.killCount = 0;
+    this.killsRequired = worldParams.killsRequired;
     
     super(game, worldParams);
   }
 
+  initEntities() {
+    super.initEntities(...arguments);
+
+    var killCounter = this.killCounter = new PIXI.Container();
+    killCounter.position.set(...layoutLevel.killCount);
+
+    var skull = this.skull = new PIXI.Sprite(getTexture('skull'));
+    skull.anchor.set(1, 0);
+    skull.x = -5; // padding
+    killCounter.addChild(skull);
+
+    var killText = this.killText = new PIXI.Text('');
+    killCounter.addChild(killText);
+
+    this.container.addChild(killCounter);
+
+    this.updateKillText();
+  }
+
+  updateKillText() {
+    this.killText.text = `${this.killCount}/${this.killsRequired}`;
+    // this.skull.x = -this.killText.width / 2;
+  }
+
   nextEnemy() {
     super.nextEnemy(...arguments);
-    this.enemy.container.on('enemy:died', () => {this.enemiesLeft--});
+    this.enemy.container.on('enemy:died', () => {
+      this.killCount++;
+      this.updateKillText();
+    });
   }
 
   fireCompleted() {
@@ -47,7 +75,9 @@ class WorldLevelScreen extends LevelScreen {
   }
 
   isComplete() {
-    return this.enemiesLeft < 1;
+      // The isComplete() check happens before nextEnemy()
+    // so we have to start with +1 to get the proper count
+    return this.killCount + 1 >= this.killsRequired;
   }
 }
 

@@ -1,4 +1,4 @@
-define(["exports", "module", "../data/enemies", "../Vector", "../layout"], function (exports, module, _dataEnemies, _Vector, _layout) {
+define(["exports", "module", "../Vector", "../layout"], function (exports, module, _Vector, _layout) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -7,11 +7,9 @@ define(["exports", "module", "../data/enemies", "../Vector", "../layout"], funct
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var dataEnemies = _interopRequire(_dataEnemies);
-
   var V = _interopRequire(_Vector);
 
-  var layout = _interopRequire(_layout);
+  var layoutEnemy = _layout.enemy;
 
   var Enemy = (function () {
     function Enemy(wordVariant, data) {
@@ -20,14 +18,12 @@ define(["exports", "module", "../data/enemies", "../Vector", "../layout"], funct
       this.container = new PIXI.Container();
       this.properties = Object.assign({}, data);
       this.properties.maxHealth = data.health;
-      this.properties.misses = data.maxMisses;
+      this.properties.misses = 0;
 
       this.initSprite();
 
       this.text = new PIXI.Container(); // placeholder
       this.nextWordVariant(wordVariant);
-
-      V.move(this.container, V(layout.enemy.center));
     }
 
     _createClass(Enemy, {
@@ -48,7 +44,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../layout"], funct
           this.container.removeChild(this.text);
 
           var text = this.text = new PIXI.Text(wordVariant);
-          var offset = V(layout.enemy.textOffset);
+          var offset = V(layoutEnemy.textOffset);
           V.center(text);
           V.move(text, offset);
           this.container.addChild(text);
@@ -56,7 +52,7 @@ define(["exports", "module", "../data/enemies", "../Vector", "../layout"], funct
       },
       miss: {
         value: function miss() {
-          this.properties.misses--;
+          this.properties.misses++;
 
           this.container.emit("enemy:missed");
 
@@ -81,12 +77,15 @@ define(["exports", "module", "../data/enemies", "../Vector", "../layout"], funct
       },
       died: {
         value: function died() {
-          return this.properties.health <= 0;
+          return this.get("health") <= 0;
         }
       },
       fled: {
         value: function fled() {
-          return this.properties.misses < 1;
+          if (!this.get("maxMisses")) {
+            return false;
+          }
+          return this.get("misses") >= this.get("maxMisses");
         }
       },
       centerText: {

@@ -1,7 +1,9 @@
-define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../Vector", "../layout"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _Vector, _layout) {
+define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../entities/enemyInfo", "../layout"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _entitiesEnemyInfo, _layout) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+  var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -23,9 +25,9 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
 
   var Enemy = _interopRequire(_entitiesEnemy);
 
-  var V = _interopRequire(_Vector);
+  var EnemyInfo = _interopRequire(_entitiesEnemyInfo);
 
-  var layout = _interopRequire(_layout);
+  var layoutLevel = _layout.level;
 
   /**
    * returns a generator function that takes no arguments.
@@ -80,7 +82,6 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
         return dataWords[word];
       });
 
-      this.resolveAttack = this.resolveAttack.bind(this);
       this.nextWord = this.nextWord.bind(this);
 
       this.initEntities();
@@ -89,25 +90,21 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
     _createClass(LevelScreen, {
       initEntities: {
         value: function initEntities() {
+          var _display$position;
+
           var container = this.container = new PIXI.Container();
 
           var display = this.display = new PIXI.Text(this.data.display);
           display.anchor.x = 1;
           container.addChild(display);
-          V.move(display, V(layout.level.display));
-
-          // enemy kill required
-
-          // has healthbar, name, and description
-          // var enemyInfo = this.enemyInfo = new EnemyInfo();
-          // container.addChild(enemyInfo);
-          // V.move(enemyInfo, V(layout.level.enemyDescription));
+          (_display$position = display.position).set.apply(_display$position, _toConsumableArray(layoutLevel.display));
 
           // placeholders;
           this.enemy = { died: function () {
               return true;
             }, container: new PIXI.Container() };
-          this.wordpartSet = { container: new PIXI.Container() };
+          this.wordpartSet = { container: new PIXI.Container(), destroy: function () {} };
+          this.enemyInfo = { container: new PIXI.Container() };
 
           this.nextWord();
         }
@@ -124,7 +121,6 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
             this.enemy.nextWordVariant(newWord.getPieces(variants.learn));
           }
 
-          // this.enemyInfo = this.enemy.health;
           this.nextWordpartSet(newWord, variants.build);
         }
       },
@@ -132,11 +128,21 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
         value: function nextEnemy(word, variant) {
           var _this = this;
 
+          var _enemy$container$position, _enemyInfo$container$position;
+
           this.container.removeChild(this.enemy.container);
+          this.container.removeChild(this.enemyInfo.container);
+          this.enemyInfo.container.destroy();
 
           var enemyData = getRandom(this.enemyChoices);
           var enemy = this.enemy = new Enemy(word.getPieces(variant), enemyData);
           this.container.addChild(enemy.container);
+          (_enemy$container$position = enemy.container.position).set.apply(_enemy$container$position, _toConsumableArray(layoutLevel.enemy));
+
+          this.enemyInfo = new EnemyInfo(enemy, this.data.enemyInfoOptions);
+          var enemyInfo = this.enemyInfo;
+          this.container.addChild(enemyInfo.container);
+          (_enemyInfo$container$position = enemyInfo.container.position).set.apply(_enemyInfo$container$position, _toConsumableArray(layoutLevel.enemyInfo));
 
           enemy.container.on("enemy:died", function () {
             _this.addGold();
@@ -146,10 +152,15 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
             }
 
             _this.nextWord();
+            // animate dying
+            // setTimeout(() => {
+            // }, 500);
           });
 
           enemy.container.on("enemy:hurt", this.nextWord);
           enemy.container.on("enemy:fled", this.nextWord);
+          // enemy.container.on('enemy:hurt', setTimeout(this.nextWord, 500));
+          // enemy.container.on('enemy:fled', setTimeout(this.nextWord, 500));
         }
       },
       fireCompleted: {
@@ -166,21 +177,23 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
         value: function nextWordpartSet(word, variant) {
           var _this = this;
 
+          var data = this.data;
           this.container.removeChild(this.wordpartSet.container);
-          this.wordpartSet.container.destroy();
+          // this.wordpartSet.container.destroy();
+          this.wordpartSet.destroy();
 
-          var levelIds = this.data.levelChoices;
+          var levelIds = data.levelChoices;
           var wordparts = word.getPieces(variant);
-          var generator = generateRandomWord.bind(null, variant, this.data.levelChoices);
+          var generator = generateRandomWord.bind(null, variant, data.levelChoices);
           var parts = generateMissingParts(generator, wordparts, 6);
-          this.wordpartSet = new WordpartSet(word, parts);
+          this.wordpartSet = new WordpartSet(word, parts, data.giveHints);
           this.container.addChild(this.wordpartSet.container);
 
           this.wordpartSet.container.on("word:completed", function () {
-            setTimeout(_this.resolveAttack, 500);
+            _this.resolveAttack();
           });
 
-          this.wordpartSet.container.on("word:incomplete", function () {
+          this.wordpartSet.container.on("word:incorrect", function () {
             _this.resolveMiss();
           });
         }

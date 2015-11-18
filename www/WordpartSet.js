@@ -63,12 +63,12 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
       this.selected = [];
 
-      this.initInteractions();
+      this.initInteractions(giveHints);
     }
 
     _createClass(WordpartSet, {
       initInteractions: {
-        value: function initInteractions() {
+        value: function initInteractions(giveHints) {
           var _this = this;
 
           var container = this.container;
@@ -126,7 +126,10 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
           container.on("wordpartSet:mouseupoutside", clear);
 
-          this.initHinter();
+          if (giveHints) {
+            this.initHinter();
+          }
+
           this.initChain();
         }
       },
@@ -155,6 +158,12 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
           this.wordparts.forEach(function (wordpart) {
             return wordpart.deselect();
           });
+        }
+      },
+      destroy: {
+        value: function destroy() {
+          this.container.removeAllListeners();
+          this.container.destroy();
         }
       }
     });
@@ -249,6 +258,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
       });
 
       function destroy() {
+        if (!container.children) {
+          return;
+        }
         container.removeChild(chain.container);
         chain.destroy();
         chain = null;

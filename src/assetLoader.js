@@ -7,6 +7,8 @@
  */
 PIXI.loader
   .add('chain', 'img/laser.png')
+  .add('skull', 'img/skull.png')
+  .add('flee', 'img/flee.png')
   .add('level-button', 'img/button.png')
   .add('level-button-disabled', 'img/button-disabled.png')
   .add('training-button', 'img/training-button.png')

@@ -1,20 +1,14 @@
 DOING
 -----
   Sprint:
-    // - GameOverlay buttons show
-    // - make buttons + level transitions
-    // -- levels unlock on world level increase
-    // - Training Level Menu
-    // -- disable locked levels
-    - No tutorial mode for World levels
+    // - Enemies left counter
     - EnemyInfo
-    -- Healthbar
-    -- Enemies left counter
-    -- Max misses
-    -- Description
+    // -- Healthbar (only show world mode)
+    // -- Max misses
+    // -- Description
     - next 2 levels + review levels
     - next 3 enemies
-  
+
   Sprint 2 (Aesthetics):
     - Background
     - Dummy
@@ -34,6 +28,8 @@ TODO
     Enemy death
     Enemy idle
     Enemy enter
+
+  Level system (enemy HP/gold bounties every level)
 
   Spaced Repitition system
     - Hint mode on first learn (training mode)

@@ -1,6 +1,5 @@
 import {getTexture} from '../assetLoader';
-
-function emptyArray(n, value=0) {return Array(n).fill(value);}
+import {emptyArray} from '../util';
 
 function zip(coll1, coll2, cb) {
   var len = Math.min(coll1.length, coll2.length)

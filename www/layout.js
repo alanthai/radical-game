@@ -20,23 +20,29 @@ define(["exports", "module"], function (exports, module) {
     },
 
     enemy: {
-      center: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
       textOffset: [0, 65] },
 
     enemyInfo: {
-      container: [],
       healthbar: {
-        containerWidth: 1,
+        containerWidth: 3,
         containerBackground: 11184810,
         background: 16711680,
-        position: [],
-        dimensions: [] },
-      fleeCounter: [],
-      description: [] },
+        position: [0, 0],
+        dimensions: [250, 25] },
+      fleeCounter: {
+        position: [160, 60],
+        inactiveColor: 10066329,
+        activeColor: 16724749,
+        circleParams: [0, 0, 20],
+        circleYOffset: 50
+      },
+      description: [0, 0] },
 
     level: {
-      display: [SCREEN_WIDTH - 50, 50] // right justified
-    },
+      display: [SCREEN_WIDTH - 50, 50], // right justified
+      enemy: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
+      enemyInfo: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8],
+      killCount: [SCREEN_WIDTH / 2, 50] },
 
     trainingButton: {
       first: [SCREEN_WIDTH / 2, 100],

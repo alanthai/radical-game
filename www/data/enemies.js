@@ -10,7 +10,7 @@ define(["exports", "module"], function (exports, module) {
       img: "img/enemy1.png"
     },
     enemy1: {
-      name: "Enemy 1",
+      name: "Chibi Bat",
       gold: 10,
       health: 2,
       maxMisses: 3,

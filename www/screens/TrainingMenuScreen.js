@@ -40,7 +40,6 @@ define(["exports", "module", "../entities/button", "../data/training", "../util"
           var coords = trainingButton.first.slice();
           var width = trainingButton.width;
 
-          console.log("highestLevel", highestLevel);
           this.buttons = getValues(levels).forEach(function (level) {
             var _button$container$position;
 

@@ -1,4 +1,4 @@
-define(["exports", "module", "./LevelScreen", "../data/training", "../data/world", "../util"], function (exports, module, _LevelScreen2, _dataTraining, _dataWorld, _util) {
+define(["exports", "module", "./LevelScreen", "../data/training", "../data/world", "../util", "../layout.js", "../assetLoader"], function (exports, module, _LevelScreen2, _dataTraining, _dataWorld, _util, _layoutJs, _assetLoader) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -21,6 +21,8 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
   var world = _interopRequire(_dataWorld);
 
   var getNRandom = _util.getNRandom;
+  var layoutLevel = _layoutJs.level;
+  var getTexture = _assetLoader.getTexture;
 
   function flatten(arr) {
     var _ref;
@@ -59,9 +61,8 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
       worldParams.words = flatten(words);
       worldParams.variants = allVariants;
 
-      // The isComplete() check happens before nextEnemy()
-      // so we have to start reduced by 1 to get the proper count
-      this.enemiesLeft = worldParams.killsRequired - 1;
+      this.killCount = 0;
+      this.killsRequired = worldParams.killsRequired;
 
       _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "constructor", this).call(this, game, worldParams);
     }
@@ -69,13 +70,42 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
     _inherits(WorldLevelScreen, _LevelScreen);
 
     _createClass(WorldLevelScreen, {
+      initEntities: {
+        value: function initEntities() {
+          var _killCounter$position;
+
+          _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "initEntities", this).apply(this, arguments);
+
+          var killCounter = this.killCounter = new PIXI.Container();
+          (_killCounter$position = killCounter.position).set.apply(_killCounter$position, _toConsumableArray(layoutLevel.killCount));
+
+          var skull = this.skull = new PIXI.Sprite(getTexture("skull"));
+          skull.anchor.set(1, 0);
+          skull.x = -5; // padding
+          killCounter.addChild(skull);
+
+          var killText = this.killText = new PIXI.Text("");
+          killCounter.addChild(killText);
+
+          this.container.addChild(killCounter);
+
+          this.updateKillText();
+        }
+      },
+      updateKillText: {
+        value: function updateKillText() {
+          this.killText.text = "" + this.killCount + "/" + this.killsRequired;
+          // this.skull.x = -this.killText.width / 2;
+        }
+      },
       nextEnemy: {
         value: function nextEnemy() {
           var _this = this;
 
           _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "nextEnemy", this).apply(this, arguments);
           this.enemy.container.on("enemy:died", function () {
-            _this.enemiesLeft--;
+            _this.killCount++;
+            _this.updateKillText();
           });
         }
       },
@@ -86,7 +116,9 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
       },
       isComplete: {
         value: function isComplete() {
-          return this.enemiesLeft < 1;
+          // The isComplete() check happens before nextEnemy()
+          // so we have to start with +1 to get the proper count
+          return this.killCount + 1 >= this.killsRequired;
         }
       }
     });

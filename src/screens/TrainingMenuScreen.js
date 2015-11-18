@@ -21,7 +21,6 @@ export default class TrainingMenuScreen {
     var coords = trainingButton.first.slice();
     var width = trainingButton.width;
 
-    console.log('highestLevel', highestLevel);
     this.buttons = getValues(levels).forEach(level => {
       var button =  new Button(level.title, width);
       button.container.position.set(...coords);

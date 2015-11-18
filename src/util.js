@@ -64,5 +64,7 @@ export default {
       obj[key] = src[key];
       return obj;
     }, dest);
-  }
+  },
+
+  emptyArray(n, value=0) {return Array(n).fill(value);}
 };

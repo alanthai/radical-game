@@ -44,10 +44,10 @@ class WordpartSet {
 
     this.selected = [];
 
-    this.initInteractions();
+    this.initInteractions(giveHints);
   }
 
-  initInteractions() {
+  initInteractions(giveHints) {
     var container = this.container;
     var isContactingWordpart = false;
     var dragging = false;
@@ -103,7 +103,10 @@ class WordpartSet {
 
     container.on('wordpartSet:mouseupoutside', clear);
 
-    this.initHinter();
+    if (giveHints) {
+      this.initHinter();
+    }
+
     this.initChain();
   }
 
@@ -121,6 +124,11 @@ class WordpartSet {
   clear() {
     this.selected = [];
     this.wordparts.forEach(wordpart => wordpart.deselect());
+  }
+
+  destroy() {
+    this.container.removeAllListeners();
+    this.container.destroy();
   }
 }
 
@@ -201,6 +209,7 @@ var WordpartSetChain = {
     });
 
     function destroy() {
+      if (!container.children) {return;}
       container.removeChild(chain.container);
       chain.destroy();
       chain = null;

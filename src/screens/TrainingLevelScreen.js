@@ -4,13 +4,15 @@ import {levels, allVariants} from '../data/training';
 
 class TrainingLevelScreen extends LevelScreen {
   constructor(game, params) {
-    this.data = params;
     var levelData = levels[params.levelId];
 
     var trainingParams = Object.assign({}, levelData, params);
     trainingParams.enemies = ['dummy'];
     trainingParams.display = `Training: ${levelData.title}`;
     trainingParams.levelChoices = ['basics1', 'basics2'];
+    trainingParams.giveHints = true;
+    trainingParams.enemyInfoOptions =
+      {hideHealthbar: true, hideFleeCounter: true};
 
     trainingParams.variants = ~params.subLevel
       ? [allVariants[params.subLevel]]

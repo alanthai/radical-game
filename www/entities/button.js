@@ -1,4 +1,4 @@
-define(["exports", "module", "../assetLoader"], function (exports, module, _assetLoader) {
+define(["exports", "module", "../assetLoader", "../util"], function (exports, module, _assetLoader, _util) {
   "use strict";
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -6,11 +6,7 @@ define(["exports", "module", "../assetLoader"], function (exports, module, _asse
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var getTexture = _assetLoader.getTexture;
-
-  function emptyArray(n) {
-    var value = arguments[1] === undefined ? 0 : arguments[1];
-    return Array(n).fill(value);
-  }
+  var emptyArray = _util.emptyArray;
 
   function zip(coll1, coll2, cb) {
     var len = Math.min(coll1.length, coll2.length);
