@@ -1,6 +1,5 @@
 
 import V from '../Vector';
-import {enemy as layoutEnemy} from '../layout';
 
 export default class Enemy {
   constructor(wordVariant, data) {
@@ -17,7 +16,8 @@ export default class Enemy {
 
   initSprite() {
     var sprite = PIXI.Sprite.fromImage(this.properties.img);
-    V.center(sprite);
+    sprite.anchor.set(0.5);
+    sprite.position.set(...this.get('position'));
     this.container.addChild(sprite);
   }
 
@@ -29,7 +29,7 @@ export default class Enemy {
     this.container.removeChild(this.text);
 
     var text = this.text = new PIXI.Text(wordVariant);
-    var offset = V(layoutEnemy.textOffset);
+    var offset = V(this.get('textOffset'));
     V.center(text);
     V.move(text, offset);
     this.container.addChild(text);

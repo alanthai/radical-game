@@ -1,4 +1,4 @@
-define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../entities/enemyInfo", "../layout"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _entitiesEnemyInfo, _layout) {
+define(["exports", "module", "../util", "../data/index", "../Word", "../WordpartSet", "../entities/enemy", "../entities/enemyInfo", "../assetLoader", "../layout"], function (exports, module, _util, _dataIndex, _Word, _WordpartSet, _entitiesEnemy, _entitiesEnemyInfo, _assetLoader, _layout) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -27,6 +27,7 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
 
   var EnemyInfo = _interopRequire(_entitiesEnemyInfo);
 
+  var getTexture = _assetLoader.getTexture;
   var layoutLevel = _layout.level;
 
   /**
@@ -92,12 +93,14 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
         value: function initEntities() {
           var _display$position;
 
-          var container = this.container = new PIXI.Container();
+          var texture = getTexture(this.data.background);
+          var container = this.container = new PIXI.Sprite(texture);
 
-          var display = this.display = new PIXI.Text(this.data.display);
+          var displayOptions = layoutLevel.display;
+          var display = this.display = new PIXI.Text(this.data.display, displayOptions.style);
           display.anchor.x = 1;
           container.addChild(display);
-          (_display$position = display.position).set.apply(_display$position, _toConsumableArray(layoutLevel.display));
+          (_display$position = display.position).set.apply(_display$position, _toConsumableArray(displayOptions.position));
 
           // placeholders;
           this.enemy = { died: function () {
@@ -151,14 +154,18 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
               return _this.fireCompleted();
             }
 
-            _this.nextWord();
             // animate dying
-            // setTimeout(() => {
-            // }, 500);
+            setTimeout(function () {
+              _this.nextWord();
+            }, 500);
           });
 
           enemy.container.on("enemy:hurt", this.nextWord);
-          enemy.container.on("enemy:fled", this.nextWord);
+          enemy.container.on("enemy:fled", function () {
+            setTimeout(function () {
+              _this.nextWord();
+            }, 500);
+          });
           // enemy.container.on('enemy:hurt', setTimeout(this.nextWord, 500));
           // enemy.container.on('enemy:fled', setTimeout(this.nextWord, 500));
         }

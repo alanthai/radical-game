@@ -1,15 +1,15 @@
-define(["exports", "module", "../Vector", "../layout"], function (exports, module, _Vector, _layout) {
+define(["exports", "module", "../Vector"], function (exports, module, _Vector) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+  var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var V = _interopRequire(_Vector);
-
-  var layoutEnemy = _layout.enemy;
 
   var Enemy = (function () {
     function Enemy(wordVariant, data) {
@@ -29,8 +29,11 @@ define(["exports", "module", "../Vector", "../layout"], function (exports, modul
     _createClass(Enemy, {
       initSprite: {
         value: function initSprite() {
+          var _sprite$position;
+
           var sprite = PIXI.Sprite.fromImage(this.properties.img);
-          V.center(sprite);
+          sprite.anchor.set(0.5);
+          (_sprite$position = sprite.position).set.apply(_sprite$position, _toConsumableArray(this.get("position")));
           this.container.addChild(sprite);
         }
       },
@@ -44,7 +47,7 @@ define(["exports", "module", "../Vector", "../layout"], function (exports, modul
           this.container.removeChild(this.text);
 
           var text = this.text = new PIXI.Text(wordVariant);
-          var offset = V(layoutEnemy.textOffset);
+          var offset = V(this.get("textOffset"));
           V.center(text);
           V.move(text, offset);
           this.container.addChild(text);

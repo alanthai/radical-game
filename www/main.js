@@ -26,25 +26,20 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
 
     var game = new Game();
 
-    game.stage.addChild(gconsole.pixiText);
-
-    // var menu = new TrainingMenuScreen(game);
-    // game.stage.addChild(menu.container);
+    // game.stage.addChildAt(gconsole.pixiText, 2);
 
     function animate() {
       requestAnimationFrame(animate);
 
-      var active = game.currentScreen.wordpartSet;
+      // var active = game.currentScreen.wordpartSet;
 
-      gconsole.clear();
-      if (active) {
-        var selected = active.selected;
+      // gconsole.clear();
+      // if (active) {
+      //   var selected = active.selected;
 
-        gconsole.log("match? " + active.word.buildsFrom(selected));
-        selected.forEach(function (s) {
-          return gconsole.log(s);
-        });
-      }
+      //   gconsole.log('match? ' + active.word.buildsFrom(selected));
+      //   selected.forEach(s => gconsole.log(s));
+      // }
 
       renderer.render(game.stage);
       ticker.tick();

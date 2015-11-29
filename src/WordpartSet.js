@@ -1,8 +1,9 @@
 import Wordpart from './entities/wordpart';
 import Word from './Word';
 import Chain from './entities/chain';
-import layout from './layout';
+import {wordpartSet as layoutWordpartSet} from './layout';
 import V from './Vector';
+import {getTexture} from './assetLoader';
 
 import data from './data/index';
 import {getValues} from './util';
@@ -18,11 +19,8 @@ function getPoints(numPoints) {
   return points;
 }
 
-var _layout = layout.wordpartSet;
-var center = V(_layout.center);
-var radius = _layout.radius;
+var radius = layoutWordpartSet.radius;
 var r = V(radius, radius);
-
 
 class WordpartSet {
   constructor(word, parts, giveHints=false) {
@@ -30,19 +28,28 @@ class WordpartSet {
     this.parts = parts;
 
     var container = this.container = new PIXI.Container();
-    V.move(container, center);
+    container.position.set(...layoutWordpartSet.position);
 
     container.interactive = true;
     container.interactiveChildren = true;
 
     container.word = this.word;
-    this.buildWordparts();
-
-    this.wordparts.forEach(wordpart => {
-      container.addChild(wordpart.container);
-    });
 
     this.selected = [];
+
+    // Order matters! Boundary must come first before wordparts
+
+    var boundaries = new PIXI.Sprite(getTexture('img/bottom-ui.png'));
+    boundaries.anchor.set(0.5);
+    // var boundaries = new PIXI.Graphics();
+    // boundaries.beginFill(layoutWordpartSet.boundaryColor);
+    // boundaries.alpha = 0.1;
+    // var [boundWidth, boundHeight] = layoutWordpartSet.dimensions;
+    // boundaries.drawRect(-boundWidth/2, -boundHeight/2, boundWidth, boundHeight);
+    // boundaries.endFill();
+    container.addChild(boundaries);
+
+    this.buildWordparts();
 
     this.initInteractions(giveHints);
   }
@@ -51,14 +58,6 @@ class WordpartSet {
     var container = this.container;
     var isContactingWordpart = false;
     var dragging = false;
-
-    var boundaries = new PIXI.Graphics();
-    boundaries.beginFill(_layout.boundaryColor);
-    boundaries.alpha = 0.1;
-    boundaries.drawRect(-200, -200, 400, 400);
-    boundaries.endFill();
-
-    container.addChild(boundaries);
 
     container.on('wordpart:mousedown', (event, wordpart) => {
       isContactingWordpart = true;
@@ -114,6 +113,10 @@ class WordpartSet {
     var points = getPoints(this.parts.length);
     points = points.map(pt => V(pt).mult(r));
     this.wordparts = points.map((pt, i) => new Wordpart(this.parts[i], pt));
+
+    this.wordparts.forEach(wordpart => {
+      this.container.addChild(wordpart.container);
+    });
   }
 
   select(wordpart) {
@@ -129,6 +132,9 @@ class WordpartSet {
   destroy() {
     this.container.removeAllListeners();
     this.container.destroy();
+    this.container.mousemove = null;
+    this.container.mouseup = null;
+    this.container.mouseupoutside = null;
   }
 }
 
@@ -209,7 +215,7 @@ var WordpartSetChain = {
     });
 
     function destroy() {
-      if (!container.children) {return;}
+      if (!container.children || !chain) {return;}
       container.removeChild(chain.container);
       chain.destroy();
       chain = null;

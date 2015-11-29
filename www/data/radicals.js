@@ -153,6 +153,7 @@ define(["exports", "module"], function (exports, module) {
     行: { chinese: "行", pinyin: "xíng", strokes: 6, english: "walk" },
     衤: { chinese: "衤", pinyin: "yī", strokes: 6, english: "clothes", alt: "衣" },
     西: { chinese: "西", pinyin: "xī", strokes: 6, english: "west", alt: "覀" },
+    覀: { chinese: "覀", pinyin: "xī", strokes: 6, english: "west", alt: "西" },
     见: { chinese: "见", pinyin: "jiàn", strokes: 4, english: "see", traditional: "見" },
     角: { chinese: "角", pinyin: "jiǎo", strokes: 7, english: "horn" },
     讠: { chinese: "讠", pinyin: "yán", strokes: 2, english: "speech", traditional: "言" },
@@ -220,7 +221,10 @@ define(["exports", "module"], function (exports, module) {
     齿: { chinese: "齿", pinyin: "chǐ", strokes: 8, english: "tooth", traditional: "齒" },
     龙: { chinese: "龙", pinyin: "lóng", strokes: 5, english: "dragon", traditional: "龍" },
     龟: { chinese: "龟", pinyin: "guī", strokes: 7, english: "turtle", traditional: "龜" },
-    龠: { chinese: "龠", pinyin: "yuè", strokes: 17, english: "flute" }
+    龠: { chinese: "龠", pinyin: "yuè", strokes: 17, english: "flute" },
+
+    // Not real radicals
+    亥: { chinese: "亥" }
   };
 
   Object.keys(radicals).forEach(function (k) {

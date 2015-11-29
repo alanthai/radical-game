@@ -1,4 +1,4 @@
-define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain", "./layout", "./Vector", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _entitiesChain, _layout2, _Vector, _dataIndex, _util) {
+define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain", "./layout", "./Vector", "./assetLoader", "./data/index", "./util"], function (exports, module, _entitiesWordpart, _Word, _entitiesChain, _layout, _Vector, _assetLoader, _dataIndex, _util) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -15,9 +15,11 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
   var Chain = _interopRequire(_entitiesChain);
 
-  var layout = _interopRequire(_layout2);
+  var layoutWordpartSet = _layout.wordpartSet;
 
   var V = _interopRequire(_Vector);
+
+  var getTexture = _assetLoader.getTexture;
 
   var data = _interopRequire(_dataIndex);
 
@@ -34,13 +36,13 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
     return points;
   }
 
-  var _layout = layout.wordpartSet;
-  var center = V(_layout.center);
-  var radius = _layout.radius;
+  var radius = layoutWordpartSet.radius;
   var r = V(radius, radius);
 
   var WordpartSet = (function () {
     function WordpartSet(word, parts) {
+      var _container$position;
+
       var giveHints = arguments[2] === undefined ? false : arguments[2];
 
       _classCallCheck(this, WordpartSet);
@@ -49,19 +51,28 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
       this.parts = parts;
 
       var container = this.container = new PIXI.Container();
-      V.move(container, center);
+      (_container$position = container.position).set.apply(_container$position, _toConsumableArray(layoutWordpartSet.position));
 
       container.interactive = true;
       container.interactiveChildren = true;
 
       container.word = this.word;
-      this.buildWordparts();
-
-      this.wordparts.forEach(function (wordpart) {
-        container.addChild(wordpart.container);
-      });
 
       this.selected = [];
+
+      // Order matters! Boundary must come first before wordparts
+
+      var boundaries = new PIXI.Sprite(getTexture("img/bottom-ui.png"));
+      boundaries.anchor.set(0.5);
+      // var boundaries = new PIXI.Graphics();
+      // boundaries.beginFill(layoutWordpartSet.boundaryColor);
+      // boundaries.alpha = 0.1;
+      // var [boundWidth, boundHeight] = layoutWordpartSet.dimensions;
+      // boundaries.drawRect(-boundWidth/2, -boundHeight/2, boundWidth, boundHeight);
+      // boundaries.endFill();
+      container.addChild(boundaries);
+
+      this.buildWordparts();
 
       this.initInteractions(giveHints);
     }
@@ -74,14 +85,6 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
           var container = this.container;
           var isContactingWordpart = false;
           var dragging = false;
-
-          var boundaries = new PIXI.Graphics();
-          boundaries.beginFill(_layout.boundaryColor);
-          boundaries.alpha = 0.1;
-          boundaries.drawRect(-200, -200, 400, 400);
-          boundaries.endFill();
-
-          container.addChild(boundaries);
 
           container.on("wordpart:mousedown", function (event, wordpart) {
             isContactingWordpart = true;
@@ -144,6 +147,10 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
           this.wordparts = points.map(function (pt, i) {
             return new Wordpart(_this.parts[i], pt);
           });
+
+          this.wordparts.forEach(function (wordpart) {
+            _this.container.addChild(wordpart.container);
+          });
         }
       },
       select: {
@@ -164,6 +171,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
         value: function destroy() {
           this.container.removeAllListeners();
           this.container.destroy();
+          this.container.mousemove = null;
+          this.container.mouseup = null;
+          this.container.mouseupoutside = null;
         }
       }
     });
@@ -258,7 +268,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
       });
 
       function destroy() {
-        if (!container.children) {
+        if (!container.children || !chain) {
           return;
         }
         container.removeChild(chain.container);

@@ -45,7 +45,6 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           var sprite = this.baseSprite = new PIXI.Sprite(this.inactiveTexture);
 
           sprite.interactive = true;
-          sprite.forceHitTest = true;
 
           var emitEvent = function (eventName) {
             return function (event) {
@@ -67,7 +66,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           var text = new PIXI.Text(this.part, { font: "30px MySimHei" });
           Vector.center(text);
 
-          this.container.addChild(text);
+          this.baseSprite.addChild(text);
         }
       },
       highlight: {
@@ -83,7 +82,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           var theta = 0;
           var tf = 1200; // total time (in ms) to complete one turn
           var TAU = 2 * Math.PI; // full circle
-          var dr = 25;
+          var dr = 25; // amplitude (in px)
 
           // On first tick, do nothing (except add the real onTick)
           // Fixes bug: On highlight and unhighlight on same frame,

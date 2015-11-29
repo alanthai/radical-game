@@ -14,8 +14,12 @@ class VectorClass {
 
     this.x = x;
     this.y = y;
-  }
 
+    // this[Symbol.iterator] = function*() {
+    //   yield this.x;
+    //   yield this.y;
+    // }
+  }
 
   _add(v) {
     var [x, y] = getXY(v);
@@ -45,6 +49,8 @@ class VectorClass {
 };
 
 var Vector = (x, y) => new VectorClass(x, y);
+
+window.Vector = Vector;
 
 Vector.move = function(dp, point) {
   dp.x = point.x;

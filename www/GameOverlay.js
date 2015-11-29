@@ -3,6 +3,8 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+  var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
+
   var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -19,6 +21,8 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
 
   var TRAINING_MENU_UNLOCK = "basics1";
   var WORLD_LEVEL_UNLOCK = "basics1";
+
+  /** To do: Add messaging? */
 
   var displayScreenOverlay = (function () {
     var _displayScreenOverlay2 = {};
@@ -56,9 +60,11 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
 
       return _goldWrapper;
     })(function () {
-      var gold = new PIXI.Text(this.game.data.gold);
+      var _gold$position;
+
+      var gold = new PIXI.Text(this.game.data.gold, overlay.gold.style);
       this.container.addChild(gold);
-      V.move(gold, V(overlay.gold));
+      (_gold$position = gold.position).set.apply(_gold$position, _toConsumableArray(overlay.gold.position));
 
       return gold;
     }),
@@ -66,9 +72,12 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
     worldLevelButton: function worldLevelButton() {
       var _this = this;
 
+      var _button$position;
+
       var button = new PIXI.Sprite(getTexture("world-button"));
       this.container.addChild(button);
-      V.move(button, V(overlay.worldLevelButton));
+      (_button$position = button.position).set.apply(_button$position, _toConsumableArray(overlay.worldLevelButton));
+      button.anchor.set(0.5);
 
       button.interactive = true;
       button.mouseup = function () {
@@ -81,9 +90,12 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
     trainingMenuButton: function trainingMenuButton() {
       var _this = this;
 
+      var _button$position;
+
       var button = new PIXI.Sprite(getTexture("training-button"));
       this.container.addChild(button);
-      V.move(button, V(overlay.trainingMenuButton));
+      (_button$position = button.position).set.apply(_button$position, _toConsumableArray(overlay.trainingMenuButton));
+      button.anchor.set(0.5);
 
       button.interactive = true;
       button.mouseup = function () {
@@ -129,13 +141,12 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
               return level.unlock === levelNumber;
             });
           }
-          this.game.stage.on("worldLevel:new", function (levelNumber) {
 
+          this.game.stage.on("worldLevel:new", function (levelNumber) {
             var unlocked = getUnlocked(levelNumber);
             if (unlocked.length) {
               var msg = "New level unlocked!";
-              // this.highlight('worldLevelButton', msg);
-              console.log(msg);
+              _this.game.highlight(_this.items.trainingMenuButton, "left", msg);
             }
           });
         }
@@ -162,6 +173,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
             this.items[itemName] = createItem[itemName].call(this);
           }
           this.items[itemName].alpha = 1;
+          this.items[itemName].interaction = true;
         }
       },
       displayIfUnlocked: {
@@ -182,7 +194,8 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
       hideAll: {
         value: function hideAll() {
           getValues(this.items).forEach(function (item) {
-            return item.alpha = 0;
+            item.alpha = 0;
+            item.interaction = false;
           });
         }
       }

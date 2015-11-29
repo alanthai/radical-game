@@ -7,6 +7,8 @@ import {levels} from './data/training';
 const TRAINING_MENU_UNLOCK = 'basics1';
 const WORLD_LEVEL_UNLOCK = 'basics1';
 
+/** To do: Add messaging? */
+
 var displayScreenOverlay = {
   [SCREENS.WORLD_LEVEL]() {
     this.display('gold');
@@ -29,9 +31,9 @@ var displayScreenOverlay = {
 
 var createItem = {
   gold() {
-    var gold = new PIXI.Text(this.game.data.gold);
+    var gold = new PIXI.Text(this.game.data.gold, overlay.gold.style);
     this.container.addChild(gold);
-    V.move(gold, V(overlay.gold));
+    gold.position.set(...overlay.gold.position);
 
     return gold;
   },
@@ -39,7 +41,8 @@ var createItem = {
   worldLevelButton() {
     var button = new PIXI.Sprite(getTexture('world-button'));
     this.container.addChild(button);
-    V.move(button, V(overlay.worldLevelButton));
+    button.position.set(...overlay.worldLevelButton);
+    button.anchor.set(0.5);
 
     button.interactive = true;
     button.mouseup = () => this.game.goTo(SCREENS.WORLD_LEVEL);
@@ -50,7 +53,8 @@ var createItem = {
   trainingMenuButton() {
     var button = new PIXI.Sprite(getTexture('training-button'));
     this.container.addChild(button);
-    V.move(button, V(overlay.trainingMenuButton));
+    button.position.set(...overlay.trainingMenuButton);
+    button.anchor.set(0.5);
 
     button.interactive = true;
     button.mouseup = () => this.game.goTo(SCREENS.TRAINING_MENU);
@@ -86,13 +90,12 @@ class GameOverlay {
     function getUnlocked(levelNumber) {
       return getValues(levels).filter(level => level.unlock === levelNumber);
     }
-    this.game.stage.on('worldLevel:new', levelNumber => {
 
+    this.game.stage.on('worldLevel:new', levelNumber => {
         var unlocked = getUnlocked(levelNumber);
         if (unlocked.length) {
-          let msg = 'New level unlocked!';
-          // this.highlight('worldLevelButton', msg);
-          console.log(msg);
+          var msg = 'New level unlocked!';
+          this.game.highlight(this.items.trainingMenuButton, 'left', msg);
         }
     })
   }
@@ -107,6 +110,7 @@ class GameOverlay {
       this.items[itemName] = createItem[itemName].call(this);
     }
     this.items[itemName].alpha = 1;
+    this.items[itemName].interaction = true;
   }
 
   displayIfUnlocked(trainingLevelId, itemName) {
@@ -124,7 +128,10 @@ class GameOverlay {
   }
 
   hideAll() {
-    getValues(this.items).forEach(item => item.alpha = 0);
+    getValues(this.items).forEach(item => {
+      item.alpha = 0;
+      item.interaction = false;
+    });
   }
 }
 

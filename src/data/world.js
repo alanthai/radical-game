@@ -1,7 +1,7 @@
 export default [
   {}, // skip level 0
-  {enemies: ['enemy1'], killsRequired: 2},
-  {enemies: ['enemy1'], killsRequired: 2},
-  {enemies: ['enemy1'], killsRequired: 2},
-  {enemies: ['enemy1'], killsRequired: 10},
+  {enemies: ['shadowbat', 'hauntedjelly', 'jiangshi'], killsRequired: 3},
+  {enemies: ['shadowbat', 'hauntedjelly', 'jiangshi'], killsRequired: 4},
+  {enemies: ['shadowbat', 'hauntedjelly', 'jiangshi'], killsRequired: 5},
+  {enemies: ['shadowbat', 'hauntedjelly', 'jiangshi'], killsRequired: 10},
 ];

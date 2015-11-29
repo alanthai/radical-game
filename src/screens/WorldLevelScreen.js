@@ -31,6 +31,7 @@ class WorldLevelScreen extends LevelScreen {
     var words = levelChoices.map(level => levels[level].words);
     worldParams.words = flatten(words);
     worldParams.variants = allVariants;
+    worldParams.background = 'img/background_01.png';
 
     this.killCount = 0;
     this.killsRequired = worldParams.killsRequired;
@@ -41,15 +42,16 @@ class WorldLevelScreen extends LevelScreen {
   initEntities() {
     super.initEntities(...arguments);
 
+    var kcOptions = layoutLevel.killCount;
     var killCounter = this.killCounter = new PIXI.Container();
-    killCounter.position.set(...layoutLevel.killCount);
+    killCounter.position.set(...kcOptions.position);
 
     var skull = this.skull = new PIXI.Sprite(getTexture('skull'));
     skull.anchor.set(1, 0);
     skull.x = -5; // padding
     killCounter.addChild(skull);
 
-    var killText = this.killText = new PIXI.Text('');
+    var killText = this.killText = new PIXI.Text('', kcOptions.style);
     killCounter.addChild(killText);
 
     this.container.addChild(killCounter);
@@ -59,7 +61,6 @@ class WorldLevelScreen extends LevelScreen {
 
   updateKillText() {
     this.killText.text = `${this.killCount}/${this.killsRequired}`;
-    // this.skull.x = -this.killText.width / 2;
   }
 
   nextEnemy() {

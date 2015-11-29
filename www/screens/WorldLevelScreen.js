@@ -60,6 +60,7 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
       });
       worldParams.words = flatten(words);
       worldParams.variants = allVariants;
+      worldParams.background = "img/background_01.png";
 
       this.killCount = 0;
       this.killsRequired = worldParams.killsRequired;
@@ -76,15 +77,16 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
 
           _get(Object.getPrototypeOf(WorldLevelScreen.prototype), "initEntities", this).apply(this, arguments);
 
+          var kcOptions = layoutLevel.killCount;
           var killCounter = this.killCounter = new PIXI.Container();
-          (_killCounter$position = killCounter.position).set.apply(_killCounter$position, _toConsumableArray(layoutLevel.killCount));
+          (_killCounter$position = killCounter.position).set.apply(_killCounter$position, _toConsumableArray(kcOptions.position));
 
           var skull = this.skull = new PIXI.Sprite(getTexture("skull"));
           skull.anchor.set(1, 0);
           skull.x = -5; // padding
           killCounter.addChild(skull);
 
-          var killText = this.killText = new PIXI.Text("");
+          var killText = this.killText = new PIXI.Text("", kcOptions.style);
           killCounter.addChild(killText);
 
           this.container.addChild(killCounter);
@@ -95,7 +97,6 @@ define(["exports", "module", "./LevelScreen", "../data/training", "../data/world
       updateKillText: {
         value: function updateKillText() {
           this.killText.text = "" + this.killCount + "/" + this.killsRequired;
-          // this.skull.x = -this.killText.width / 2;
         }
       },
       nextEnemy: {

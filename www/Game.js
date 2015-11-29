@@ -1,4 +1,4 @@
-define(["exports", "module", "./layout", "./data/training", "./screens/WorldLevelScreen", "./screens/TrainingLevelScreen", "./screens/TrainingMenuScreen", "./GameOverlay"], function (exports, module, _layout, _dataTraining, _screensWorldLevelScreen, _screensTrainingLevelScreen, _screensTrainingMenuScreen, _GameOverlay) {
+define(["exports", "module", "./layout", "./data/training", "./screens/WorldLevelScreen", "./screens/TrainingLevelScreen", "./screens/TrainingMenuScreen", "./assetLoader", "./globals", "./GameOverlay"], function (exports, module, _layout, _dataTraining, _screensWorldLevelScreen, _screensTrainingLevelScreen, _screensTrainingMenuScreen, _assetLoader, _globals, _GameOverlay) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -17,6 +17,9 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
   var TrainingLevelScreen = _interopRequire(_screensTrainingLevelScreen);
 
   var TrainingMenuScreen = _interopRequire(_screensTrainingMenuScreen);
+
+  var getTexture = _assetLoader.getTexture;
+  var ticker = _globals.ticker;
 
   var GameOverlay = _interopRequire(_GameOverlay);
 
@@ -53,18 +56,18 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
 
       var stage = this.stage = new PIXI.Container();
 
-      this.overlay = new GameOverlay(this);
-      stage.addChild(this.overlay.container);
-
       // blank placeholder
       this.currentScreen = { container: new PIXI.Container() };
-      stage.addChild(this.currentScreen.container);
+      stage.addChildAt(this.currentScreen.container, 0);
+
+      this.overlay = new GameOverlay(this);
+      stage.addChildAt(this.overlay.container, 1);
 
       this.initGlobalEventHandlers();
 
-      // var goToParams = {levelId: 'basics1', subLevel: 0};
-      // this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
-      this.goTo(SCREENS.WORLD_LEVEL);
+      var goToParams = { levelId: "basics1", subLevel: 0 };
+      this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
+      // this.goTo(SCREENS.WORLD_LEVEL);
     }
 
     _createClass(Game, {
@@ -78,11 +81,15 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
         value: function goTo(enumScreen, options) {
           var ScreenClass = screenClasses[enumScreen];
           var screen = new ScreenClass(this, options);
-          this.stage.addChild(screen.container);
+          this.stage.addChildAt(screen.container, 0);
 
           this.stage.removeChild(this.currentScreen.container);
           this.currentScreen.container.destroy();
+          this.currentScreen.container.interactiveChildren = false;
+
           this.currentScreen = screen;
+
+          this.unhighlight();
 
           this.overlay.displayScreenOverlay(enumScreen);
         }
@@ -120,12 +127,68 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
             highestLevel++;
             _this.data.worldLevel = highestLevel;
             _this.save();
-            _this.stage.emit("worldLevel:new", highestLevel);
             _this.goTo(SCREENS.WORLD_LEVEL, { levelNumber: highestLevel });
+            _this.stage.emit("worldLevel:new", highestLevel);
             // } else {
             //   this.goTo(SCREENS.WORLD_MENU)
             // }
           });
+        }
+      },
+      highlight: {
+
+        // for now assume achor is center
+        // consider making directions enum
+        /**
+         * Produces an arrow that visually shows points to something new or important
+         * @param container Object being highlighted
+         * @param direction Values are 'right', 'left', 'up', 'down'
+        */
+
+        value: function highlight(container) {
+          var direction = arguments[1] === undefined ? "left" : arguments[1];
+
+          var params = ({
+            left: { dir: 1, z: "x", rotation: 0 * Math.PI, dim: "width" },
+            right: { dir: -1, z: "x", rotation: 1 * Math.PI, dim: "width" },
+            up: { dir: 1, z: "y", rotation: 0.5 * Math.PI, dim: "height" },
+            down: { dir: -1, z: "y", rotation: 1.5 * Math.PI, dim: "height" }
+          })[direction];
+
+          var arrow = this.arrow = new PIXI.Sprite(getTexture("arrow"));
+          arrow.anchor.set(0, 0.5);
+          arrow.rotation = params.rotation;
+          this.stage.addChild(arrow);
+
+          var _container$getGlobalPosition = container.getGlobalPosition();
+
+          var x = _container$getGlobalPosition.x;
+          var y = _container$getGlobalPosition.y;
+
+          arrow.position.set(x, y);
+          arrow[params.z] += container[params.dim] / 2;
+          var z = arrow[params.z];
+
+          // bouncing animation
+          var theta = 0;
+          var tf = 1200; // total time (in ms) to complete 2 bounces
+          var TAU = 2 * Math.PI;
+          var amplitude = 30; // is haved since we're taking abs value of sin wave
+
+          this._tickerId = ticker.onTick(function (tick, diff) {
+            theta += TAU * diff / tf;
+            arrow[params.z] = z + params.dir * amplitude * Math.abs(Math.sin(theta));
+          });
+        }
+      },
+      unhighlight: {
+        value: function unhighlight() {
+          if (!this.arrow) {
+            return;
+          }this.stage.removeChild(this.arrow);
+          this.arrow.destroy();
+          this.arrow = null;
+          ticker.removeListener(this._tickerId);
         }
       },
       loadSave: {

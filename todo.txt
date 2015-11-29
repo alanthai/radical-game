@@ -1,22 +1,20 @@
 DOING
 -----
-  Sprint:
-    // - Enemies left counter
-    - EnemyInfo
-    // -- Healthbar (only show world mode)
-    // -- Max misses
-    // -- Description
-    - next 2 levels + review levels
-    - next 3 enemies
+  Sprint (Aesthetics):
+    //*- next 1 enemy
+    // - Overlays + layouts
+    //* - Temporary "Win!" screen
+    //- Fancier text
+    //* - Highlights events
+    //* -- highlight overlay button
+    // -- highlight level buttons (only highlights when level is reached)
+    // - Fix positions and sizes of monsters; position of the lvl select buttons; Replace new background as test
+    // - switched to newest version of PIXI.js
 
-  Sprint 2 (Aesthetics):
-    - Background
-    - Dummy
-    - Overlays + layouts
-    - Temporary "Win!" screen
-    - Fancier text
-    - Animations (death)
-    - Unlocks and highlights
+    - Bug: Hidden buttons still interact
+    - Bug: Sometimes word choices offer correct parts, but says it's wrong.
+    - Refactor using Tween.js
+      -- Animations (death, and run away)
 
   Then show it off to people!
 
@@ -28,6 +26,8 @@ TODO
     Enemy death
     Enemy idle
     Enemy enter
+
+  Game Overlay messaging
 
   Level system (enemy HP/gold bounties every level)
 

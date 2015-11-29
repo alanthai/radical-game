@@ -14,13 +14,11 @@ define(["exports", "module"], function (exports, module) {
     backgroundColor: 8947848,
 
     wordpartSet: {
-      center: [SCREEN_WIDTH / 2, 700],
       radius: 150, // pixel
-      boundaryColor: 16776960
+      boundaryColor: 16776960,
+      position: [SCREEN_WIDTH / 2, SCREEN_HEIGHT * 8 / 10],
+      dimensions: [SCREEN_WIDTH, SCREEN_HEIGHT * 4 / 10]
     },
-
-    enemy: {
-      textOffset: [0, 65] },
 
     enemyInfo: {
       healthbar: {
@@ -39,21 +37,30 @@ define(["exports", "module"], function (exports, module) {
       description: [0, 0] },
 
     level: {
-      display: [SCREEN_WIDTH - 50, 50], // right justified
+      display: {
+        position: [SCREEN_WIDTH - 50, 50],
+        style: { fill: "white", stroke: "black", strokeThickness: 2 }
+      }, // right justified
       enemy: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4],
       enemyInfo: [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8],
-      killCount: [SCREEN_WIDTH / 2, 50] },
+      killCount: {
+        position: [SCREEN_WIDTH / 2, 50],
+        style: { fill: "white", stroke: "black", strokeThickness: 2 }
+      } },
 
     trainingButton: {
       first: [SCREEN_WIDTH / 2, 100],
-      width: 400,
+      width: 300,
       offset: 100
     },
 
     overlay: {
-      gold: [50, 50],
-      trainingMenuButton: [50, 100],
-      worldLevelButton: [50, 200] },
+      gold: {
+        position: [50, 50],
+        style: { fill: 16766720, stroke: 9127187, strokeThickness: 2 }
+      },
+      trainingMenuButton: [100, 150],
+      worldLevelButton: [100, 250] },
 
     SCREENS: SCREENS };
 });

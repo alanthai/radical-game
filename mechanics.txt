@@ -47,6 +47,7 @@ Advanced upgrade categories (Maybe):
 - Hard-kill: Angry monsters drop more gold on death. Rewards users for challenging themselves. Later on deters people from using "Repels"
 - Luck: Increase chance of random drops
 - Rapid fire: Speed bonus
+- Forgiveness: Chance to reduce "misses left"
 
 Monsters
 --------

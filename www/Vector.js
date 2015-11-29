@@ -30,6 +30,11 @@ define(["exports", "module"], function (exports, module) {
 
       this.x = x;
       this.y = y;
+
+      // this[Symbol.iterator] = function*() {
+      //   yield this.x;
+      //   yield this.y;
+      // }
     }
 
     _createClass(VectorClass, {
@@ -86,6 +91,8 @@ define(["exports", "module"], function (exports, module) {
   var Vector = function (x, y) {
     return new VectorClass(x, y);
   };
+
+  window.Vector = Vector;
 
   Vector.move = function (dp, point) {
     dp.x = point.x;

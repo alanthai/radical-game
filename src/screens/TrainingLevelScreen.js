@@ -13,6 +13,7 @@ class TrainingLevelScreen extends LevelScreen {
     trainingParams.giveHints = true;
     trainingParams.enemyInfoOptions =
       {hideHealthbar: true, hideFleeCounter: true};
+    trainingParams.background = 'img/background_training.png';
 
     trainingParams.variants = ~params.subLevel
       ? [allVariants[params.subLevel]]
@@ -31,6 +32,7 @@ class TrainingLevelScreen extends LevelScreen {
   }
 
   fireCompleted() {
+    this.container.removeChild(this.wordpartSet.container);
     this.game.stage.emit('trainingLevel:completed', this);
   }
 

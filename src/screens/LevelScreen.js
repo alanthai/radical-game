@@ -10,6 +10,7 @@ import Word from '../Word';
 import WordpartSet from '../WordpartSet';
 import Enemy from '../entities/enemy';
 import EnemyInfo from '../entities/enemyInfo';
+import {getTexture} from '../assetLoader';
 
 import {level as layoutLevel} from '../layout';
 
@@ -64,12 +65,15 @@ export default class LevelScreen {
   }
 
   initEntities() {
-    var container = this.container = new PIXI.Container();
+    var texture = getTexture(this.data.background);
+    var container = this.container = new PIXI.Sprite(texture);
 
-    var display = this.display = new PIXI.Text(this.data.display);
+    var displayOptions = layoutLevel.display;
+    var display = this.display = new PIXI.Text(
+      this.data.display, displayOptions.style);
     display.anchor.x = 1;
     container.addChild(display);
-    display.position.set(...layoutLevel.display);
+    display.position.set(...displayOptions.position);
 
     // placeholders;
     this.enemy = {died: () => true, container: new PIXI.Container()};
@@ -115,15 +119,19 @@ export default class LevelScreen {
         return this.fireCompleted();
       }
 
-      this.nextWord();
       // animate dying
-      // setTimeout(() => {
-      // }, 500);
+      setTimeout(() => {
+        this.nextWord();
+      }, 500);
 
     });
 
     enemy.container.on('enemy:hurt', this.nextWord);
-    enemy.container.on('enemy:fled', this.nextWord);
+    enemy.container.on('enemy:fled', () => {
+      setTimeout(() => {
+        this.nextWord();
+      }, 500);
+    });
     // enemy.container.on('enemy:hurt', setTimeout(this.nextWord, 500));
     // enemy.container.on('enemy:fled', setTimeout(this.nextWord, 500));
   }

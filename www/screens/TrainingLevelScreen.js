@@ -28,6 +28,7 @@ define(["exports", "module", "./LevelScreen", "../data/training"], function (exp
       trainingParams.levelChoices = ["basics1", "basics2"];
       trainingParams.giveHints = true;
       trainingParams.enemyInfoOptions = { hideHealthbar: true, hideFleeCounter: true };
+      trainingParams.background = "img/background_training.png";
 
       trainingParams.variants = ~params.subLevel ? [allVariants[params.subLevel]] : allVariants;
 
@@ -53,6 +54,7 @@ define(["exports", "module", "./LevelScreen", "../data/training"], function (exp
       },
       fireCompleted: {
         value: function fireCompleted() {
+          this.container.removeChild(this.wordpartSet.container);
           this.game.stage.emit("trainingLevel:completed", this);
         }
       },
