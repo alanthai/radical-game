@@ -1,20 +1,12 @@
 DOING
 -----
   Sprint (Aesthetics):
-    //*- next 1 enemy
-    // - Overlays + layouts
-    //* - Temporary "Win!" screen
-    //- Fancier text
-    //* - Highlights events
-    //* -- highlight overlay button
-    // -- highlight level buttons (only highlights when level is reached)
-    // - Fix positions and sizes of monsters; position of the lvl select buttons; Replace new background as test
-    // - switched to newest version of PIXI.js
-
     - Bug: Hidden buttons still interact
     - Bug: Sometimes word choices offer correct parts, but says it's wrong.
     - Refactor using Tween.js
       -- Animations (death, and run away)
+    - highlight overlay button
+    - More enemies
 
   Then show it off to people!
 

@@ -65,9 +65,9 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
 
       this.initGlobalEventHandlers();
 
-      var goToParams = { levelId: "basics1", subLevel: 0 };
-      this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
-      // this.goTo(SCREENS.WORLD_LEVEL);
+      // var goToParams = {levelId: 'basics1', subLevel: 0};
+      // this.goTo(SCREENS.TRAINING_LEVEL, goToParams);
+      this.goTo(SCREENS.WORLD_LEVEL);
     }
 
     _createClass(Game, {
