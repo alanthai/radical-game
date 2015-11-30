@@ -45,7 +45,9 @@ var createItem = {
     button.anchor.set(0.5);
 
     button.interactive = true;
-    button.mouseup = () => this.game.goTo(SCREENS.WORLD_LEVEL);
+    button.mouseup = () => {
+      button.interactive && this.game.goTo(SCREENS.WORLD_LEVEL);
+    };
 
     return button;
   },
@@ -57,7 +59,9 @@ var createItem = {
     button.anchor.set(0.5);
 
     button.interactive = true;
-    button.mouseup = () => this.game.goTo(SCREENS.TRAINING_MENU);
+    button.mouseup = () => {
+      button.interactive && this.game.goTo(SCREENS.TRAINING_MENU);
+    };
 
     return button;
   }
@@ -110,7 +114,7 @@ class GameOverlay {
       this.items[itemName] = createItem[itemName].call(this);
     }
     this.items[itemName].alpha = 1;
-    this.items[itemName].interaction = true;
+    this.items[itemName].interactive = true;
   }
 
   displayIfUnlocked(trainingLevelId, itemName) {
@@ -130,7 +134,7 @@ class GameOverlay {
   hideAll() {
     getValues(this.items).forEach(item => {
       item.alpha = 0;
-      item.interaction = false;
+      item.interactive = false;
     });
   }
 }

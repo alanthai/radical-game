@@ -81,7 +81,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
 
       button.interactive = true;
       button.mouseup = function () {
-        return _this.game.goTo(SCREENS.WORLD_LEVEL);
+        button.interactive && _this.game.goTo(SCREENS.WORLD_LEVEL);
       };
 
       return button;
@@ -99,7 +99,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
 
       button.interactive = true;
       button.mouseup = function () {
-        return _this.game.goTo(SCREENS.TRAINING_MENU);
+        button.interactive && _this.game.goTo(SCREENS.TRAINING_MENU);
       };
 
       return button;
@@ -173,7 +173,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
             this.items[itemName] = createItem[itemName].call(this);
           }
           this.items[itemName].alpha = 1;
-          this.items[itemName].interaction = true;
+          this.items[itemName].interactive = true;
         }
       },
       displayIfUnlocked: {
@@ -195,7 +195,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
         value: function hideAll() {
           getValues(this.items).forEach(function (item) {
             item.alpha = 0;
-            item.interaction = false;
+            item.interactive = false;
           });
         }
       }
