@@ -36,12 +36,6 @@ export default class Word {
 
     // ordered match
     return arraysMatch(this.getPieces(variant), pieces);
-
-    // unordered
-    // var wPiecesCount = getPiecesCount(this.getPieces(variant));
-    // var piecesCount = getPiecesCount(pieces);
-
-    // return deepEquals(wPiecesCount, piecesCount);
   }
 
   getPieces(variant) {

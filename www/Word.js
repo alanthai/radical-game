@@ -56,12 +56,6 @@ define(["exports", "module", "./data/index", "./util"], function (exports, modul
 
           // ordered match
           return arraysMatch(this.getPieces(variant), pieces);
-
-          // unordered
-          // var wPiecesCount = getPiecesCount(this.getPieces(variant));
-          // var piecesCount = getPiecesCount(pieces);
-
-          // return deepEquals(wPiecesCount, piecesCount);
         }
       },
       getPieces: {
