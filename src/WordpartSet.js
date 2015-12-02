@@ -143,18 +143,20 @@ var WordpartSetHinter = {
   initHinter() {
     this.resetHints();
 
-    this.container.on('wordpart:mousedown', (event, wordpart) => {
-      this.getHint() === wordpart.part
-        && this.highlightNextHint();
-    });
-
     this.container.on('wordpart:select', (event, wordpart) => {
       this.wordparts.forEach(wp => wp.unhighlight());
+      this.highlightIfMatch(wordpart);
     });
 
     this.container.on('word:incorrect', () => this.resetHints());
 
-    this.container.on('wordpart:mouseup', () => this.resetHints());
+    this.container.on('wordpart:mouseupoutside', () => this.resetHints());
+  },
+
+  highlightIfMatch(wordpart) {
+    this.correctBuild = this.getHint() === wordpart.part && this.correctBuild
+      ? (this.highlightNextHint(), true)
+      : false;
   },
 
   highlightNextHint() {
@@ -176,6 +178,7 @@ var WordpartSetHinter = {
   resetHints() {
     this.wordparts.forEach(wp => wp.unhighlight());
     this.hints = [null, ...this.word.getPieces()];
+    this.correctBuild = true;
     this.highlightNextHint();
   }
 };

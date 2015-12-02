@@ -1,12 +1,15 @@
 DOING
 -----
+  QA: 
+  // - All hint errors
+  // - FF error on Training level: got rid of undefined variable
+
   Sprint (Aesthetics):
     - Bug: Hidden buttons still interact
     - Bug: Sometimes word choices offer correct parts, but says it's wrong.
     - Refactor using Tween.js
-      -- Animations (death, and run away)
     - highlight overlay button
-    - More enemies
+    - Navigating causes level refresh (clicking World Level ON world level)
 
   Then show it off to people!
 
@@ -19,6 +22,7 @@ TODO
     Enemy idle
     Enemy enter
 
+  More enemies
   Game Overlay messaging
 
   Level system (enemy HP/gold bounties every level)

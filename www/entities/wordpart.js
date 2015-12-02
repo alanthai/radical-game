@@ -23,6 +23,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
       _classCallCheck(this, Wordpart);
 
       this.container = new PIXI.Container();
+      this.container._name = "Wordpart";
 
       this.part = part;
 
@@ -55,6 +56,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           sprite.mousedown = emitEvent("wordpart:mousedown");
           sprite.mouseover = emitEvent("wordpart:mouseover");
           sprite.mouseout = emitEvent("wordpart:mouseout");
+          sprite.mouseupoutside = emitEvent("wordpart:mouseupoutside");
 
           Vector.center(sprite);
 
@@ -76,6 +78,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           if (this.hiSprite) {
             return;
           }var hiSprite = this.hiSprite = new PIXI.Graphics();
+          hiSprite._name = "hiSprite";
           hiSprite.lineStyle(2, 0, 1);
           hiSprite.drawCircle(0, 0, this.baseSprite.height);
 
@@ -88,11 +91,17 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           // Fixes bug: On highlight and unhighlight on same frame,
           // Two highlights show at the same time.
           var firstTick = function () {
+            // Fixes bug: this still gets called after it gets destroyed
+            // Sequence: Go to highlight, then go to non-highlight
+            if (!hiSprite.scale) {
+              return;
+            }
             _this.container.addChild(hiSprite);
             ticker.removeListener(firstTicker);
             _this.ticker = ticker.onTick(onTick);
           };
 
+          // TODO: scale instead of height/width
           var onTick = function (tick, diff) {
             var baseRadius = _this.baseSprite.height + dr;
             theta += TAU * diff / tf;
@@ -110,6 +119,9 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           }this.container.removeChild(this.hiSprite);
           ticker.removeListener(this.ticker);
           this.hiSprite.destroy();
+          if (~this.container.children.indexOf(this.hiSprite)) {
+            debugger;
+          }
           this.hiSprite = null;
           this.ticker = 0;
         }
@@ -128,7 +140,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
         value: function select() {
           this.selected = true;
           this.baseSprite.texture = this.activeTexture;
-          this.container.parent.emit("wordpart:select", event, this);
+          this.container.parent.emit("wordpart:select", null, this); // event === null?
         }
       },
       deselect: {

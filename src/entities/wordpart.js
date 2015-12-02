@@ -9,6 +9,7 @@ var imgs = layout.wordpart;
 export default class Wordpart {
   constructor(part, point) {
     this.container = new PIXI.Container();
+    this.container._name = 'Wordpart';
 
     this.part = part;
 
@@ -37,6 +38,7 @@ export default class Wordpart {
     sprite.mousedown = emitEvent('wordpart:mousedown');
     sprite.mouseover = emitEvent('wordpart:mouseover');
     sprite.mouseout = emitEvent('wordpart:mouseout');
+    sprite.mouseupoutside = emitEvent('wordpart:mouseupoutside');
 
     Vector.center(sprite);
 
@@ -54,6 +56,7 @@ export default class Wordpart {
     if (this.hiSprite) return;
 
     var hiSprite = this.hiSprite = new PIXI.Graphics();
+    hiSprite._name = 'hiSprite';
     hiSprite.lineStyle(2, 0x000000, 1);
     hiSprite.drawCircle(0, 0, this.baseSprite.height);
 
@@ -66,11 +69,15 @@ export default class Wordpart {
     // Fixes bug: On highlight and unhighlight on same frame,
     // Two highlights show at the same time.
     var firstTick = () => {
+      // Fixes bug: this still gets called after it gets destroyed
+      // Sequence: Go to highlight, then go to non-highlight
+      if (!hiSprite.scale) {return;}
       this.container.addChild(hiSprite);
       ticker.removeListener(firstTicker);
       this.ticker = ticker.onTick(onTick);
     }
 
+    // TODO: scale instead of height/width
     var onTick = (tick, diff) => {
       var baseRadius = this.baseSprite.height + dr;
       theta += TAU * diff / tf;
@@ -86,6 +93,7 @@ export default class Wordpart {
     this.container.removeChild(this.hiSprite);
     ticker.removeListener(this.ticker);
     this.hiSprite.destroy();
+    if (~this.container.children.indexOf(this.hiSprite)) {debugger;}
     this.hiSprite = null;
     this.ticker = 0;
   }
@@ -103,7 +111,7 @@ export default class Wordpart {
   select() {
     this.selected = true;
     this.baseSprite.texture = this.activeTexture;
-    this.container.parent.emit('wordpart:select', event, this);
+    this.container.parent.emit('wordpart:select', null, this); // event === null?
   }
 
   deselect() {

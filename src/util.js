@@ -66,5 +66,5 @@ export default {
     }, dest);
   },
 
-  emptyArray(n, value=0) {return Array(n).fill(value);}
+  emptyArray(n, value=0) {return n ? Array(n).fill(value) : [];}
 };

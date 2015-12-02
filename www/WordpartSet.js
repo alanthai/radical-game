@@ -187,23 +187,24 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
       this.resetHints();
 
-      this.container.on("wordpart:mousedown", function (event, wordpart) {
-        _this.getHint() === wordpart.part && _this.highlightNextHint();
-      });
-
       this.container.on("wordpart:select", function (event, wordpart) {
         _this.wordparts.forEach(function (wp) {
           return wp.unhighlight();
         });
+        _this.highlightIfMatch(wordpart);
       });
 
       this.container.on("word:incorrect", function () {
         return _this.resetHints();
       });
 
-      this.container.on("wordpart:mouseup", function () {
+      this.container.on("wordpart:mouseupoutside", function () {
         return _this.resetHints();
       });
+    },
+
+    highlightIfMatch: function highlightIfMatch(wordpart) {
+      this.correctBuild = this.getHint() === wordpart.part && this.correctBuild ? (this.highlightNextHint(), true) : false;
     },
 
     highlightNextHint: function highlightNextHint() {
@@ -229,6 +230,7 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
         return wp.unhighlight();
       });
       this.hints = [null].concat(_toConsumableArray(this.word.getPieces()));
+      this.correctBuild = true;
       this.highlightNextHint();
     }
   };

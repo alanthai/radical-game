@@ -90,7 +90,7 @@ define(["exports", "module"], function (exports, module) {
 
     emptyArray: function emptyArray(n) {
       var value = arguments[1] === undefined ? 0 : arguments[1];
-      return Array(n).fill(value);
+      return n ? Array(n).fill(value) : [];
     }
   };
 });
