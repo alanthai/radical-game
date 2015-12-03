@@ -81,9 +81,9 @@ class WordpartSet {
       return event => this.container.emit(eventName, event);
     };
 
-    container.mousemove = emitEvent('wordpartSet:mousemove');
-    container.mouseup = emitEvent('wordpartSet:mouseup');
-    container.mouseupoutside = emitEvent('wordpartSet:mouseupoutside');
+    container.mousemove = container.touchmove = emitEvent('wordpartSet:mousemove');
+    container.mouseup = container.touchend = emitEvent('wordpartSet:mouseup');
+    container.mouseupoutside = container.touchendoutside = emitEvent('wordpartSet:mouseupoutside');
 
     var clear = () => {
       dragging = false;

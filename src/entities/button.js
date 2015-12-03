@@ -14,7 +14,7 @@ export default class LevelButton {
   constructor(text, width) {
     var container = this.container = new PIXI.Container();
     container.interactive = true;
-    container.mouseup = this.fire.bind(this);
+    container.click = container.tap = this.fire.bind(this);
 
     this.enabled = true;
 

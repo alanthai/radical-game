@@ -110,9 +110,9 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
             };
           };
 
-          container.mousemove = emitEvent("wordpartSet:mousemove");
-          container.mouseup = emitEvent("wordpartSet:mouseup");
-          container.mouseupoutside = emitEvent("wordpartSet:mouseupoutside");
+          container.mousemove = container.touchmove = emitEvent("wordpartSet:mousemove");
+          container.mouseup = container.touchend = emitEvent("wordpartSet:mouseup");
+          container.mouseupoutside = container.touchendoutside = emitEvent("wordpartSet:mouseupoutside");
 
           var clear = function () {
             dragging = false;

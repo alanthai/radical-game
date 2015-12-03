@@ -53,10 +53,10 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
             };
           };
 
-          sprite.mousedown = emitEvent("wordpart:mousedown");
+          sprite.mousedown = sprite.touchstart = emitEvent("wordpart:mousedown");
           sprite.mouseover = emitEvent("wordpart:mouseover");
           sprite.mouseout = emitEvent("wordpart:mouseout");
-          sprite.mouseupoutside = emitEvent("wordpart:mouseupoutside");
+          sprite.mouseupoutside = sprite.touchendoutside = emitEvent("wordpart:mouseupoutside");
 
           Vector.center(sprite);
 
