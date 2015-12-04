@@ -1,7 +1,7 @@
 import gconsole from './GConsole';
 import Game from './Game';
 import layout from './layout';
-import {ticker} from './globals';
+import {ticker, patchInteractionManager} from './globals';
 import './assetLoader';
 import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
@@ -9,6 +9,8 @@ function setup() {
   var dimensions = layout.screen;
   var backgroundColor = layout.backgroundColor;
   var renderer = PIXI.autoDetectRenderer(...dimensions, {backgroundColor});
+
+  patchInteractionManager(renderer);
 
   document.body.appendChild(renderer.view);
 
@@ -30,7 +32,7 @@ function setup() {
     // }
 
     renderer.render(game.stage);
-    ticker.tick();
+    ticker.update();
   }
 
   requestAnimationFrame(animate);

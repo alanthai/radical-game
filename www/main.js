@@ -12,6 +12,7 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
   var layout = _interopRequire(_layout);
 
   var ticker = _globals.ticker;
+  var patchInteractionManager = _globals.patchInteractionManager;
 
   var TrainingMenuScreen = _interopRequire(_screensTrainingMenuScreen);
 
@@ -21,6 +22,8 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
     var dimensions = layout.screen;
     var backgroundColor = layout.backgroundColor;
     var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
+
+    patchInteractionManager(renderer);
 
     document.body.appendChild(renderer.view);
 
@@ -42,7 +45,7 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
       // }
 
       renderer.render(game.stage);
-      ticker.tick();
+      ticker.update();
     }
 
     requestAnimationFrame(animate);

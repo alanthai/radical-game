@@ -36,8 +36,8 @@ export default class Wordpart {
     };
 
     sprite.mousedown = sprite.touchstart = emitEvent('wordpart:mousedown');
-    sprite.mouseover = emitEvent('wordpart:mouseover');
-    sprite.mouseout = emitEvent('wordpart:mouseout');
+    sprite.mouseover = sprite.touchover = emitEvent('wordpart:mouseover');
+    sprite.mouseout = sprite.touchout = emitEvent('wordpart:mouseout');
     sprite.mouseupoutside = sprite.touchendoutside = emitEvent('wordpart:mouseupoutside');
 
     Vector.center(sprite);
