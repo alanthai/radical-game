@@ -80,7 +80,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
       button.anchor.set(0.5);
 
       button.interactive = true;
-      button.mouseup = function () {
+      button.click = button.tap = function () {
         button.interactive && _this.game.goTo(SCREENS.WORLD_LEVEL);
       };
 
@@ -98,7 +98,7 @@ define(["exports", "module", "./Vector", "./layout", "./util", "./assetLoader", 
       button.anchor.set(0.5);
 
       button.interactive = true;
-      button.mouseup = function () {
+      button.click = button.tap = function () {
         button.interactive && _this.game.goTo(SCREENS.TRAINING_MENU);
       };
 

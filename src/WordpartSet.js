@@ -132,9 +132,6 @@ class WordpartSet {
   destroy() {
     this.container.removeAllListeners();
     this.container.destroy();
-    this.container.mousemove = null;
-    this.container.mouseup = null;
-    this.container.mouseupoutside = null;
   }
 }
 

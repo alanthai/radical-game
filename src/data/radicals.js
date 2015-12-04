@@ -174,7 +174,7 @@ var radicals = {
   '钅': {chinese: '钅', pinyin: 'jīn', strokes: 5, english: 'metal', alt: '金'},
   '长': {chinese: '长', pinyin: 'cháng', strokes: 4, english: 'long', traditional: '長'},
   '门': {chinese: '门', pinyin: 'mén', strokes: 3, english: 'gate', traditional: '門'},
-  '阝': {chinese: '阝', pinyin: 'fù', strokes: 8, english: 'mound', traditional: '阜'},
+  // '阝': {chinese: '阝', pinyin: 'fù', strokes: 8, english: 'mound', traditional: '阜'},
   '隶': {chinese: '隶', pinyin: 'lì', strokes: 8, english: 'slave'},
   '隹': {chinese: '隹', pinyin: 'zhuī', strokes: 8, english: 'short-tailed bird'},
   '雨': {chinese: '雨', pinyin: 'yǔ', strokes: 8, english: 'rain'},

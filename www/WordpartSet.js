@@ -171,9 +171,6 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
         value: function destroy() {
           this.container.removeAllListeners();
           this.container.destroy();
-          this.container.mousemove = null;
-          this.container.mouseup = null;
-          this.container.mouseupoutside = null;
         }
       }
     });

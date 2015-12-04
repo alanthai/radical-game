@@ -45,7 +45,7 @@ var createItem = {
     button.anchor.set(0.5);
 
     button.interactive = true;
-    button.mouseup = () => {
+    button.click = button.tap = () => {
       button.interactive && this.game.goTo(SCREENS.WORLD_LEVEL);
     };
 
@@ -59,7 +59,7 @@ var createItem = {
     button.anchor.set(0.5);
 
     button.interactive = true;
-    button.mouseup = () => {
+    button.click = button.tap = () => {
       button.interactive && this.game.goTo(SCREENS.TRAINING_MENU);
     };
 
