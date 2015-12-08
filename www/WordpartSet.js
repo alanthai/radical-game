@@ -122,7 +122,12 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
           container.on("wordpartSet:mouseup", function () {
             if (isContactingWordpart) {
-              _this.word.buildsFrom(_this.selected) ? container.emit("word:completed") : container.emit("word:incorrect");
+              if (_this.word.buildsFrom(_this.selected)) {
+                container.emit("word:completed");
+                _this.container.interactiveChildren = false;
+              } else {
+                container.emit("word:incorrect");
+              }
             }
             clear();
           });
@@ -182,6 +187,8 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
     initHinter: function initHinter() {
       var _this = this;
 
+      this.stopHints = false;
+
       this.resetHints();
 
       this.container.on("wordpart:select", function (event, wordpart) {
@@ -210,6 +217,10 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
     },
 
     highlightHint: function highlightHint() {
+      if (this.stopHints) {
+        return;
+      }
+
       var hint = this.getHint();
       var wordpart = this.wordparts.find(function (wp) {
         return hint === wp.part;
@@ -229,6 +240,13 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
       this.hints = [null].concat(_toConsumableArray(this.word.getPieces()));
       this.correctBuild = true;
       this.highlightNextHint();
+    },
+
+    stop: function stop() {
+      this.wordparts.forEach(function (wp) {
+        return wp.unhighlight();
+      });
+      this.stopHints = true;
     }
   };
 

@@ -93,9 +93,12 @@ class WordpartSet {
 
     container.on('wordpartSet:mouseup', () => {
       if (isContactingWordpart) {
-        this.word.buildsFrom(this.selected)
-          ? container.emit('word:completed')
-          : container.emit('word:incorrect');
+        if (this.word.buildsFrom(this.selected)) {
+          container.emit('word:completed');
+          this.container.interactiveChildren = false;
+        } else {
+          container.emit('word:incorrect');
+        }
       }
       clear();
     });
@@ -138,6 +141,8 @@ class WordpartSet {
 
 var WordpartSetHinter = {
   initHinter() {
+    this.stopHints = false;
+
     this.resetHints();
 
     this.container.on('wordpart:select', (event, wordpart) => {
@@ -162,8 +167,10 @@ var WordpartSetHinter = {
   },
 
   highlightHint() {
+    if (this.stopHints) {return;}
+
     var hint = this.getHint();
-    var wordpart = this.wordparts.find(wp => hint === wp.part)
+    var wordpart = this.wordparts.find(wp => hint === wp.part);
 
     if (wordpart) wordpart.highlight();
   },
@@ -177,6 +184,11 @@ var WordpartSetHinter = {
     this.hints = [null, ...this.word.getPieces()];
     this.correctBuild = true;
     this.highlightNextHint();
+  },
+
+  stop() {
+    this.wordparts.forEach(wp => wp.unhighlight());
+    this.stopHints = true;
   }
 };
 

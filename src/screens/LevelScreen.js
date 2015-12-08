@@ -112,6 +112,11 @@ export default class LevelScreen {
     this.container.addChild(enemyInfo.container);
     enemyInfo.container.position.set(...layoutLevel.enemyInfo);
 
+    var next = () => {
+      this.wordpartSet.container.interactiveChildren = false;
+      setTimeout(() => {this.nextWord();}, 500);
+    };
+
     enemy.container.on('enemy:died', () => {
       this.addGold();
 
@@ -119,18 +124,14 @@ export default class LevelScreen {
         return this.fireCompleted();
       }
 
-      // animate dying
-      setTimeout(() => {
-        this.nextWord();
-      }, 500);
-
+      next();
     });
 
-    enemy.container.on('enemy:hurt', this.nextWord);
-    enemy.container.on('enemy:fled', () => {
-      setTimeout(() => {
-        this.nextWord();
-      }, 500);
+    enemy.container.on('enemy:hurt', next);
+    enemy.container.on('enemy:fled', next);
+    enemy.container.on('enemy:missed', () => {
+      this.wordpartSet.container.interactiveChildren = false;
+      setTimeout(() => {this.wordpartSet.container.interactiveChildren = true;}, 200)
     });
     // enemy.container.on('enemy:hurt', setTimeout(this.nextWord, 500));
     // enemy.container.on('enemy:fled', setTimeout(this.nextWord, 500));

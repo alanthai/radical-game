@@ -147,6 +147,13 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
           this.container.addChild(enemyInfo.container);
           (_enemyInfo$container$position = enemyInfo.container.position).set.apply(_enemyInfo$container$position, _toConsumableArray(layoutLevel.enemyInfo));
 
+          var next = function () {
+            _this.wordpartSet.container.interactiveChildren = false;
+            setTimeout(function () {
+              _this.nextWord();
+            }, 500);
+          };
+
           enemy.container.on("enemy:died", function () {
             _this.addGold();
 
@@ -154,17 +161,16 @@ define(["exports", "module", "../util", "../data/index", "../Word", "../Wordpart
               return _this.fireCompleted();
             }
 
-            // animate dying
-            setTimeout(function () {
-              _this.nextWord();
-            }, 500);
+            next();
           });
 
-          enemy.container.on("enemy:hurt", this.nextWord);
-          enemy.container.on("enemy:fled", function () {
+          enemy.container.on("enemy:hurt", next);
+          enemy.container.on("enemy:fled", next);
+          enemy.container.on("enemy:missed", function () {
+            _this.wordpartSet.container.interactiveChildren = false;
             setTimeout(function () {
-              _this.nextWord();
-            }, 500);
+              _this.wordpartSet.container.interactiveChildren = true;
+            }, 200);
           });
           // enemy.container.on('enemy:hurt', setTimeout(this.nextWord, 500));
           // enemy.container.on('enemy:fled', setTimeout(this.nextWord, 500));

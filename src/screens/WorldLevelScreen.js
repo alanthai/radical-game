@@ -24,9 +24,12 @@ class WorldLevelScreen extends LevelScreen {
 
     var worldParams = Object.assign({levelNumber}, levelData);
     worldParams.display = `Level ${levelNumber}`;
-    // worldParams.levelChoices = getNRandom(, 3);
-    worldParams.levelChoices = ['basics1', 'basics2'];
-    // var levelChoices = Object.keys(this.game.data.trainingUnlocked);
+
+    var levelIds = Object.keys(game.data.trainingUnlocked);
+    worldParams.levelChoices = getNRandom(levelIds, 3);
+
+    // worldParams.levelChoices = ['basics1', 'basics2'];
+
     var levelChoices = worldParams.levelChoices;
     var words = levelChoices.map(level => levels[level].words);
     worldParams.words = flatten(words);

@@ -44,7 +44,7 @@ export default {
   // taken from here: http://jsperf.com/k-random-elements-from-array/2
   getNRandom(array, n) {
     var result = new Array(n);
-    var len = arr.length;
+    var len = array.length;
     var taken = new Array(len);
 
     if (n >= len) {
@@ -53,7 +53,7 @@ export default {
 
     while (n--) {
         var x = Math.floor(Math.random() * len);
-        result[n] = arr[x in taken ? taken[x] : x];
+        result[n] = array[x in taken ? taken[x] : x];
         taken[x] = --len;
     }
     return result;

@@ -1,20 +1,23 @@
 DOING
 -----
-  QA: 
-  // - All hint errors
-  // - FF error on Training level: got rid of undefined variable
-
-  Sprint (Aesthetics):
-    - Bug: Hidden buttons still interact
-    - Bug: Sometimes word choices offer correct parts, but says it's wrong.
-    - Refactor using Tween.js
-    - highlight overlay button
-    - Navigating causes level refresh (clicking World Level ON world level)
+  Sprint:
+    //- Make working for touch events
+    //- Bug: Hidden buttons still interact
+    //- Make WorldLevelScreen take from completed levels
+  - Bug: mobile tapping once fires 2 tap events
+  - Bug: mobile 2+ word sets not building: `touchend` might not be working
+  - on "wrong" animation, lock things up so you can't get wrong twice
 
   Then show it off to people!
 
 TODO
 ----
+  - Try to reproduce bug: empty bubble (Christine): Likely font file not loading. Also got box characters (unidentified)
+  - Mobile has a problem with multi-touch
+  - Bug: Sometimes word choices offer correct parts, but says it's wrong.
+  - highlight overlay button
+  - Refactor using Tween.js
+
   Animations
     Correct answer
     Incorrect answer
@@ -31,8 +34,6 @@ TODO
     - Hint mode on first learn (training mode)
 
   Set up build system for phone
-
-  Figure out the right vocab set to let into wordpartset.
 
   Audio for pinyin
 
