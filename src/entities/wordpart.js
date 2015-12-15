@@ -31,6 +31,8 @@ export default class Wordpart {
 
     var emitEvent = eventName => {
       return (event => {
+        // only handle single touch for now
+        if (event.data.identifier > 0) return;
         this.container.parent.emit(eventName, event, this);
       });
     };

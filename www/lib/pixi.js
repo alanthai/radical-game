@@ -23318,7 +23318,7 @@ InteractionManager.prototype.update = function (deltaTime)
 
     this.cursor = 'inherit';
 
-    this.processInteractive(this.mouse.global, this.renderer._lastObjectRendered, this.processMouseOverOut, true );
+    // this.processInteractive(this.mouse.global, this.renderer._lastObjectRendered, this.processMouseOverOut, true );
 
     if (this.currentCursorStyle !== this.cursor)
     {

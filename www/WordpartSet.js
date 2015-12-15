@@ -106,7 +106,8 @@ define(["exports", "module", "./entities/wordpart", "./Word", "./entities/chain"
 
           var emitEvent = function (eventName) {
             return function (event) {
-              return _this.container.emit(eventName, event);
+              if (event.data.identifier > 0) return;
+              _this.container.emit(eventName, event);
             };
           };
 

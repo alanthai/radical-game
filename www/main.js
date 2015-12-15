@@ -19,11 +19,10 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
   function setup() {
     var _PIXI;
 
+    patchInteractionManager();
     var dimensions = layout.screen;
     var backgroundColor = layout.backgroundColor;
     var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
-
-    patchInteractionManager(renderer);
 
     document.body.appendChild(renderer.view);
 
@@ -41,7 +40,7 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
       //   var selected = active.selected;
 
       //   gconsole.log('match? ' + active.word.buildsFrom(selected));
-      //   selected.forEach(s => gconsole.log(s));
+      //   selected.forEach(gconsole.log.bind(gconsole));
       // }
 
       renderer.render(game.stage);

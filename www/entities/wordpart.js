@@ -49,6 +49,8 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
 
           var emitEvent = function (eventName) {
             return function (event) {
+              // only handle single touch for now
+              if (event.data.identifier > 0) return;
               _this.container.parent.emit(eventName, event, _this);
             };
           };

@@ -78,7 +78,10 @@ class WordpartSet {
     });
 
     var emitEvent = eventName => {
-      return event => this.container.emit(eventName, event);
+      return event => {
+        if (event.data.identifier > 0) return;
+        this.container.emit(eventName, event);
+      };
     };
 
     container.mousemove = container.touchmove = emitEvent('wordpartSet:mousemove');

@@ -6,11 +6,11 @@ import './assetLoader';
 import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
 function setup() {
+  patchInteractionManager();
   var dimensions = layout.screen;
   var backgroundColor = layout.backgroundColor;
   var renderer = PIXI.autoDetectRenderer(...dimensions, {backgroundColor});
 
-  patchInteractionManager(renderer);
 
   document.body.appendChild(renderer.view);
 
@@ -28,7 +28,7 @@ function setup() {
     //   var selected = active.selected;
 
     //   gconsole.log('match? ' + active.word.buildsFrom(selected));
-    //   selected.forEach(s => gconsole.log(s));
+    //   selected.forEach(gconsole.log.bind(gconsole));
     // }
 
     renderer.render(game.stage);
