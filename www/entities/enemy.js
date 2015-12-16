@@ -48,7 +48,7 @@ define(["exports", "module", "../Vector"], function (exports, module, _Vector) {
 
           var text = this.text = new PIXI.Text(wordVariant);
           var offset = V(this.get("textOffset"));
-          V.center(text);
+          text.anchor.set(0.5);
           V.move(text, offset);
           this.container.addChild(text);
         }

@@ -60,7 +60,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           sprite.mouseout = sprite.touchout = emitEvent("wordpart:mouseout");
           sprite.mouseupoutside = sprite.touchendoutside = emitEvent("wordpart:mouseupoutside");
 
-          Vector.center(sprite);
+          sprite.anchor.set(0.5);
 
           this.container.addChild(sprite);
         }
@@ -68,7 +68,7 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
       initText: {
         value: function initText() {
           var text = new PIXI.Text(this.part, { font: "30px MySimHei" });
-          Vector.center(text);
+          text.anchor.set(0.5);
 
           this.baseSprite.addChild(text);
         }

@@ -1,5 +1,8 @@
-var SCREEN_WIDTH = 640;
-var SCREEN_HEIGHT = 1024;
+var e = document.documentElement;
+var g = document.getElementsByTagName('body')[0];
+
+const SCREEN_HEIGHT = window.innerHeight|| e.clientHeight|| g.clientHeight;
+const SCREEN_WIDTH = SCREEN_HEIGHT * 640 / 1024;
 
 const SCREENS = {
   WORLD_LEVEL: Symbol('World Level Screen'),
