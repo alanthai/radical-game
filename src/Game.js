@@ -1,4 +1,4 @@
-import {SCREENS} from './layout';
+import {SCREENS, screenRatio} from './layout';
 import {levels} from './data/training';
 
 import WorldLevelScreen from './screens/WorldLevelScreen';
@@ -33,6 +33,9 @@ class Game {
     this.loadSave();
 
     var stage = this.stage = new PIXI.Container();
+
+    stage.scale.x = screenRatio;
+    stage.scale.y = screenRatio;
 
     // blank placeholder
     this.currentScreen = {container: new PIXI.Container()};

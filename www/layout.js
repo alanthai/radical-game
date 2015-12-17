@@ -4,8 +4,15 @@ define(["exports", "module"], function (exports, module) {
   var e = document.documentElement;
   var g = document.getElementsByTagName("body")[0];
 
-  var SCREEN_HEIGHT = window.innerHeight || e.clientHeight || g.clientHeight;
-  var SCREEN_WIDTH = SCREEN_HEIGHT * 640 / 1024;
+  var SCREEN_HEIGHT = 1024;
+  var SCREEN_WIDTH = 640;
+
+  var screenHeight = window.innerHeight || e.clientHeight || g.clientHeight;
+  var screenRatio = screenHeight / SCREEN_HEIGHT;
+
+  var screen = screen || {};
+  screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || function () {};
+  screen.lockOrientationUniversal(["portrait-primary", "portrait-secondary"]);
 
   var SCREENS = {
     WORLD_LEVEL: Symbol("World Level Screen"),
@@ -13,7 +20,9 @@ define(["exports", "module"], function (exports, module) {
     TRAINING_MENU: Symbol("World Menu Screen") };
 
   module.exports = {
-    screen: [SCREEN_WIDTH, SCREEN_HEIGHT],
+    defaultScreenDimensions: [SCREEN_WIDTH, SCREEN_HEIGHT],
+    screenDimensions: [SCREEN_WIDTH * screenRatio, SCREEN_HEIGHT * screenRatio],
+    screenRatio: screenRatio,
     backgroundColor: 8947848,
 
     wordpartSet: {

@@ -10,6 +10,7 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var SCREENS = _layout.SCREENS;
+  var screenRatio = _layout.screenRatio;
   var levels = _dataTraining.levels;
 
   var WorldLevelScreen = _interopRequire(_screensWorldLevelScreen);
@@ -55,6 +56,9 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
       this.loadSave();
 
       var stage = this.stage = new PIXI.Container();
+
+      stage.scale.x = screenRatio;
+      stage.scale.y = screenRatio;
 
       // blank placeholder
       this.currentScreen = { container: new PIXI.Container() };

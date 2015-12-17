@@ -20,7 +20,7 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
     var _PIXI;
 
     patchInteractionManager();
-    var dimensions = layout.screen;
+    var dimensions = layout.screenDimensions;
     var backgroundColor = layout.backgroundColor;
     var renderer = (_PIXI = PIXI).autoDetectRenderer.apply(_PIXI, _toConsumableArray(dimensions).concat([{ backgroundColor: backgroundColor }]));
 

@@ -7,7 +7,7 @@ import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
 function setup() {
   patchInteractionManager();
-  var dimensions = layout.screen;
+  var dimensions = layout.screenDimensions;
   var backgroundColor = layout.backgroundColor;
   var renderer = PIXI.autoDetectRenderer(...dimensions, {backgroundColor});
 

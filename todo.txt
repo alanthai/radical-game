@@ -1,15 +1,12 @@
 DOING
 -----
   Sprint:
-    //- Make working for touch events
-    //- Bug: Hidden buttons still interact
-    //- Make WorldLevelScreen take from completed levels
-    // - Bug: mobile 2+ word sets not building:
-  - Bug: mobile tapping once fires 2 tap events
-  - Layout
+  // - Bug: mobile tapping once fires 2 tap events (crosswalk fixed it)
+  // - Layout
   - Reduce size of orbs (invisible parts also part of hit test)
-  - on "wrong" animation, lock things up so you can't get wrong twice
   - passing over the chain makes touchover false
+  Brenda: Can't keep track of all the words
+  - Want to know how they build into the real word
 
   Then show it off to people!
 
@@ -29,9 +26,6 @@ TODO
     Enemy death
     Enemy idle
     Enemy enter
-
-  Brenda: Can't keep track of all the words
-  - Want to know how they build into the real word
 
   More enemies
   Game Overlay messaging
