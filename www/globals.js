@@ -5,64 +5,48 @@ define(["exports", "module", "./util", "./data/index"], function (exports, modul
 
   var _slice = Array.prototype.slice;
 
-  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
   var util = _interopRequire(_util);
 
   var data = _interopRequire(_dataIndex);
 
   var getValues = util.getValues;
 
-  var Ticker = (function () {
-    function Ticker() {
-      _classCallCheck(this, Ticker);
+  // class Ticker {
+  //   constructor() {
+  //     this.counter = 0
+  //     this.callbacks = {};
+  //     this.now = Date.now();
+  //   }
 
-      this.counter = 0;
-      this.callbacks = {};
-      this.now = Date.now();
-    }
+  //   getId() {
+  //     var id = parseInt(Math.random() * Math.pow(10, 9));
+  //     return !this.callbacks[id]
+  //       ? id
+  //       : this.getId();
+  //   }
 
-    _createClass(Ticker, {
-      getId: {
-        value: function getId() {
-          var id = parseInt(Math.random() * Math.pow(10, 9));
-          return !this.callbacks[id] ? id : this.getId();
-        }
-      },
-      onTick: {
-        value: function onTick(callback, scope) {
-          var id = this.getId();
-          this.callbacks[id] = callback.bind(scope || this);
-          return id;
-        }
-      },
-      update: {
-        value: function update() {
-          var now = Date.now();
-          var diff = now - this.now;
-          var counter = ++this.counter;
-          getValues(this.callbacks).forEach(function (cb) {
-            return cb(counter, diff);
-          });
-          this.now = now;
-        }
-      },
-      removeListener: {
-        value: function removeListener(id) {
-          delete this.callbacks[id];
-        }
-      },
-      removeAllListeners: {
-        value: function removeAllListeners() {
-          this.callbacks = {};
-        }
-      }
-    });
+  //   onTick(callback, scope) {
+  //     var id = this.getId();
+  //     this.callbacks[id] = callback.bind(scope || this);
+  //     return id;
+  //   }
 
-    return Ticker;
-  })();
+  //   update() {
+  //     var now = Date.now();
+  //     var diff = now - this.now;
+  //     var counter = ++this.counter;
+  //     getValues(this.callbacks).forEach(cb => cb(counter, diff));
+  //     this.now = now;
+  //   }
+
+  //   removeListener(id) {
+  //     delete this.callbacks[id];
+  //   }
+
+  //   removeAllListeners() {
+  //     this.callbacks = {};
+  //   }
+  // }
 
   function isMobile() {
     var check = false;
@@ -146,7 +130,7 @@ define(["exports", "module", "./util", "./data/index"], function (exports, modul
   module.exports = {
     util: util,
     data: data,
-    patchInteractionManager: patchInteractionManager,
-    ticker: new Ticker()
-  };
+    patchInteractionManager: patchInteractionManager };
 });
+
+// ticker: new Ticker()

@@ -1,7 +1,6 @@
 // import {wordpart as imgs} from '../layout';
 import layout from '../layout';
 import Vector from '../Vector';
-import {ticker} from '../globals';
 import {getTexture} from '../assetLoader';
 
 var imgs = layout.wordpart;
@@ -60,44 +59,29 @@ export default class Wordpart {
     var hiSprite = this.hiSprite = new PIXI.Graphics();
     hiSprite._name = 'hiSprite';
     hiSprite.lineStyle(2, 0x000000, 1);
-    hiSprite.drawCircle(0, 0, this.baseSprite.height);
+    hiSprite.drawCircle(0, 0, this.baseSprite.height /2);
 
-    var theta = 0;
-    var tf = 1200; // total time (in ms) to complete one turn
-    var TAU = 2 * Math.PI; // full circle 
-    var dr = 25; // amplitude (in px) 
+    var t = 1200; // total time (in ms) to complete one turn
+    var r = this.baseSprite.height + 50; // amplitude (in px)
 
-    // On first tick, do nothing (except add the real onTick)
-    // Fixes bug: On highlight and unhighlight on same frame,
-    // Two highlights show at the same time.
-    var firstTick = () => {
-      // Fixes bug: this still gets called after it gets destroyed
-      // Sequence: Go to highlight, then go to non-highlight
+    setTimeout(() => {
       if (!hiSprite.scale) {return;}
       this.container.addChild(hiSprite);
-      ticker.removeListener(firstTicker);
-      this.ticker = ticker.onTick(onTick);
-    }
-
-    // TODO: scale instead of height/width
-    var onTick = (tick, diff) => {
-      var baseRadius = this.baseSprite.height + dr;
-      theta += TAU * diff / tf;
-      var radius = baseRadius + dr * Math.sin(theta);
-      hiSprite.height = hiSprite.width = radius;
-    }
-
-    var firstTicker = ticker.onTick(firstTick);
+      this.hiTween = new TWEEN.Tween(hiSprite)
+        .to({height: r, width: r}, t / 2)
+        .repeat(Infinity)
+        .yoyo(true)
+        .start();
+    }, 1);
   }
 
   unhighlight() {
     if (!this.hiSprite) return;
     this.container.removeChild(this.hiSprite);
-    ticker.removeListener(this.ticker);
+    this.hiTween.stop();
     this.hiSprite.destroy();
     if (~this.container.children.indexOf(this.hiSprite)) {debugger;}
     this.hiSprite = null;
-    this.ticker = 0;
   }
 
   move(point) {

@@ -120,32 +120,34 @@ class Game {
    * @param direction Values are 'right', 'left', 'up', 'down'
   */
   highlight(container, direction='left') {
-    var params = {
+    const params = {
       left:  {dir:  1, z: 'x', rotation: 0 * Math.PI, dim: 'width'},
       right: {dir: -1, z: 'x', rotation: 1 * Math.PI, dim: 'width'},
       up:    {dir:  1, z: 'y', rotation: 0.5 * Math.PI, dim: 'height'},
       down:  {dir: -1, z: 'y', rotation: 1.5 * Math.PI, dim: 'height'}
     }[direction];
 
+    // add arrow in correct orientation
     var arrow = this.arrow = new PIXI.Sprite(getTexture('arrow'));
     arrow.anchor.set(0, 0.5);
     arrow.rotation = params.rotation;
-    this.stage.addChild(arrow); 
-    var {x, y} = container.getGlobalPosition();
-    arrow.position.set(x, y);
-    arrow[params.z] += container[params.dim] / 2;
-    var z = arrow[params.z];
+    this.stage.addChild(arrow);
 
-    // bouncing animation
-    var theta = 0;
-    var tf = 1200; // total time (in ms) to complete 2 bounces
-    var TAU = 2 * Math.PI;
-    var amplitude = 30; // is haved since we're taking abs value of sin wave
+    // position next to container (but not touching)
+    const {x, y} = container.getGlobalPosition();
+    const z = params.z;
+    arrow.position.set(x / screenRatio, y / screenRatio);
+    arrow[z] += container[params.dim] / 2;
 
-    this._tickerId = ticker.onTick((tick, diff) => {
-      theta += TAU * diff / tf;
-      arrow[params.z] = z + params.dir * amplitude * Math.abs(Math.sin(theta));
-    });
+    // animate
+    const t = 600; // total time (in ms)
+    const amplitude = 60;
+
+    this.arrowTween = new TWEEN.Tween(arrow)
+      .to({[z]: arrow[z] + params.dir * amplitude}, t / 2)
+      .repeat(Infinity)
+      .yoyo(true)
+      .start();
   }
 
   unhighlight() {
@@ -154,7 +156,8 @@ class Game {
     this.stage.removeChild(this.arrow);
     this.arrow.destroy();
     this.arrow = null;
-    ticker.removeListener(this._tickerId);
+    this.arrowTween.stop();
+    // ticker.removeListener(this._tickerId);
   }
 
   loadSave() {

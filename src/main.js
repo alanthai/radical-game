@@ -1,7 +1,7 @@
 import gconsole from './GConsole';
 import Game from './Game';
 import layout from './layout';
-import {ticker, patchInteractionManager} from './globals';
+import {patchInteractionManager} from './globals';
 import './assetLoader';
 import TrainingMenuScreen from './screens/TrainingMenuScreen';
 
@@ -32,7 +32,7 @@ function setup() {
     // }
 
     renderer.render(game.stage);
-    ticker.update();
+    TWEEN.update();
   }
 
   requestAnimationFrame(animate);

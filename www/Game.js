@@ -159,30 +159,28 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
             down: { dir: -1, z: "y", rotation: 1.5 * Math.PI, dim: "height" }
           })[direction];
 
+          // add arrow in correct orientation
           var arrow = this.arrow = new PIXI.Sprite(getTexture("arrow"));
           arrow.anchor.set(0, 0.5);
           arrow.rotation = params.rotation;
           this.stage.addChild(arrow);
+
+          // position next to container (but not touching)
 
           var _container$getGlobalPosition = container.getGlobalPosition();
 
           var x = _container$getGlobalPosition.x;
           var y = _container$getGlobalPosition.y;
 
-          arrow.position.set(x, y);
-          arrow[params.z] += container[params.dim] / 2;
-          var z = arrow[params.z];
+          var z = params.z;
+          arrow.position.set(x / screenRatio, y / screenRatio);
+          arrow[z] += container[params.dim] / 2;
 
-          // bouncing animation
-          var theta = 0;
-          var tf = 1200; // total time (in ms) to complete 2 bounces
-          var TAU = 2 * Math.PI;
-          var amplitude = 30; // is haved since we're taking abs value of sin wave
+          // animate
+          var t = 600; // total time (in ms)
+          var amplitude = 60;
 
-          this._tickerId = ticker.onTick(function (tick, diff) {
-            theta += TAU * diff / tf;
-            arrow[params.z] = z + params.dir * amplitude * Math.abs(Math.sin(theta));
-          });
+          this.arrowTween = new TWEEN.Tween(arrow).to(_defineProperty({}, z, arrow[z] + params.dir * amplitude), t / 2).repeat(Infinity).yoyo(true).start();
         }
       },
       unhighlight: {
@@ -192,7 +190,8 @@ define(["exports", "module", "./layout", "./data/training", "./screens/WorldLeve
           }this.stage.removeChild(this.arrow);
           this.arrow.destroy();
           this.arrow = null;
-          ticker.removeListener(this._tickerId);
+          this.arrowTween.stop();
+          // ticker.removeListener(this._tickerId);
         }
       },
       loadSave: {

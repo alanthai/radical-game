@@ -11,7 +11,6 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
 
   var layout = _interopRequire(_layout);
 
-  var ticker = _globals.ticker;
   var patchInteractionManager = _globals.patchInteractionManager;
 
   var TrainingMenuScreen = _interopRequire(_screensTrainingMenuScreen);
@@ -44,7 +43,7 @@ define(["exports", "./GConsole", "./Game", "./layout", "./globals", "./assetLoad
       // }
 
       renderer.render(game.stage);
-      ticker.update();
+      TWEEN.update();
     }
 
     requestAnimationFrame(animate);

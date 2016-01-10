@@ -3,42 +3,42 @@ import data from './data/index';
 
 var getValues = util.getValues;
 
-class Ticker {
-  constructor() {
-    this.counter = 0
-    this.callbacks = {};
-    this.now = Date.now();
-  }
+// class Ticker {
+//   constructor() {
+//     this.counter = 0
+//     this.callbacks = {};
+//     this.now = Date.now();
+//   }
 
-  getId() {
-    var id = parseInt(Math.random() * Math.pow(10, 9));
-    return !this.callbacks[id]
-      ? id
-      : this.getId();
-  }
+//   getId() {
+//     var id = parseInt(Math.random() * Math.pow(10, 9));
+//     return !this.callbacks[id]
+//       ? id
+//       : this.getId();
+//   }
 
-  onTick(callback, scope) {
-    var id = this.getId();
-    this.callbacks[id] = callback.bind(scope || this);
-    return id;
-  }
+//   onTick(callback, scope) {
+//     var id = this.getId();
+//     this.callbacks[id] = callback.bind(scope || this);
+//     return id;
+//   }
 
-  update() {
-    var now = Date.now();
-    var diff = now - this.now;
-    var counter = ++this.counter;
-    getValues(this.callbacks).forEach(cb => cb(counter, diff));
-    this.now = now;
-  }
+//   update() {
+//     var now = Date.now();
+//     var diff = now - this.now;
+//     var counter = ++this.counter;
+//     getValues(this.callbacks).forEach(cb => cb(counter, diff));
+//     this.now = now;
+//   }
 
-  removeListener(id) {
-    delete this.callbacks[id];
-  }
+//   removeListener(id) {
+//     delete this.callbacks[id];
+//   }
 
-  removeAllListeners() {
-    this.callbacks = {};
-  }
-}
+//   removeAllListeners() {
+//     this.callbacks = {};
+//   }
+// }
 
 function isMobile() {
   var check = false;
@@ -130,5 +130,5 @@ export default {
   util,
   data,
   patchInteractionManager,
-  ticker: new Ticker()
+  // ticker: new Ticker()
 };

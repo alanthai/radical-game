@@ -1,4 +1,4 @@
-define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLoader"], function (exports, module, _layout, _Vector, _globals, _assetLoader) {
+define(["exports", "module", "../layout", "../Vector", "../assetLoader"], function (exports, module, _layout, _Vector, _assetLoader) {
   "use strict";
 
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -13,7 +13,6 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
 
   var Vector = _interopRequire(_Vector);
 
-  var ticker = _globals.ticker;
   var getTexture = _assetLoader.getTexture;
 
   var imgs = layout.wordpart;
@@ -82,36 +81,18 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           }var hiSprite = this.hiSprite = new PIXI.Graphics();
           hiSprite._name = "hiSprite";
           hiSprite.lineStyle(2, 0, 1);
-          hiSprite.drawCircle(0, 0, this.baseSprite.height);
+          hiSprite.drawCircle(0, 0, this.baseSprite.height / 2);
 
-          var theta = 0;
-          var tf = 1200; // total time (in ms) to complete one turn
-          var TAU = 2 * Math.PI; // full circle
-          var dr = 25; // amplitude (in px)
+          var t = 1200; // total time (in ms) to complete one turn
+          var r = this.baseSprite.height + 50; // amplitude (in px)
 
-          // On first tick, do nothing (except add the real onTick)
-          // Fixes bug: On highlight and unhighlight on same frame,
-          // Two highlights show at the same time.
-          var firstTick = function () {
-            // Fixes bug: this still gets called after it gets destroyed
-            // Sequence: Go to highlight, then go to non-highlight
+          setTimeout(function () {
             if (!hiSprite.scale) {
               return;
             }
             _this.container.addChild(hiSprite);
-            ticker.removeListener(firstTicker);
-            _this.ticker = ticker.onTick(onTick);
-          };
-
-          // TODO: scale instead of height/width
-          var onTick = function (tick, diff) {
-            var baseRadius = _this.baseSprite.height + dr;
-            theta += TAU * diff / tf;
-            var radius = baseRadius + dr * Math.sin(theta);
-            hiSprite.height = hiSprite.width = radius;
-          };
-
-          var firstTicker = ticker.onTick(firstTick);
+            _this.hiTween = new TWEEN.Tween(hiSprite).to({ height: r, width: r }, t / 2).repeat(Infinity).yoyo(true).start();
+          }, 1);
         }
       },
       unhighlight: {
@@ -119,13 +100,12 @@ define(["exports", "module", "../layout", "../Vector", "../globals", "../assetLo
           if (!this.hiSprite) {
             return;
           }this.container.removeChild(this.hiSprite);
-          ticker.removeListener(this.ticker);
+          this.hiTween.stop();
           this.hiSprite.destroy();
           if (~this.container.children.indexOf(this.hiSprite)) {
             debugger;
           }
           this.hiSprite = null;
-          this.ticker = 0;
         }
       },
       move: {

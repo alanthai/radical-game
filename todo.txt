@@ -1,8 +1,8 @@
 DOING
 -----
   Sprint:
-  // - Bug: mobile tapping once fires 2 tap events (crosswalk fixed it)
-  // - Layout
+  // - Refactor using Tween.js
+  - Tutorial animation
   - Reduce size of orbs (invisible parts also part of hit test)
   - passing over the chain makes touchover false
   Brenda: Can't keep track of all the words
@@ -18,7 +18,6 @@ TODO
   - Mobile has a problem with multi-touch
   - Bug: Sometimes word choices offer correct parts, but says it's wrong.
   - highlight overlay button
-  - Refactor using Tween.js
 
   Animations
     Correct answer
